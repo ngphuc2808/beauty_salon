@@ -1,13 +1,23 @@
-import { useState, useEffect, SyntheticEvent } from "react";
+import { useState, useEffect, useId, SyntheticEvent } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
+import Aos from "aos";
+import "aos/dist/aos.css";
 
+import styles from "./LoginPage.module.css";
 import images from "../../assets/images";
 
 const LoginPage = () => {
+  useEffect(() => {
+    Aos.init();
+  }, []);
+
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [checkValueUsername, setCheckValueUsername] = useState<boolean>(true);
   const [checkValuePassword, setCheckValuePassword] = useState<boolean>(true);
+
+  const usernameId = useId();
+  const passwordId = useId();
 
   useEffect(() => {
     if (username.length > 0) setCheckValueUsername(true);
@@ -37,9 +47,13 @@ const LoginPage = () => {
         <title>Admin Login</title>
       </Helmet>
       <section className="wrapper">
-        <div className="bg-[#f6f6f7] h-screen flex items-center justify-center">
-          <div className="bg-white shadow-loginBox p-10 w-[90%] md:w-[80%] lg:w-[475px] rounded-md">
-            <div className="flex items-center justify-center mb-[30px]">
+        <div className={`${styles.background}`}>
+          <div
+            className={`${styles.loginArea}`}
+            data-aos="fade-down"
+            data-aos-duration="800"
+          >
+            <div className={`${styles.logo}`}>
               <figure className="w-[140px] h-[70px]">
                 <img src={images.logoMain} />
               </figure>
@@ -47,8 +61,8 @@ const LoginPage = () => {
             <form>
               <div className="mb-5">
                 <label
-                  htmlFor="username"
-                  className={`block mb-2 text-sm font-normal ${
+                  htmlFor={usernameId}
+                  className={`${styles.label} ${
                     !checkValueUsername ? "text-red-700" : "text-[#666]"
                   }`}
                 >
@@ -56,28 +70,28 @@ const LoginPage = () => {
                 </label>
                 <input
                   type="text"
-                  id="username"
+                  id={usernameId}
                   value={username}
                   onChange={(e) => {
                     setUsername(e.target.value);
                   }}
-                  className={`border text-sm outline-none rounded-md block w-full p-2.5 ${
+                  className={`${styles.input} ${
                     !checkValueUsername
-                      ? "bg-red-50 border-red-500 placeholder-red-400"
-                      : "bg-white border-gray-300"
+                      ? `${styles.errorInput}`
+                      : `${styles.normalInput}`
                   }`}
                   placeholder="Nhập tài khoản"
                 />
                 {!checkValueUsername && (
-                  <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+                  <p className={`${styles.warning}`}>
                     Vui lòng nhập tài khoản!
                   </p>
                 )}
               </div>
               <div>
                 <label
-                  htmlFor="password"
-                  className={`block mb-2 text-sm font-normal ${
+                  htmlFor={passwordId}
+                  className={`${styles.label} ${
                     !checkValuePassword ? "text-red-700" : "text-[#666]"
                   }`}
                 >
@@ -85,27 +99,25 @@ const LoginPage = () => {
                 </label>
                 <input
                   type="password"
-                  id="password"
+                  id={passwordId}
                   value={password}
                   onChange={(e) => {
                     setPassword(e.target.value);
                   }}
-                  className={`border text-sm outline-none rounded-md block w-full p-2.5 ${
+                  className={`${styles.input} ${
                     !checkValuePassword
-                      ? "bg-red-50 border-red-500 placeholder-red-400"
-                      : "bg-white border-gray-300"
+                      ? `${styles.errorInput}`
+                      : `${styles.normalInput}`
                   }`}
                   placeholder="Nhập mật khẩu"
                 />
                 {!checkValuePassword && (
-                  <p className="mt-2 text-sm text-red-500 dark:text-red-500">
-                    Vui lòng nhập mật khẩu!
-                  </p>
+                  <p className={`${styles.warning}`}>Vui lòng nhập mật khẩu!</p>
                 )}
               </div>
-              <div className="mt-[10px] pt-[10px] border-t border-gray-300">
+              <div className={`${styles.buttonArea}`}>
                 <button
-                  className="w-full py-3 px-4 bg-red-500 rounded-md hover:bg-red-600 text-yellow-200 hover:text-yellow-300 ease-in duration-300"
+                  className={`${styles.button}`}
                   onClick={handleClickButton}
                 >
                   Đăng nhập

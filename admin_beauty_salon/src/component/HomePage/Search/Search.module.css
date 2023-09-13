@@ -1,0 +1,23 @@
+.searchArea {
+  @apply md:w-[250px] lg:w-[400px] h-[35px] bg-[#f1f2f3] rounded md:flex items-center justify-between overflow-hidden hidden;
+}
+
+.inputSearch {
+  @apply flex-1 h-full outline-none bg-transparent px-3 text-sm text-textPrimaryColor;
+}
+
+.customIconClear {
+  @apply py-[5px] px-3 hover:text-red-500 cursor-pointer ease-in duration-200;
+}
+
+.customIconLoading {
+  @apply py-[5px] px-3 animate-loading;
+}
+
+.separate {
+  @apply w-px h-5 bg-[#cecece];
+}
+
+.customIconSearch {
+  @apply py-[5px] px-3 hover:bg-red-500 hover:text-yellow-200 cursor-pointer ease-in duration-200;
+}

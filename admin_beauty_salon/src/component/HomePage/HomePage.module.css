@@ -1,0 +1,89 @@
+.wrapper {
+}
+
+.header {
+  @apply fixed w-full h-16 bg-white inset-0 px-[10px] py-2 flex items-center justify-between shadow-headerBox z-50;
+}
+
+.logoArea {
+  @apply w-[90px] h-full;
+}
+
+.infoArea {
+  @apply flex items-center gap-2;
+}
+
+.avatar {
+  @apply w-[35px] h-[35px] bg-red-100 rounded-full hover:cursor-pointer;
+}
+
+.subMenu {
+  @apply bg-white p-3 absolute w-[212px] shadow-menuBox rounded-md top-[44px] right-0 flex items-center gap-2 scale-0 origin-subMenu ease-in duration-200
+    before:content-[''] before:absolute before:top-[-13px] before:right-0 before:w-[50px] before:h-[20px] before:bg-transparent;
+}
+
+.customCameraIcon {
+  @apply flex items-center justify-center absolute bottom-0 right-[-5px] bg-[#e4e6eb] w-6 h-6 rounded-full cursor-pointer;
+}
+
+.subList {
+  @apply [&>li]:py-2 [&>li]:px-3 [&>li]:cursor-pointer text-sm text-textPrimaryColor [&>:hover]:text-red-600 [&>:hover]:bg-red-50;
+}
+
+.content {
+  @apply h-screen mt-16 bg-[#f6f6f7] grid grid-cols-12 gap-y-0 md:gap-4 px-[10px];
+}
+
+.navigation {
+  @apply h-max md:pr-4 col-span-12 md:col-span-3 md:border-r md:border-solid md:border-[#e1e3e5];
+}
+
+.headerMenu {
+  @apply text-sm uppercase font-semibold pl-2 lg:ml-2 pt-3;
+}
+
+.navList {
+  @apply lg:text-base md:text-sm [&>li]:py-2 [&>li]:pl-5 [&>li]:lg:pl-8 [&>li]:md:pl-5 [&>li]:cursor-pointer [&>:hover]:text-red-600 [&>:hover]:bg-red-50 text-textPrimaryColor
+  [&>li>span]:pb-1 [&>li>span]:relative
+  [&>li>span]:before:content-[''] [&>li>span]:before:absolute [&>li>span]:before:bottom-0 [&>li>span]:before:left-0 [&>li>span]:before:w-full [&>li>span]:before:h-0.5 [&>li>span]:before:scale-x-0 [&>li>span]:before:origin-bottom-left [&>li>span]:before:bg-current [&>li>span]:before:delay-0 [&>li>span]:before:ease-linear [&>li>span]:before:duration-200;
+}
+
+.dashBoard {
+  @apply w-full py-4 mt-5 mb-5 bg-white flex items-center justify-between shadow rounded-lg;
+}
+
+.buttonAdd {
+  @apply lg:text-base md:text-sm lg:mr-5 md:mr-3 mr-2 bg-green-400 rounded-md hover:bg-green-500 ease-in duration-300 px-3 py-2 text-gray-900;
+}
+
+.divTable {
+  @apply relative overflow-x-auto shadow-md rounded-lg bg-white;
+}
+
+.table {
+  @apply w-full text-sm text-left text-gray-500;
+}
+
+.tableHead {
+  @apply text-xs text-gray-700 uppercase bg-gray-50;
+}
+
+.tableRow {
+  @apply bg-white border-b hover:bg-gray-50 cursor-pointer;
+}
+
+.tableContent {
+  @apply h-[626px] overflow-y-scroll;
+}
+
+.headerTable {
+  @apply flex gap-4 mx-3 mb-3 sm:mx-5 sm:mb-5 border-b border-gray-200 justify-center lg:justify-normal;
+}
+
+.customSpan {
+  @apply hidden lg:px-4 lg:py-3 md:py-2 lg:my-5 md:my-3 rounded-md md:text-sm lg:text-base;
+}
+
+.customButton {
+  @apply min-w-[100px] py-2 px-1 my-2 lg:px-4 lg:py-3 md:py-2 lg:my-5 md:my-3 rounded-md text-gray-900 ease-in duration-300 md:text-sm lg:text-base;
+}
