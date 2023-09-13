@@ -81,7 +81,7 @@
 }
 
 .customSpan {
-  @apply hidden lg:px-4 lg:py-3 md:py-2 lg:my-5 md:my-3 rounded-md md:text-sm lg:text-base;
+  @apply hidden sm:block lg:px-4 lg:py-3 md:py-2 lg:my-5 md:my-3 rounded-md md:text-sm lg:text-base;
 }
 
 .customButton {
