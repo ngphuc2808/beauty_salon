@@ -32,6 +32,9 @@ export default {
       animation: {
         loading: "loading 1.2s linear infinite",
       },
+      gridTemplateRows: {
+        maxContent: "max-content;",
+      },
     },
   },
   plugins: [],
