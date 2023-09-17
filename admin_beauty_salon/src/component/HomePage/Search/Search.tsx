@@ -24,15 +24,19 @@ const Search = () => {
           setSearchValue(e.target.value);
         }}
       />
-      <i
-        className={`ri-close-line ${styles.customIconClear} ${
-          searchValue.length > 0 ? "block" : "hidden"
-        }`}
-        onClick={handleClear}
-      ></i>
-      <i className={`ri-loader-3-line ${styles.customIconLoading} hidden`}></i>
-      <span className={`${styles.separate}`}></span>
-      <i className={`ri-search-line ${styles.customIconSearch}`}></i>
+      <div className="flex items-center">
+        <i
+          className={`ri-close-line ${styles.customIconClear} ${
+            searchValue.length > 0 ? "block" : "hidden"
+          }`}
+          onClick={handleClear}
+        ></i>
+        <i
+          className={`ri-loader-3-line ${styles.customIconLoading} hidden`}
+        ></i>
+        <span className={`${styles.separate}`}></span>
+        <i className={`ri-search-line ${styles.customIconSearch}`}></i>
+      </div>
     </div>
   );
 };

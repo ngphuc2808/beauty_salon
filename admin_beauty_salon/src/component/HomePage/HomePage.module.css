@@ -35,16 +35,19 @@
 }
 
 .navigation {
-  @apply mt-5 max-h-[1000px] sm:mt-0 md:pr-4 col-span-12 md:col-span-3 md:border-r md:border-solid md:border-[#e1e3e5] 
-  shadow-md sm:shadow-inherit rounded-md sm:shadow-md sm:rounded-none overflow-y-auto transition-all ease-linear duration-500;
+  @apply max-h-[1000px] col-span-3 border-r border-solid border-[#e1e3e5] overflow-y-auto hidden sm:block;
 }
 
-.showNavigation {
-  @apply mt-0 max-h-0 sm:max-h-[1000px];
+.navigationMobile {
+  @apply fixed inset-0 bg-white z-[100] sm:hidden ease-in duration-500 transition-all overflow-y-auto;
+}
+
+.customCloseIcon {
+  @apply absolute right-7 top-7 text-3xl w-[30px] h-[30px] flex items-center justify-center rounded-full hover:text-red-500 ease-in duration-200;
 }
 
 .headerMenu {
-  @apply text-sm uppercase font-semibold pl-2 lg:ml-2 pt-3;
+  @apply uppercase font-semibold pl-2 lg:ml-2;
 }
 
 .navList {
@@ -54,9 +57,9 @@
 }
 
 .dashBoard {
-  @apply w-full py-4 mt-5 mb-5 bg-white flex items-center justify-between shadow rounded-lg;
+  @apply w-full py-4 mt-5 mb-5 bg-white flex items-center justify-between shadow rounded-lg flex-wrap sm:flex-nowrap;
 }
 
 .buttonAdd {
-  @apply lg:text-base md:text-sm lg:mr-5 md:mr-3 mr-2 bg-green-400 rounded-md hover:bg-green-500 ease-in duration-300 px-3 py-2 text-gray-900;
+  @apply lg:text-base md:text-sm lg:mr-5 md:mr-3 mr-2 bg-yellow-300 rounded-md hover:bg-yellow-400 text-red-700 ease-in duration-300 px-3 py-2;
 }

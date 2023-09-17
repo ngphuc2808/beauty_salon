@@ -1,0 +1,31 @@
+.divTable {
+  @apply relative overflow-x-auto shadow-md rounded-lg mb-5 bg-white;
+}
+
+.table {
+  @apply w-full text-sm text-left text-gray-500;
+}
+
+.tableHead {
+  @apply text-xs text-gray-700 uppercase bg-gray-50;
+}
+
+.tableRow {
+  @apply bg-white border-b hover:bg-gray-50 cursor-pointer;
+}
+
+.tableContent {
+  @apply h-[626px] overflow-y-scroll;
+}
+
+.headerTable {
+  @apply flex gap-4 mx-3 mb-3 sm:mx-5 sm:mb-5 border-b border-gray-200 items-center justify-center lg:justify-normal;
+}
+
+.customSpan {
+  @apply lg:px-4 md:py-2 lg:my-5 md:my-3 rounded-md text-sm lg:text-base;
+}
+
+.customButton {
+  @apply min-w-[70px] h-10 py-1 px-1 my-2 md:my-3 rounded-md text-gray-900 ease-in duration-300 text-sm bg-red-500 hover:bg-red-600 text-yellow-200 hover:text-yellow-300;
+}

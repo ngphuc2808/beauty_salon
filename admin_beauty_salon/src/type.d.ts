@@ -1,4 +1,10 @@
 interface iAccount {
   username: string;
-  password: stringl;
+  password: string;
+}
+
+interface iFakeData {
+  id: string;
+  name: string;
+  icon: string;
 }

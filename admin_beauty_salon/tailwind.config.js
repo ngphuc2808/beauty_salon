@@ -35,6 +35,9 @@ export default {
       gridTemplateRows: {
         maxContent: "max-content;",
       },
+      flexBasis: {
+        inherit: "inherit",
+      },
     },
   },
   plugins: [],

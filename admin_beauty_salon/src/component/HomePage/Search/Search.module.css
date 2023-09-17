@@ -1,9 +1,10 @@
 .searchArea {
-  @apply md:w-[250px] lg:w-[400px] h-[35px] bg-[#f1f2f3] rounded md:flex items-center justify-between overflow-hidden hidden;
+  @apply md:w-[250px] lg:w-[400px] h-[35px] bg-[#f1f2f3] rounded flex 
+  items-center justify-between overflow-hidden order-3 sm:order-none mt-4 sm:mt-0 mx-2 sm:mx-0 basis-full sm:basis-inherit;
 }
 
 .inputSearch {
-  @apply flex-1 h-full outline-none bg-transparent px-3 text-sm text-textPrimaryColor;
+  @apply flex-1 h-full outline-none bg-transparent pl-3 text-sm text-textPrimaryColor;
 }
 
 .customIconClear {

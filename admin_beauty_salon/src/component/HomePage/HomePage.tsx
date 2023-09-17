@@ -7,18 +7,52 @@ import images from "../../assets/images";
 import Search from "./Search";
 
 import { dataNavigation } from "../../utils/data";
-import CategoryLevel1 from "./NavigationItem/CategoryLevel1";
+import NavigationContent from "./NavigationContent";
 
 const HomePage = () => {
   const [isLoggedIn, SetIsLoggedIn] = useState<boolean>(true);
-  const [nav, setNav] = useState<boolean>(true);
 
   useEffect(() => {
     SetIsLoggedIn(true);
   }, [isLoggedIn]);
 
   if (!isLoggedIn) return <Navigate to={"/login"} />;
-  else
+  else {
+    const [category, setCategory] = useState<string>("Cat1");
+
+    const [navMobile, setNavMobile] = useState<boolean>(false);
+
+    const handleClick = (item: iFakeData) => {
+      if (item.id === "Cat1") {
+        setCategory("Cat1");
+        return;
+      }
+      if (item.id === "Cat2") {
+        setCategory("Cat2");
+        return;
+      }
+      if (item.id === "Cat3") {
+        setCategory("Cat3");
+        return;
+      }
+      if (item.id === "Cat4") {
+        setCategory("Cat4");
+        return;
+      }
+      if (item.id === "Cat5") {
+        setCategory("Cat5");
+        return;
+      }
+      if (item.id === "Cat6") {
+        setCategory("Cat6");
+        return;
+      }
+      if (item.id === "Cat7") {
+        setCategory("Cat7");
+        return;
+      }
+    };
+
     return (
       <section className={`${styles.wrapper}`}>
         {/* Header */}
@@ -31,7 +65,7 @@ const HomePage = () => {
             </div>
             <i
               className="ri-menu-line text-2xl p-4 sm:hidden"
-              onClick={() => setNav(!nav)}
+              onClick={() => setNavMobile(!navMobile)}
             ></i>
           </div>
           <div className={`${styles.infoArea}`}>
@@ -60,21 +94,21 @@ const HomePage = () => {
 
         {/* Content */}
         <div className={`${styles.content}`}>
-          <div
-            className={`${styles.navigation} ${
-              nav ? "" : `${styles.showNavigation}`
-            }`}
-          >
-            <ul className="bg-white sm:bg-inherit [&>*:last-child]:pb-5">
+          <div className={`${styles.navigation}`}>
+            <ul className="bg-white sm:bg-inherit [&>*:first-child]:mt-5 [&>*:last-child]:mb-5">
               <li>
-                <div className={`${styles.headerMenu}`}>
-                  <span className="leading-9 text-textHeadingColor">
+                <div className={`${styles.headerMenu} text-sm`}>
+                  <span className="leading-8 text-textHeadingColor">
                     Mục lục
                   </span>
                 </div>
                 <ul className={`${styles.navList}`}>
                   {dataNavigation.map((item, index) => (
-                    <li className="flex gap-2 items-center group" key={index}>
+                    <li
+                      className="flex gap-2 items-center group"
+                      key={index}
+                      onClick={() => handleClick(item)}
+                    >
                       {
                         <span
                           className="text-xl"
@@ -91,8 +125,8 @@ const HomePage = () => {
                 </ul>
               </li>
               <li>
-                <div className={`${styles.headerMenu}`}>
-                  <span className="leading-9 text-textHeadingColor">
+                <div className={`${styles.headerMenu} text-sm`}>
+                  <span className="leading-8 text-textHeadingColor">
                     Liên kết nhanh
                   </span>
                 </div>
@@ -100,19 +134,76 @@ const HomePage = () => {
               </li>
             </ul>
           </div>
+          <div
+            className={`${styles.navigationMobile} ${
+              navMobile
+                ? "-translate-x-full opacity-0"
+                : "translate-x-0 opacity-100"
+            }`}
+          >
+            <i
+              className={`ri-close-fill ${styles.customCloseIcon}`}
+              onClick={() => setNavMobile(!navMobile)}
+            ></i>
+            <ul className="[&>li]:px-5 [&>*:first-child]:mt-12 [&>*:last-child]:mb-12 overflow-y-auto">
+              <li>
+                <div className={`${styles.headerMenu} text-base`}>
+                  <span className="leading-8 text-textHeadingColor text-base">
+                    Mục lục
+                  </span>
+                </div>
+                <ul className={`${styles.navList} [&>li]:text-lg`}>
+                  {dataNavigation.map((item, index) => (
+                    <li
+                      className="flex gap-2 items-center group"
+                      key={index}
+                      onClick={() => handleClick(item)}
+                    >
+                      {
+                        <span
+                          className="text-xl"
+                          dangerouslySetInnerHTML={{
+                            __html: `${item.icon}`,
+                          }}
+                        ></span>
+                      }
+                      <span className={`group-hover:before:scale-x-100`}>
+                        {item.name}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+              <li>
+                <div className={`${styles.headerMenu} text-base`}>
+                  <span className="leading-8 text-textHeadingColor">
+                    Liên kết nhanh
+                  </span>
+                </div>
+                <ul className={`${styles.navList} [&>li]:text-lg`}></ul>
+              </li>
+            </ul>
+          </div>
           <div className="col-span-12 md:col-span-9">
             <div className={`${styles.dashBoard}`}>
               <h1 className="lg:text-xl md:text-base lg:ml-5 md:ml-3 ml-2">
-                Danh mục cấp 1
+                {category === "Cat1"
+                  ? "Danh mục cấp 1"
+                  : category === "Cat2"
+                  ? "Danh mục cấp 2"
+                  : category === "Cat3"
+                  ? "Danh mục cấp 3"
+                  : ""}
               </h1>
               <Search />
               <button className={`${styles.buttonAdd}`}>Thêm danh mục</button>
             </div>
-            <CategoryLevel1 />
+            <NavigationContent category={category} />
           </div>
         </div>
       </section>
     );
+  }
 };
 
 export default HomePage;
