@@ -8,3 +8,25 @@ interface iFakeData {
   name: string;
   icon: string;
 }
+
+interface iCategory {
+  category: string;
+}
+
+interface iPropCategoryLevel {
+  title: string;
+  childTitle: string;
+}
+
+interface iItem {
+  currentItems: iData[];
+}
+
+interface iDataList {
+  id: string;
+  imgUrl: string;
+  name: string;
+  category: string;
+  dateTime: string;
+  permission: boolean;
+}

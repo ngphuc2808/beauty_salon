@@ -31,11 +31,15 @@
 }
 
 .content {
-  @apply h-screen mt-16 bg-[#f6f6f7] grid grid-cols-12 grid-rows-maxContent gap-y-0 md:gap-4 px-[10px];
+  @apply min-h-screen max-h-full mt-16 bg-[#f6f6f7] grid grid-cols-12 grid-rows-maxContent gap-y-0;
 }
 
 .navigation {
-  @apply max-h-[1000px] col-span-3 border-r border-solid border-[#e1e3e5] overflow-y-auto hidden sm:block;
+  @apply max-h-[1000px] col-span-3 border-r-4 border-solid border-red-500 overflow-y-auto hidden sm:block;
+}
+
+.navigation::-webkit-scrollbar {
+  @apply w-[5px] h-2 bg-[#edeeef];
 }
 
 .navigationMobile {
@@ -51,15 +55,17 @@
 }
 
 .navList {
-  @apply lg:text-base md:text-sm [&>li]:py-2 [&>li]:pl-5 [&>li]:lg:pl-8 [&>li]:md:pl-5 [&>li]:cursor-pointer [&>:hover]:text-red-600 [&>:hover]:bg-red-50 text-textPrimaryColor
-  [&>li>span]:pb-1 [&>li>span]:relative
-  [&>li>span]:before:content-[''] [&>li>span]:before:absolute [&>li>span]:before:bottom-0 [&>li>span]:before:left-0 [&>li>span]:before:w-full [&>li>span]:before:h-0.5 [&>li>span]:before:scale-x-0 [&>li>span]:before:origin-bottom-left [&>li>span]:before:bg-current [&>li>span]:before:delay-0 [&>li>span]:before:ease-linear [&>li>span]:before:duration-200;
+  @apply text-sm [&>li]:cursor-pointer [&>:hover]:text-red-600 text-textPrimaryColor;
+}
+
+.active {
+  @apply text-red-600 bg-red-100 rounded;
 }
 
 .dashBoard {
-  @apply w-full py-4 mt-5 mb-5 bg-white flex items-center justify-between shadow rounded-lg flex-wrap sm:flex-nowrap;
+  @apply w-full py-4 mb-5 bg-white flex items-center justify-between shadow rounded-lg flex-wrap sm:flex-nowrap;
 }
 
 .buttonAdd {
-  @apply lg:text-base md:text-sm lg:mr-5 md:mr-3 mr-2 bg-yellow-300 rounded-md hover:bg-yellow-400 text-red-700 ease-in duration-300 px-3 py-2;
+  @apply lg:text-base md:text-sm lg:mr-5 md:mr-3 mr-2 bg-red-500 rounded-md hover:bg-red-600 text-white ease-in duration-300 px-3 py-2;
 }

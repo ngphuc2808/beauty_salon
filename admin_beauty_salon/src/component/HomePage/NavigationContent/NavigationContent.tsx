@@ -1,115 +1,47 @@
 import styles from "./NavigationContent.module.css";
 
-const NavigationContent = ({ category }: any) => {
+import TableCategory from "./TableCategory";
+import TableCategoryLevel from "./TableCategoryLevel";
+import TableComment from "./TableComment";
+import TableList from "./TableList";
+import TableSchedule from "./TableSchedule";
+
+const NavigationContent = ({ category }: iCategory) => {
   return (
     <div className={`${styles.divTable}`}>
       <div className={`${styles.headerTable}`}>
         <span className={`${styles.customSpan}`}>0 lượt chọn</span>
         <button className={`${styles.customButton} `}>Xóa</button>
-        <button className={`${styles.customButton}`}>Bật</button>
-        <button className={`${styles.customButton}`}>Tắt</button>
+        {category !== "Cat6" && category !== "Cat7" && (
+          <>
+            <button className={`${styles.customButton}`}>Bật</button>
+            <button className={`${styles.customButton}`}>Tắt</button>
+          </>
+        )}
       </div>
-      <div className={`${styles.tableContent}`}>
-        <table className={`${styles.table}`}>
-          <thead className={`${styles.tableHead}`}>
-            <tr>
-              <th scope="col" className="p-5">
-                <div className="flex items-center">
-                  <input
-                    id="checkbox-all-search"
-                    type="checkbox"
-                    className="w-4 h-4 cursor-pointer"
-                  />
-                </div>
-              </th>
-              <th scope="col" className="px-6 py-3 text-red-600">
-                {category === "Cat1"
-                  ? "Tên danh mục"
-                  : category === "Cat2"
-                  ? "Tên danh mục cấp 2"
-                  : category === "Cat3"
-                  ? "Tên danh mục cấp 3"
-                  : ""}
-              </th>
-              {category === "Cat2" ? (
-                <th scope="col" className="px-6 py-3 text-red-600">
-                  Tên danh mục cấp 1
-                </th>
-              ) : category === "Cat3" ? (
-                <th scope="col" className="px-6 py-3 text-red-600">
-                  Tên danh mục cấp 2
-                </th>
-              ) : (
-                ""
-              )}
-              <th scope="col" className="px-6 py-3 text-red-600">
-                Nội dung hiển thị
-              </th>
-              <th scope="col" className="px-6 py-3 text-red-600">
-                Trạng thái
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className={`${styles.tableRow}`}>
-              <td className="w-4 p-5">
-                <div className="flex items-center">
-                  <input
-                    id="checkbox-table-search-1"
-                    type="checkbox"
-                    className="w-4 h-4 cursor-pointer"
-                  />
-                </div>
-              </td>
-              <th
-                scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-              >
-                Apple MacBook Pro 17"
-              </th>
-              {category === "Cat2" ? (
-                <td className="px-6 py-4">Render tên danh mục cấp 1</td>
-              ) : category === "Cat3" ? (
-                <td className="px-6 py-4">Render tên danh mục cấp 2</td>
-              ) : (
-                ""
-              )}
-              <td className="px-6 py-4">Trang Landing Page</td>
-              <td className="px-6 py-4">
-                <span className="font-medium text-green-500">Bật</span>
-              </td>
-            </tr>
-            <tr className={`${styles.tableRow}`}>
-              <td className="w-4 p-5">
-                <div className="flex items-center">
-                  <input
-                    id="checkbox-table-search-1"
-                    type="checkbox"
-                    className="w-4 h-4 cursor-pointer"
-                  />
-                </div>
-              </td>
-              <th
-                scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-              >
-                Apple MacBook Pro 17"
-              </th>
-              {category === "Cat2" ? (
-                <td className="px-6 py-4">Render tên danh mục cấp 1</td>
-              ) : category === "Cat3" ? (
-                <td className="px-6 py-4">Render tên danh mục cấp 2</td>
-              ) : (
-                ""
-              )}
-              <td className="px-6 py-4">Trang Landing Page</td>
-              <td className="px-6 py-4">
-                <span className="font-medium text-green-500">Bật</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      {category === "Cat1" ? (
+        <TableCategory />
+      ) : category === "Cat2" ? (
+        <TableCategoryLevel
+          title="Tên danh mục cấp 2"
+          childTitle="Tên danh mục cấp 1"
+        />
+      ) : category === "Cat3" ? (
+        <TableCategoryLevel
+          title="Tên danh mục cấp 3"
+          childTitle="Tên danh mục cấp 2"
+        />
+      ) : category === "Cat4" ? (
+        <TableList />
+      ) : category === "Cat5" ? (
+        <TableList />
+      ) : category === "Cat6" ? (
+        <TableSchedule />
+      ) : category === "Cat7" ? (
+        <TableComment />
+      ) : (
+        ""
+      )}
     </div>
   );
 };

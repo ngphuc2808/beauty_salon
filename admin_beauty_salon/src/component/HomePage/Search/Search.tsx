@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 
 import styles from "./Search.module.css";
 
-const Search = () => {
+const Search = ({ category }: iCategory) => {
   const [searchValue, setSearchValue] = useState<string>("");
 
   const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
@@ -13,12 +13,28 @@ const Search = () => {
   };
 
   return (
-    <div className={`${styles.searchArea}`}>
+    <div
+      className={`${styles.searchArea} ${
+        category === "Cat6" || category === "Cat7" ? "hidden" : ""
+      }`}
+    >
       <input
         className={`${styles.inputSearch}`}
         ref={inputRef}
         type="text"
-        placeholder="Tìm kiếm"
+        placeholder={
+          category === "Cat1"
+            ? "Tìm kiếm danh mục cấp 1"
+            : category === "Cat2"
+            ? "Tìm kiếm danh mục cấp 2"
+            : category === "Cat3"
+            ? "Tìm kiếm danh mục cấp 3"
+            : category === "Cat4"
+            ? "Tìm kiếm bài viết"
+            : category === "Cat5"
+            ? "Tìm kiếm sản phẩm"
+            : ""
+        }
         value={searchValue}
         onChange={(e) => {
           setSearchValue(e.target.value);

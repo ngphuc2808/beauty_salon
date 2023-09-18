@@ -20,7 +20,7 @@ const HomePage = () => {
   else {
     const [category, setCategory] = useState<string>("Cat1");
 
-    const [navMobile, setNavMobile] = useState<boolean>(false);
+    const [navMobile, setNavMobile] = useState<boolean>(true);
 
     const handleClick = (item: iFakeData) => {
       if (item.id === "Cat1") {
@@ -95,7 +95,7 @@ const HomePage = () => {
         {/* Content */}
         <div className={`${styles.content}`}>
           <div className={`${styles.navigation}`}>
-            <ul className="bg-white sm:bg-inherit [&>*:first-child]:mt-5 [&>*:last-child]:mb-5">
+            <ul className="bg-white sm:bg-inherit [&>*:first-child]:mt-5 [&>*:last-child]:mb-5 pr-[10px]">
               <li>
                 <div className={`${styles.headerMenu} text-sm`}>
                   <span className="leading-8 text-textHeadingColor">
@@ -105,21 +105,32 @@ const HomePage = () => {
                 <ul className={`${styles.navList}`}>
                   {dataNavigation.map((item, index) => (
                     <li
-                      className="flex gap-2 items-center group"
+                      className={`flex gap-2 items-center group mb-[3px]`}
                       key={index}
                       onClick={() => handleClick(item)}
                     >
-                      {
-                        <span
-                          className="text-xl"
-                          dangerouslySetInnerHTML={{
-                            __html: `${item.icon}`,
-                          }}
-                        ></span>
-                      }
-                      <span className={`group-hover:before:scale-x-100`}>
-                        {item.name}
-                      </span>
+                      {item.id === category ? (
+                        <span className="border-2 bg-red-500 h-11 w-1.5 rounded-full border-red-500"></span>
+                      ) : (
+                        <span className="h-11 w-1.5 rounded-full "></span>
+                      )}
+                      <div
+                        className={`w-full flex items-center gap-2 p-2 hover:bg-red-100 ${
+                          item.id === category ? styles.active : ""
+                        }`}
+                      >
+                        {
+                          <span
+                            className="text-xl"
+                            dangerouslySetInnerHTML={{
+                              __html: `${item.icon}`,
+                            }}
+                          ></span>
+                        }
+                        <span className={`group-hover:before:scale-x-100`}>
+                          {item.name}
+                        </span>
+                      </div>
                     </li>
                   ))}
                 </ul>
@@ -145,7 +156,7 @@ const HomePage = () => {
               className={`ri-close-fill ${styles.customCloseIcon}`}
               onClick={() => setNavMobile(!navMobile)}
             ></i>
-            <ul className="[&>li]:px-5 [&>*:first-child]:mt-12 [&>*:last-child]:mb-12 overflow-y-auto">
+            <ul className="[&>li]:px-5 [&>*:first-child]:mt-12 [&>*:last-child]:mb-12 [&>*:last-child]:mt-2 overflow-y-auto">
               <li>
                 <div className={`${styles.headerMenu} text-base`}>
                   <span className="leading-8 text-textHeadingColor text-base">
@@ -159,17 +170,23 @@ const HomePage = () => {
                       key={index}
                       onClick={() => handleClick(item)}
                     >
-                      {
-                        <span
-                          className="text-xl"
-                          dangerouslySetInnerHTML={{
-                            __html: `${item.icon}`,
-                          }}
-                        ></span>
-                      }
-                      <span className={`group-hover:before:scale-x-100`}>
-                        {item.name}
-                      </span>
+                      <div
+                        className={`w-full flex items-center gap-2 p-2 hover:bg-red-100 ${
+                          item.id === category ? styles.active : ""
+                        }`}
+                      >
+                        {
+                          <span
+                            className="text-xl"
+                            dangerouslySetInnerHTML={{
+                              __html: `${item.icon}`,
+                            }}
+                          ></span>
+                        }
+                        <span className={`group-hover:before:scale-x-100`}>
+                          {item.name}
+                        </span>
+                      </div>
                     </li>
                   ))}
                 </ul>
@@ -184,7 +201,7 @@ const HomePage = () => {
               </li>
             </ul>
           </div>
-          <div className="col-span-12 md:col-span-9">
+          <div className="col-span-12 md:col-span-9 p-5">
             <div className={`${styles.dashBoard}`}>
               <h1 className="lg:text-xl md:text-base lg:ml-5 md:ml-3 ml-2">
                 {category === "Cat1"
@@ -193,10 +210,26 @@ const HomePage = () => {
                   ? "Danh mục cấp 2"
                   : category === "Cat3"
                   ? "Danh mục cấp 3"
+                  : category === "Cat4"
+                  ? "Danh sách bài viết"
+                  : category === "Cat5"
+                  ? "Danh sách sản phẩm"
+                  : category === "Cat6"
+                  ? "Danh sách lịch hẹn"
+                  : category === "Cat7"
+                  ? "Danh sách bình luận"
                   : ""}
               </h1>
-              <Search />
-              <button className={`${styles.buttonAdd}`}>Thêm danh mục</button>
+              <Search category={category} />
+              {category !== "Cat6" && category !== "Cat7" && (
+                <button className={`${styles.buttonAdd}`}>
+                  {category === "Cat4"
+                    ? "Thêm bài viết"
+                    : category === "Cat5"
+                    ? "Thêm sản phẩm"
+                    : "Thêm danh mục"}
+                </button>
+              )}
             </div>
             <NavigationContent category={category} />
           </div>
