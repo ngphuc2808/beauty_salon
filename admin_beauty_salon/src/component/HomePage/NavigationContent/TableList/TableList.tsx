@@ -75,7 +75,7 @@ const TableList = () => {
             onChange={handleChange}
             onKeyDown={handleKeyDown}
           />
-          trang
+          bài trên trang
         </label>
         <ReactPaginate
           activeClassName={`${styles.item} ${styles.active}`}
