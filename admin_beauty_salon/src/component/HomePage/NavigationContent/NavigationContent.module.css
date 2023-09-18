@@ -68,7 +68,7 @@
 }
 
 .customItemsPerpage {
-  @apply w-[55px] p-2 border border-solid border-gray-300 outline-none;
+  @apply w-[55px] p-2 border border-solid border-gray-300 outline-none rounded;
 }
 
 .customItemsPerpage::-webkit-outer-spin-button,
