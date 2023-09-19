@@ -4,7 +4,6 @@ import "remixicon/fonts/remixicon.css";
 
 import styles from "./HomePage.module.css";
 import images from "../../assets/images";
-import Search from "./Search";
 
 import { dataNavigation } from "../../utils/data";
 import NavigationContent from "./NavigationContent";
