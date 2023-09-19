@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 
-import styles from "../../NavigationContent.module.css";
+import styles from "../../../NavigationContent.module.css";
 
 const Items = ({ currentItems }: iItem) => {
   return (

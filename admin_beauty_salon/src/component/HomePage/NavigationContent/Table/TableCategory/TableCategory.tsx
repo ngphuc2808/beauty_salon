@@ -1,4 +1,4 @@
-import styles from "../NavigationContent.module.css";
+import styles from "../../NavigationContent.module.css";
 
 const TableCategory = () => {
   return (

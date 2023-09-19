@@ -1,6 +1,6 @@
-import styles from "../NavigationContent.module.css";
+import styles from "../../NavigationContent.module.css";
 
-const TableSchedule = () => {
+const TableCategoryLevel = ({ title, childTitle }: iPropCategoryLevel) => {
   return (
     <div className={`${styles.tableContent}`}>
       <table className={`${styles.table}`}>
@@ -15,25 +15,19 @@ const TableSchedule = () => {
                 />
               </div>
             </th>
-
             <th scope="col" className="px-6 py-3 text-red-600">
-              Ngày đặt
+              {title}
             </th>
 
             <th scope="col" className="px-6 py-3 text-red-600">
-              Thời gian
+              {childTitle}
+            </th>
+
+            <th scope="col" className="px-6 py-3 text-red-600">
+              Nội dung
             </th>
             <th scope="col" className="px-6 py-3 text-red-600">
-              Họ và tên
-            </th>
-            <th scope="col" className="px-6 py-3 text-red-600">
-              Số điện thoại
-            </th>
-            <th scope="col" className="px-6 py-3 text-red-600">
-              Dịch vụ đăng ký
-            </th>
-            <th scope="col" className="px-6 py-3 text-red-600">
-              Địa điểm
+              Trạng thái
             </th>
           </tr>
         </thead>
@@ -48,13 +42,18 @@ const TableSchedule = () => {
                 />
               </div>
             </td>
+            <th
+              scope="row"
+              className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+            >
+              Apple MacBook Pro 17"
+            </th>
+            <td className="px-6 py-4">Render tên danh mục cấp 1</td>
 
-            <td className="px-6 py-4">10/10/2010</td>
-            <td className="px-6 py-4">8:00</td>
-            <td className="px-6 py-4">Nguyễn Hoàng Phúc</td>
-            <td className="px-6 py-4">0901234567</td>
-            <td className="px-6 py-4">Trắng da</td>
-            <td className="px-6 py-4">HCM</td>
+            <td className="px-6 py-4">Trang Landing Page</td>
+            <td className="px-6 py-4">
+              <span className="font-medium text-green-500">Bật</span>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -62,4 +61,4 @@ const TableSchedule = () => {
   );
 };
 
-export default TableSchedule;
+export default TableCategoryLevel;

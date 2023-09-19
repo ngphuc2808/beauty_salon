@@ -1,8 +1,8 @@
 import { InvalidEvent, KeyboardEvent, Fragment, useState, useId } from "react";
 import ReactPaginate from "react-paginate";
 
-import styles from "../NavigationContent.module.css";
-import { dataList } from "../../../../utils/data";
+import styles from "../../NavigationContent.module.css";
+import { dataList } from "../../../../../utils/data";
 import Items from "./Items/Items";
 
 const TableList = () => {

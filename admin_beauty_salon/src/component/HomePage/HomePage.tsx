@@ -201,36 +201,7 @@ const HomePage = () => {
               </li>
             </ul>
           </div>
-          <div className="col-span-12 md:col-span-9 p-5">
-            <div className={`${styles.dashBoard}`}>
-              <h1 className="lg:text-xl md:text-base lg:ml-5 md:ml-3 ml-2">
-                {category === "Cat1"
-                  ? "Danh mục cấp 1"
-                  : category === "Cat2"
-                  ? "Danh mục cấp 2"
-                  : category === "Cat3"
-                  ? "Danh mục cấp 3"
-                  : category === "Cat4"
-                  ? "Danh sách bài viết"
-                  : category === "Cat5"
-                  ? "Danh sách sản phẩm"
-                  : category === "Cat6"
-                  ? "Danh sách lịch hẹn"
-                  : category === "Cat7"
-                  ? "Danh sách bình luận"
-                  : ""}
-              </h1>
-              <Search category={category} />
-              {category !== "Cat6" && category !== "Cat7" && (
-                <button className={`${styles.buttonAdd}`}>
-                  {category === "Cat4"
-                    ? "Thêm bài viết"
-                    : category === "Cat5"
-                    ? "Thêm sản phẩm"
-                    : "Thêm danh mục"}
-                </button>
-              )}
-            </div>
+          <div className="col-span-12 md:col-span-9 lg:col-span-10 p-5">
             <NavigationContent category={category} />
           </div>
         </div>
