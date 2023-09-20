@@ -253,7 +253,7 @@ const HomePage = () => {
             </ul>
           </div>
           <div className="col-span-12 md:col-span-9 lg:col-span-10 p-5">
-            <NavigationContent category={category} />
+            <NavigationContent />
           </div>
         </div>
       </section>
