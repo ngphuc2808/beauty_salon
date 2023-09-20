@@ -95,7 +95,7 @@
 }
 
 .listCategory {
-  @apply max-h-[400px] overflow-auto text-textPrimaryColor text-sm [&>li]:border-b [&>:last-child]:border-none mt-4;
+  @apply max-h-[400px] overflow-auto text-textPrimaryColor text-sm [&>li]:border-b [&>:last-child]:border-none;
 }
 
 .itemCategory {

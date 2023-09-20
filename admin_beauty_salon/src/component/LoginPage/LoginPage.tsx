@@ -36,7 +36,6 @@ const LoginPage = () => {
         username: username,
         password: password,
       };
-      console.log(value);
     }
 
     event.preventDefault();

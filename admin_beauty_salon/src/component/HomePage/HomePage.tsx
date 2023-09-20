@@ -17,40 +17,8 @@ const HomePage = () => {
 
   if (!isLoggedIn) return <Navigate to={"/login"} />;
   else {
-    const [category, setCategory] = useState<string>("Cat1");
-
+    const [category, setCategory] = useState<string>(dataNavigation[0].id);
     const [navMobile, setNavMobile] = useState<boolean>(true);
-
-    const handleClick = (item: iFakeData) => {
-      if (item.id === "Cat1") {
-        setCategory("Cat1");
-        return;
-      }
-      if (item.id === "Cat2") {
-        setCategory("Cat2");
-        return;
-      }
-      if (item.id === "Cat3") {
-        setCategory("Cat3");
-        return;
-      }
-      if (item.id === "Cat4") {
-        setCategory("Cat4");
-        return;
-      }
-      if (item.id === "Cat5") {
-        setCategory("Cat5");
-        return;
-      }
-      if (item.id === "Cat6") {
-        setCategory("Cat6");
-        return;
-      }
-      if (item.id === "Cat7") {
-        setCategory("Cat7");
-        return;
-      }
-    };
 
     return (
       <section className={`${styles.wrapper}`}>
@@ -106,7 +74,9 @@ const HomePage = () => {
                     <li
                       className={`flex gap-2 items-center group mb-[3px]`}
                       key={index}
-                      onClick={() => handleClick(item)}
+                      onClick={() => {
+                        item.id !== category && setCategory(item.id);
+                      }}
                     >
                       {item.id === category ? (
                         <span className="border-2 bg-red-500 h-11 w-1.5 rounded-full border-red-500"></span>
@@ -140,7 +110,47 @@ const HomePage = () => {
                     Liên kết nhanh
                   </span>
                 </div>
-                <ul className={`${styles.navList}`}></ul>
+                <ul className={`${styles.linkList}`}>
+                  <li className={`${styles.activeAfter} relative`}>
+                    <p className="my-2">Danh sách sản phẩm</p>
+                    <ul className="ml-6">
+                      <li className={`${styles.activeAfter} relative my-2`}>
+                        <p className="my-2">Danh sách sản phẩm 1</p>
+                        <ul className="ml-8">
+                          <li className="p-1">Danh sách sản phẩm 2</li>
+                          <li className="p-1">Danh sách sản phẩm 2</li>
+                          <li className="p-1">Danh sách sản phẩm 2</li>
+                        </ul>
+                      </li>
+                      <li className={`${styles.activeAfter} relative my-2`}>
+                        <p className="my-2">Danh sách sản phẩm 1</p>
+                        <ul className="ml-8">
+                          <li className="p-1">Danh sách sản phẩm 2</li>
+                          <li className="p-1">Danh sách sản phẩm 2</li>
+                          <li className="p-1">Danh sách sản phẩm 2</li>
+                        </ul>
+                      </li>
+                    </ul>
+                    <ul className="ml-6">
+                      <li className={`${styles.activeAfter} relative my-2`}>
+                        <p className="my-2">Danh sách sản phẩm 1</p>
+                        <ul className="ml-8">
+                          <li className="p-1">Danh sách sản phẩm 2</li>
+                          <li className="p-1">Danh sách sản phẩm 2</li>
+                          <li className="p-1">Danh sách sản phẩm 2</li>
+                        </ul>
+                      </li>
+                      <li className={`${styles.activeAfter} relative my-2`}>
+                        <p className="my-2">Danh sách sản phẩm 1</p>
+                        <ul className="ml-8">
+                          <li className="p-1">Danh sách sản phẩm 2</li>
+                          <li className="p-1">Danh sách sản phẩm 2</li>
+                          <li className="p-1">Danh sách sản phẩm 2</li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
               </li>
             </ul>
           </div>
@@ -167,7 +177,9 @@ const HomePage = () => {
                     <li
                       className="flex gap-2 items-center group"
                       key={index}
-                      onClick={() => handleClick(item)}
+                      onClick={() => {
+                        item.id !== category && setCategory(item.id);
+                      }}
                     >
                       <div
                         className={`w-full flex items-center gap-2 p-2 hover:bg-red-100 ${
@@ -196,7 +208,47 @@ const HomePage = () => {
                     Liên kết nhanh
                   </span>
                 </div>
-                <ul className={`${styles.navList} [&>li]:text-lg`}></ul>
+                <ul className={`${styles.linkList} text-lg`}>
+                  <li className={`${styles.activeAfter} relative`}>
+                    <p className="my-2">Danh sách sản phẩm</p>
+                    <ul className="ml-6">
+                      <li className={`${styles.activeAfter} relative my-2`}>
+                        <p className="my-2">Danh sách sản phẩm 1</p>
+                        <ul className="ml-8">
+                          <li className="p-1">Danh sách sản phẩm 2</li>
+                          <li className="p-1">Danh sách sản phẩm 2</li>
+                          <li className="p-1">Danh sách sản phẩm 2</li>
+                        </ul>
+                      </li>
+                      <li className={`${styles.activeAfter} relative my-2`}>
+                        <p className="my-2">Danh sách sản phẩm 1</p>
+                        <ul className="ml-8">
+                          <li className="p-1">Danh sách sản phẩm 2</li>
+                          <li className="p-1">Danh sách sản phẩm 2</li>
+                          <li className="p-1">Danh sách sản phẩm 2</li>
+                        </ul>
+                      </li>
+                    </ul>
+                    <ul className="ml-6">
+                      <li className={`${styles.activeAfter} relative my-2`}>
+                        <p className="my-2">Danh sách sản phẩm 1</p>
+                        <ul className="ml-8">
+                          <li className="p-1">Danh sách sản phẩm 2</li>
+                          <li className="p-1">Danh sách sản phẩm 2</li>
+                          <li className="p-1">Danh sách sản phẩm 2</li>
+                        </ul>
+                      </li>
+                      <li className={`${styles.activeAfter} relative my-2`}>
+                        <p className="my-2">Danh sách sản phẩm 1</p>
+                        <ul className="ml-8">
+                          <li className="p-1">Danh sách sản phẩm 2</li>
+                          <li className="p-1">Danh sách sản phẩm 2</li>
+                          <li className="p-1">Danh sách sản phẩm 2</li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
               </li>
             </ul>
           </div>

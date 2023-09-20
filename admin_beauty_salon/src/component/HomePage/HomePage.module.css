@@ -35,11 +35,7 @@
 }
 
 .navigation {
-  @apply min-h-full max-h-[1000px] col-span-3 lg:col-span-2 border-r-4 border-solid border-red-500 overflow-y-auto hidden sm:block;
-}
-
-.navigation::-webkit-scrollbar {
-  @apply w-[5px] h-2 bg-[#edeeef];
+  @apply min-h-full col-span-3 lg:col-span-2 border-r-4 border-solid border-red-500 overflow-y-auto hidden sm:block;
 }
 
 .navigationMobile {
@@ -56,6 +52,14 @@
 
 .navList {
   @apply text-sm [&>li]:cursor-pointer [&>:hover]:text-red-600 text-textPrimaryColor;
+}
+
+.linkList {
+  @apply max-h-[800px] overflow-auto text-sm text-textPrimaryColor pl-4 relative;
+}
+
+.activeAfter {
+  @apply after:content-[''] after:absolute after:top-1 after:left-[-5px] after:h-full after:w-px after:border-l after:border-dashed after:border-gray-500;
 }
 
 .active {

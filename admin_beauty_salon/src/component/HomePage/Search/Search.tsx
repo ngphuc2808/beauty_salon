@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 
 import styles from "./Search.module.css";
+import { dataNavigation } from "../../../utils/data";
 
 const Search = ({ category }: iCategory) => {
   const [searchValue, setSearchValue] = useState<string>("");
@@ -22,19 +23,9 @@ const Search = ({ category }: iCategory) => {
         className={`${styles.inputSearch}`}
         ref={inputRef}
         type="text"
-        placeholder={
-          category === "Cat1"
-            ? "Tìm kiếm danh mục cấp 1"
-            : category === "Cat2"
-            ? "Tìm kiếm danh mục cấp 2"
-            : category === "Cat3"
-            ? "Tìm kiếm danh mục cấp 3"
-            : category === "Cat4"
-            ? "Tìm kiếm bài viết"
-            : category === "Cat5"
-            ? "Tìm kiếm sản phẩm"
-            : ""
-        }
+        placeholder={`Tìm kiếm ${dataNavigation
+          .find((item) => item.id === category)
+          ?.name.toLowerCase()}`}
         value={searchValue}
         onChange={(e) => {
           setSearchValue(e.target.value);
