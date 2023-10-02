@@ -23,19 +23,6 @@ export default {
       transformOrigin: {
         subMenu: "95% top",
       },
-      keyframes: {
-        loading: {
-          "0%": {
-            transform: "rotate(0deg)",
-          },
-          "100%": {
-            transform: "rotate(360deg)",
-          },
-        },
-      },
-      animation: {
-        loading: "loading 1.2s linear infinite",
-      },
       gridTemplateRows: {
         maxContent: "max-content;",
       },

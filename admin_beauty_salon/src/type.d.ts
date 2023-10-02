@@ -3,6 +3,10 @@ interface iAccount {
   password: string;
 }
 
+interface FormInputs {
+  test: string;
+}
+
 interface iFakeData {
   id: string;
   name: string;

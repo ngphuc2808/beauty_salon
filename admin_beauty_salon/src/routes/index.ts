@@ -1,6 +1,6 @@
 import config from "../config";
-import LoginPage from "../component/LoginPage";
-import HomePage from "../component/HomePage";
+import LoginPage from "@/component/templates/LoginPage";
+import HomePage from "@/component/templates/HomePage";
 
 //public routes
 const publicRoutes = [

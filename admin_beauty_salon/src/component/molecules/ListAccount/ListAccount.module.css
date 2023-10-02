@@ -1,0 +1,23 @@
+.content {
+  @apply relative shadow-md rounded-lg mb-5 bg-white;
+}
+
+.headerTable {
+  @apply flex gap-4 mx-3 mb-3 sm:mx-5 sm:mb-5 border-b border-gray-200 items-center justify-center lg:justify-normal;
+}
+
+.customSpan {
+  @apply lg:px-4 md:py-2 lg:my-5 md:my-3 rounded-md text-sm lg:text-base;
+}
+
+.customButton {
+  @apply min-w-[70px] h-10 py-1 px-1 my-2 md:my-3 rounded-md text-gray-900 ease-in duration-300 text-sm border-2 border-solid;
+}
+
+.table {
+  @apply mb-4 min-w-full max-w-full whitespace-nowrap text-sm text-left text-gray-500;
+}
+
+.tableRow {
+  @apply bg-white border-b hover:bg-gray-50 cursor-pointer;
+}

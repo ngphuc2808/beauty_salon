@@ -1,0 +1,75 @@
+.wrapper {
+}
+
+.header {
+  @apply fixed w-full h-16 bg-white inset-0 px-[10px] py-2 flex items-center justify-between shadow-headerBox z-50;
+}
+
+.logoArea {
+  @apply w-[90px] h-full;
+}
+
+.infoArea {
+  @apply flex items-center gap-2;
+}
+
+.avatar {
+  @apply w-[35px] h-[35px] bg-red-100 rounded-full hover:cursor-pointer;
+}
+
+.subMenu {
+  @apply bg-white p-3 absolute w-max shadow-menuBox rounded-md top-[44px] right-0 flex items-center gap-2 scale-0 origin-subMenu ease-in duration-200
+    before:content-[''] before:absolute before:top-[-13px] before:right-0 before:w-[50px] before:h-[20px] before:bg-transparent;
+}
+
+.customCameraIcon {
+  @apply flex items-center justify-center absolute bottom-0 right-[-5px] bg-[#e4e6eb] w-6 h-6 rounded-full cursor-pointer;
+}
+
+.subList {
+  @apply [&>li]:py-2 [&>li]:px-3 [&>li]:cursor-pointer text-sm text-textPrimaryColor [&>:hover]:text-red-600 [&>:hover]:bg-red-50;
+}
+
+.content {
+  @apply min-h-screen max-h-full mt-16 bg-[#f6f6f7] grid grid-cols-12 grid-rows-maxContent gap-y-0;
+}
+
+.leftContent {
+  @apply min-h-full col-span-3 lg:col-span-2 border-r-4 border-solid border-red-500 overflow-y-auto hidden sm:block;
+}
+
+.leftContentMobile {
+  @apply fixed inset-0 bg-white z-[100] sm:hidden ease-in duration-500 transition-all overflow-y-auto;
+}
+
+.rightContent {
+  @apply col-span-12 md:col-span-9 lg:col-span-10 p-5;
+}
+
+.customCloseIcon {
+  @apply absolute right-7 top-7 text-3xl w-[30px] h-[30px] flex items-center justify-center rounded-full hover:text-red-500 ease-in duration-200;
+}
+
+.headerMenu {
+  @apply uppercase font-semibold pl-2 lg:ml-2;
+}
+
+.navList {
+  @apply text-sm [&>li]:cursor-pointer [&>:hover]:text-red-600 text-textPrimaryColor;
+}
+
+.linkList {
+  @apply max-h-[800px] overflow-auto text-sm text-textPrimaryColor pl-4 relative;
+}
+
+.itemList {
+  @apply cursor-pointer hover:text-red-600;
+}
+
+.activeAfter {
+  @apply after:content-[''] after:absolute after:top-2 after:left-[1px] after:h-full after:border-l after:border-dashed after:border-gray-500;
+}
+
+.active {
+  @apply text-red-600 bg-red-100 rounded;
+}
