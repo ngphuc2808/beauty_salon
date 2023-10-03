@@ -134,7 +134,7 @@ const EditAccount = () => {
         </div>
       </div>
       <div className="col-span-12 lg:col-span-4 [&>*]:mb-5">
-        <div className="bg-white shadow rounded-lg p-5 mt-5 lg:mt-0">
+        <div className="bg-white shadow rounded-lg p-5 mt-0">
           <div className="flex items-center justify-between mb-3">
             <h1 className="text-textHeadingColor">Ảnh đại diện</h1>
             <div className="flex items-center gap-3 text-sm">

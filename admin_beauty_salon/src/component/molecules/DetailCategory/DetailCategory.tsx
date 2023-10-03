@@ -184,12 +184,12 @@ const DetailCategory = () => {
               <button
                 className={`${styles.customButtonCategory} w-[48%] lg:w-[200px] `}
               >
-                Thoát
+                Lưu
               </button>
               <button
                 className={`${styles.customButtonCategory} w-[48%] lg:w-[200px]`}
               >
-                Lưu
+                Thoát
               </button>
             </div>
           </div>
@@ -224,27 +224,13 @@ const DetailCategory = () => {
             <div className="flex items-center justify-center w-full">
               <label htmlFor="dropZone" className={`${styles.labelDropZone}`}>
                 <div className={`${styles.dropZone}`}>
-                  <svg
-                    className="w-8 h-8 mb-4 text-gray-500 "
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 20 16"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                    />
-                  </svg>
-                  <p className="mb-2 text-sm text-gray-500 ">
+                  <i className="ri-upload-cloud-2-line mb-1 text-4xl text-textPrimaryColor"></i>
+                  <p className="mb-2 text-sm text-textPrimaryColor">
                     <span className="font-semibold">
                       Bấm hoặc kéo thả để chọn ảnh của bạn
                     </span>
                   </p>
-                  <p className="text-xs text-gray-500 ">
+                  <p className="text-xs text-textPrimaryColor">
                     SVG, PNG, JPG or GIF (MAX. 800x400px)
                   </p>
                 </div>

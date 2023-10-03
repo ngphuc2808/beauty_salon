@@ -23,8 +23,8 @@ const Auth = () => {
         <button className={`${styles.buttonAddAccount}`}>Thêm tài khoản</button>
         {/* <button className={`${styles.buttonSaveAccount}`}>Lưu cài đặt</button> */}
       </div>
-      <ListAccount />
-      {/* <EditAccount /> */}
+      {/* <ListAccount /> */}
+      <EditAccount />
     </Fragment>
   );
 };

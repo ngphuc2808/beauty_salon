@@ -13,3 +13,47 @@
 .titleDashBoard {
   @apply text-xl text-textHeadingColor;
 }
+
+.titleItem {
+  @apply text-lg text-textHeadingColor;
+}
+
+.inputName {
+  @apply mt-3 w-full border rounded p-3 text-sm focus:outline-none focus:border-red-500 focus:ring focus:ring-red-500/20;
+}
+
+.gridContent {
+  @apply grid grid-cols-12 gap-x-3;
+}
+
+.leftContent {
+  @apply col-span-12 lg:col-span-8 order-2 lg:order-none;
+}
+
+.mainItemLeftContent {
+  @apply shadow rounded-lg mb-5 bg-white w-full p-4;
+}
+
+.itemLeftContent {
+  @apply bg-white shadow rounded-lg p-5;
+}
+
+.customButton {
+  @apply text-textPrimaryColor text-sm px-4 py-3 bg-red-400 hover:bg-red-500 ease-in duration-200 text-white rounded-md;
+}
+
+.rightContent {
+  @apply col-span-12 lg:col-span-4 [&>*]:mb-5;
+}
+
+.banner {
+  @apply bg-white shadow rounded-lg p-5 mt-0;
+}
+
+.labelDropZone {
+  @apply flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100;
+}
+
+.dropZone {
+  @apply flex flex-col items-center justify-center pt-5 pb-6 overflow-hidden rounded-lg;
+}

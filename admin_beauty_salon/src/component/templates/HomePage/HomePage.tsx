@@ -8,6 +8,7 @@ import { dataNavigation } from "@/utils/data";
 
 import Navigation from "@/component/organisms/Navigation";
 import Auth from "@/component/organisms/Auth";
+import CropImage from "@/component/molecules/CropImage";
 
 const HomePage = () => {
   const [isLoggedIn, SetIsLoggedIn] = useState<boolean>(true);

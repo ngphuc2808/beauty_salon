@@ -1,3 +1,10 @@
+interface Window {
+  Image: {
+    prototype: HTMLImageElement;
+    new (): HTMLImageElement;
+  };
+}
+
 interface iAccount {
   username: string;
   password: string;
@@ -33,4 +40,10 @@ interface iDataList {
   category: string;
   dateTime: string;
   permission: boolean;
+}
+
+interface ICrop {
+  image: string | ArrayBuffer | null;
+  setModalCrop: (modalCrop: boolean) => void;
+  setPreviewImg: (img: string) => void;
 }

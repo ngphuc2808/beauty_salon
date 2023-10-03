@@ -87,7 +87,7 @@
 }
 
 .secondItemRightContent {
-  @apply bg-white shadow rounded-lg p-5 mt-5 lg:mt-0;
+  @apply bg-white shadow rounded-lg p-5 mt-0;
 }
 
 .labelDropZone {

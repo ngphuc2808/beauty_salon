@@ -27,3 +27,7 @@ html *::-webkit-scrollbar-thumb {
 html *::-webkit-scrollbar-track {
   @apply rounded-none bg-transparent;
 }
+
+.ck-editor__editable {
+  @apply h-[500px];
+}
