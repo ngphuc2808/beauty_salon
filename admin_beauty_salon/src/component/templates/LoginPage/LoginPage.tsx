@@ -1,6 +1,6 @@
 import { useState, useEffect, ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
@@ -13,6 +13,15 @@ import { setLoggedIn } from "@/features/redux/slices/authSlice";
 const LoginPage = () => {
   const router = useNavigate();
   const dispatch = useDispatch();
+
+  const { isLoggedIn } = useSelector((state: any) => state.auth);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      router("/");
+      return;
+    }
+  }, []);
 
   const [formValue, setFormValue] = useState<iAccount>({
     username: "",
@@ -47,8 +56,8 @@ const LoginPage = () => {
     try {
       if (formValue.username.length > 0 && formValue.password.length > 0) {
         const result = await UsersApi.login(formValue);
-        if (result.results === "Login success") {
-          dispatch(setLoggedIn());
+        if (result.results === "Đăng nhập thành công.") {
+          dispatch(setLoggedIn(true));
           router("/");
           return;
         }

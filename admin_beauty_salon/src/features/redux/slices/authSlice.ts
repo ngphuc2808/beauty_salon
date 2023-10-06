@@ -8,8 +8,8 @@ export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setLoggedIn: (state) => {
-      state.isLoggedIn = true;
+    setLoggedIn: (state, payload) => {
+      state.isLoggedIn = payload.payload;
     },
   },
 });

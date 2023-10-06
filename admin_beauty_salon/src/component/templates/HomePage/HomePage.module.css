@@ -18,7 +18,7 @@
 }
 
 .subMenu {
-  @apply bg-white p-3 absolute w-max shadow-menuBox rounded-md top-[44px] right-0 flex items-center gap-2 scale-0 origin-subMenu ease-in duration-200
+  @apply bg-white p-3 absolute w-max shadow-menuBox rounded-md top-[44px] right-0 items-center gap-2 hidden
     before:content-[''] before:absolute before:top-[-13px] before:right-0 before:w-[50px] before:h-[20px] before:bg-transparent;
 }
 
