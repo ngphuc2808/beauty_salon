@@ -142,3 +142,42 @@ export const dataList = [
     permission: true,
   },
 ];
+
+export const dataListAccount: iAccountAuth[] = [
+  {
+    id: 1,
+    username: "admin1",
+    password: "admin",
+    fullName: "Nguyễn Văn A",
+    email: "nva@gmail.com",
+    phone: "0901234567",
+    avatar: "",
+    permission: "Bật",
+    role: "guest",
+    status: true,
+  },
+  {
+    id: 2,
+    username: "admin2",
+    password: "admin",
+    fullName: "Nguyễn Văn B",
+    email: "nvb@gmail.com",
+    phone: "0901234568",
+    avatar: "",
+    permission: "Bật",
+    role: "guest",
+    status: true,
+  },
+  {
+    id: 3,
+    username: "admin3",
+    password: "admin",
+    fullName: "Nguyễn Văn C",
+    email: "nvc@gmail.com",
+    phone: "0901234569",
+    avatar: "",
+    permission: "Tắt",
+    role: "guest",
+    status: true,
+  },
+];

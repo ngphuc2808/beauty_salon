@@ -18,6 +18,8 @@ const HomePage = () => {
   const router = useNavigate();
   const dispatch = useDispatch();
 
+  const [auth, setAuth] = useState<boolean>(false);
+
   const { isLoggedIn } = useSelector((state: any) => state.auth);
 
   useEffect(() => {
@@ -67,8 +69,8 @@ const HomePage = () => {
                 </div>
               </div>
               <ul className={`${styles.subList}`}>
-                <li>Xác thực và ủy quyền</li>
-                <li>Sửa thông tin</li>
+                <li onClick={() => setAuth(true)}>Xác thực và ủy quyền</li>
+                <li onClick={() => setAuth(true)}>Sửa thông tin</li>
                 <li onClick={handleLogout}>Đăng xuất</li>
               </ul>
             </div>
@@ -290,8 +292,8 @@ const HomePage = () => {
           </ul>
         </div>
         <div className={`${styles.rightContent}`}>
-          <Navigation category={category} />
-          {/* <Auth /> */}
+          {/* <Navigation category={category} /> */}
+          {auth && <Auth />}
         </div>
       </div>
     </section>

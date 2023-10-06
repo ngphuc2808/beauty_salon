@@ -1,5 +1,5 @@
 .content {
-  @apply relative shadow-md rounded-lg mb-5 bg-white;
+  @apply relative shadow-md rounded-lg mb-5 bg-white overflow-hidden;
 }
 
 .dashBoard {

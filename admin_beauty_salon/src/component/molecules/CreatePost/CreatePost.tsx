@@ -68,6 +68,153 @@ const CreatePost = () => {
     e.currentTarget.value = "";
   };
 
+  // const uploadPlugin = (editor: ClassicEditor) => {
+  //   editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
+  //     return uploadAdapter(loader);
+  //   };
+  // }
+
+  const configPluginEditor: any = {
+    plugins: [
+      Autoformat,
+      Essentials,
+      Paragraph,
+      Bold,
+      Italic,
+      Heading,
+      Indent,
+      IndentBlock,
+      Underline,
+      BlockQuote,
+      Font,
+      Alignment,
+      List,
+      Link,
+      MediaEmbed,
+      PasteFromOffice,
+      Image,
+      ImageStyle,
+      ImageToolbar,
+      ImageUpload,
+      ImageResize,
+      Base64UploadAdapter,
+      Table,
+      TableToolbar,
+      TextTransformation,
+    ],
+    toolbar: [
+      "undo",
+      "redo",
+      "|",
+      "heading",
+      "|",
+      "fontFamily",
+      "fontSize",
+      "fontColor",
+      "fontBackgroundColor",
+      "|",
+      "bold",
+      "italic",
+      "underline",
+      "|",
+      "alignment",
+      "outdent",
+      "indent",
+      "bulletedList",
+      "numberedList",
+      "blockQuote",
+      "|",
+      "link",
+      "insertTable",
+      "imageUpload",
+      "mediaEmbed",
+    ],
+    heading: {
+      options: [
+        {
+          model: "paragraph",
+          title: "Paragraph",
+          class: "ck-heading_paragraph",
+        },
+        {
+          model: "heading1",
+          view: "h1",
+          title: "Heading 1",
+          class: "ck-heading_heading1",
+        },
+        {
+          model: "heading2",
+          view: "h2",
+          title: "Heading 2",
+          class: "ck-heading_heading2",
+        },
+        {
+          model: "heading3",
+          view: "h3",
+          title: "Heading 3",
+          class: "ck-heading_heading3",
+        },
+      ],
+    },
+    fontSize: {
+      options: [
+        9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 25, 27, 29, 31,
+        33, 35,
+      ],
+    },
+    fontFamily: {
+      options: [
+        "default",
+        "Arial, Helvetica, sans-serif",
+        "Courier New, Courier, monospace",
+        "Georgia, serif",
+        "Lucida Sans Unicode, Lucida Grande, sans-serif",
+        "Tahoma, Geneva, sans-serif",
+        "Times New Roman, Times, serif",
+        "Trebuchet MS, Helvetica, sans-serif",
+        "Verdana, Geneva, sans-serif",
+      ],
+    },
+    alignment: {
+      options: ["justify", "left", "center", "right"],
+    },
+    table: {
+      contentToolbar: ["tableColumn", "tableRow", "mergeTableCells"],
+    },
+    image: {
+      resizeUnit: "px",
+      toolbar: [
+        "imageStyle:alignLeft",
+        "imageStyle:alignCenter",
+        "imageStyle:alignRight",
+        "|",
+        "imageTextAlternative",
+      ],
+    },
+    typing: {
+      transformations: {
+        include: [
+          // Use only the 'quotes' and 'typography' groups.
+          "quotes",
+          "typography",
+
+          // Plus some custom transformation.
+          { from: "CKE", to: "CKEditor" },
+        ],
+        remove: [
+          "enDash",
+          "emDash",
+          "oneHalf",
+          "oneThird",
+          "twoThirds",
+          "oneForth",
+          "threeQuarters",
+        ],
+      },
+    },
+    placeholder: "Nhập nội dung...",
+  };
+
   return (
     <Fragment>
       <div className={`${styles.dashBoard}`}>
@@ -94,150 +241,7 @@ const CreatePost = () => {
           <div className={`${styles.mainItemLeftContent}`}>
             <CKEditor
               editor={ClassicEditor}
-              config={{
-                plugins: [
-                  Autoformat,
-                  Essentials,
-                  Paragraph,
-                  Bold,
-                  Italic,
-                  Heading,
-                  Indent,
-                  IndentBlock,
-                  Underline,
-                  BlockQuote,
-                  Font,
-                  Alignment,
-                  List,
-                  Link,
-                  MediaEmbed,
-                  PasteFromOffice,
-                  Image,
-                  ImageStyle,
-                  ImageToolbar,
-                  ImageUpload,
-                  ImageResize,
-                  Base64UploadAdapter,
-                  Table,
-                  TableToolbar,
-                  TextTransformation,
-                ],
-                toolbar: [
-                  "undo",
-                  "redo",
-                  "|",
-                  "heading",
-                  "|",
-                  "fontFamily",
-                  "fontSize",
-                  "fontColor",
-                  "fontBackgroundColor",
-                  "|",
-                  "bold",
-                  "italic",
-                  "underline",
-                  "|",
-                  "alignment",
-                  "outdent",
-                  "indent",
-                  "bulletedList",
-                  "numberedList",
-                  "blockQuote",
-                  "|",
-                  "link",
-                  "insertTable",
-                  "imageUpload",
-                  "mediaEmbed",
-                ],
-                heading: {
-                  options: [
-                    {
-                      model: "paragraph",
-                      title: "Paragraph",
-                      class: "ck-heading_paragraph",
-                    },
-                    {
-                      model: "heading1",
-                      view: "h1",
-                      title: "Heading 1",
-                      class: "ck-heading_heading1",
-                    },
-                    {
-                      model: "heading2",
-                      view: "h2",
-                      title: "Heading 2",
-                      class: "ck-heading_heading2",
-                    },
-                    {
-                      model: "heading3",
-                      view: "h3",
-                      title: "Heading 3",
-                      class: "ck-heading_heading3",
-                    },
-                  ],
-                },
-                fontSize: {
-                  options: [
-                    9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 25,
-                    27, 29, 31, 33, 35,
-                  ],
-                },
-                fontFamily: {
-                  options: [
-                    "default",
-                    "Arial, Helvetica, sans-serif",
-                    "Courier New, Courier, monospace",
-                    "Georgia, serif",
-                    "Lucida Sans Unicode, Lucida Grande, sans-serif",
-                    "Tahoma, Geneva, sans-serif",
-                    "Times New Roman, Times, serif",
-                    "Trebuchet MS, Helvetica, sans-serif",
-                    "Verdana, Geneva, sans-serif",
-                  ],
-                },
-                alignment: {
-                  options: ["justify", "left", "center", "right"],
-                },
-                table: {
-                  contentToolbar: [
-                    "tableColumn",
-                    "tableRow",
-                    "mergeTableCells",
-                  ],
-                },
-                image: {
-                  resizeUnit: "px",
-                  toolbar: [
-                    "imageStyle:alignLeft",
-                    "imageStyle:alignCenter",
-                    "imageStyle:alignRight",
-                    "|",
-                    "imageTextAlternative",
-                  ],
-                },
-                typing: {
-                  transformations: {
-                    include: [
-                      // Use only the 'quotes' and 'typography' groups.
-                      "quotes",
-                      "typography",
-
-                      // Plus some custom transformation.
-                      { from: "CKE", to: "CKEditor" },
-                    ],
-                    remove: [
-                      "enDash",
-                      "emDash",
-                      "oneHalf",
-                      "oneThird",
-                      "twoThirds",
-                      "oneForth",
-                      "threeQuarters",
-                    ],
-                  },
-                },
-                placeholder: "Nhập nội dung...",
-              }}
+              config={configPluginEditor}
               onChange={(_event, editor) => {
                 const newData = editor.getData();
                 setData(newData);

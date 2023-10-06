@@ -1,5 +1,5 @@
 .content {
-  @apply relative shadow-md rounded-lg mb-5 bg-white;
+  @apply relative shadow-md rounded-lg mb-5 bg-white overflow-hidden;
 }
 
 .headerTable {
@@ -19,5 +19,5 @@
 }
 
 .tableRow {
-  @apply bg-white border-b hover:bg-gray-50 cursor-pointer;
+  @apply bg-white border-b hover:bg-gray-50;
 }

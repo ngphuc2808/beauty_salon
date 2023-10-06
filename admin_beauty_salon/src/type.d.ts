@@ -47,3 +47,21 @@ interface ICrop {
   setModalCrop: (modalCrop: boolean) => void;
   setPreviewImg: (img: string) => void;
 }
+
+interface iListAccount {
+  editAccount: boolean;
+  setEditAccount: (editAccount: boolean) => void;
+}
+
+interface iAccountAuth {
+  id: number;
+  username: string;
+  password: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  avatar: string;
+  permission: string;
+  role: string;
+  status: boolean;
+}

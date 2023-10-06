@@ -1,0 +1,15 @@
+.label {
+  @apply block mb-2 text-sm font-normal;
+}
+
+.input {
+  @apply border text-sm outline-none rounded-md block w-full p-2.5;
+}
+
+.customRadio[type="radio"]:after {
+  @apply cursor-pointer w-4 h-4 rounded-full relative top-[-2px] left-0 bg-[#d1d3d1] content-[''] inline-block visible;
+}
+
+.customRadio[type="radio"]:checked:after {
+  @apply cursor-pointer w-4 h-4 rounded-full relative top-[-2px] left-0 bg-green-500 content-[''] inline-block visible;
+}

@@ -1,7 +1,7 @@
 import { useState } from "react";
-import styles from "./EditAccount.module.css";
+import styles from "./AddAccount.module.css";
 
-const EditAccount = ({ superAdmin }: { superAdmin: boolean }) => {
+const AddAccount = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
@@ -79,8 +79,8 @@ const EditAccount = ({ superAdmin }: { superAdmin: boolean }) => {
               <input
                 type="password"
                 id="password"
-                value={password}
                 autoComplete="on"
+                value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
                 }}
@@ -88,72 +88,64 @@ const EditAccount = ({ superAdmin }: { superAdmin: boolean }) => {
                 placeholder="Mật khẩu"
               />
             </div>
-            {superAdmin && (
-              <>
-                <div className="mb-5">
-                  <h1 className="text-sm text-textHeadingColor mb-2">
-                    Trạng thái
-                  </h1>
-                  <div className="flex gap-10 items-center">
-                    <label
-                      htmlFor="permission1"
-                      className="flex gap-4 items-center text-sm"
-                    >
-                      <input
-                        type="radio"
-                        id="permission1"
-                        name="permission"
-                        className={`${styles.customRadio}`}
-                      />
-                      Bật
-                    </label>
-                    <label
-                      htmlFor="permission2"
-                      className="flex gap-4 items-center text-sm"
-                    >
-                      <input
-                        type="radio"
-                        id="permission2"
-                        name="permission"
-                        className={`${styles.customRadio}`}
-                      />
-                      Tắt
-                    </label>
-                  </div>
-                </div>
-                <div className="mb-5">
-                  <h1 className="text-sm text-textHeadingColor mb-2">
-                    Phân quyền
-                  </h1>
-                  <div className="flex gap-10 items-center">
-                    <label
-                      htmlFor="role1"
-                      className="flex gap-4 items-center text-sm"
-                    >
-                      <input
-                        type="radio"
-                        id="role1"
-                        name="role"
-                        className={`${styles.customRadio}`}
-                      />
-                      Quản trị viên
-                    </label>
-                    <label
-                      htmlFor="role2"
-                      className="flex gap-4 items-center text-sm"
-                    >
-                      <input
-                        type="radio"
-                        id="role2"
-                        name="role"
-                        className={`${styles.customRadio}`}
-                      />
-                      Nhân viên
-                    </label>
-                  </div>
-                </div>
-              </>
-            )}
+            <div className="mb-5">
+              <h1 className="text-sm text-textHeadingColor mb-2">Trạng thái</h1>
+              <div className="flex gap-10 items-center">
+                <label
+                  htmlFor="permission1"
+                  className="flex gap-4 items-center text-sm"
+                >
+                  <input
+                    type="radio"
+                    id="permission1"
+                    name="permission"
+                    className={`${styles.customRadio}`}
+                  />
+                  Bật
+                </label>
+                <label
+                  htmlFor="permission2"
+                  className="flex gap-4 items-center text-sm"
+                >
+                  <input
+                    type="radio"
+                    id="permission2"
+                    name="permission"
+                    className={`${styles.customRadio}`}
+                  />
+                  Tắt
+                </label>
+              </div>
+            </div>
+            <div className="mb-5">
+              <h1 className="text-sm text-textHeadingColor mb-2">Phân quyền</h1>
+              <div className="flex gap-10 items-center">
+                <label
+                  htmlFor="role1"
+                  className="flex gap-4 items-center text-sm"
+                >
+                  <input
+                    type="radio"
+                    id="role1"
+                    name="role"
+                    className={`${styles.customRadio}`}
+                  />
+                  Quản trị viên
+                </label>
+                <label
+                  htmlFor="role2"
+                  className="flex gap-4 items-center text-sm"
+                >
+                  <input
+                    type="radio"
+                    id="role2"
+                    name="role"
+                    className={`${styles.customRadio}`}
+                  />
+                  Nhân viên
+                </label>
+              </div>
+            </div>
           </form>
         </div>
       </div>
@@ -205,4 +197,4 @@ const EditAccount = ({ superAdmin }: { superAdmin: boolean }) => {
   );
 };
 
-export default EditAccount;
+export default AddAccount;
