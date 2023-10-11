@@ -57,3 +57,7 @@
 .dropZone {
   @apply flex flex-col items-center justify-center pt-5 pb-6 overflow-hidden rounded-lg;
 }
+
+.toastBody {
+  @apply font-beVietnam text-sm;
+}

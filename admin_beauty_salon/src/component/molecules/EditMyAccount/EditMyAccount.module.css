@@ -18,7 +18,7 @@
   @apply w-full py-4 mb-5 bg-white flex items-center justify-between shadow rounded-lg flex-wrap lg:flex-nowrap;
 }
 
-.buttonListAccount {
+.buttonAddAccount {
   @apply w-full lg:w-auto lg:text-base md:text-sm bg-red-500 rounded-md hover:bg-red-600 text-white ease-in duration-300 px-3 py-2;
 }
 
@@ -30,20 +30,8 @@
   @apply lg:text-2xl text-xl ml-5 w-10 h-10 flex items-center justify-center text-white bg-red-400 hover:bg-red-500 ease-in duration-200 cursor-pointer rounded-md;
 }
 
-.itemLeftContent {
-  @apply bg-white shadow rounded-lg p-5;
-}
-
-.customButton {
-  @apply text-textPrimaryColor text-sm px-4 py-3 bg-red-400 hover:bg-red-500 ease-in duration-200 text-white rounded-md;
-}
-
-.rightContent {
-  @apply col-span-12 lg:col-span-4 [&>*]:mb-5;
-}
-
-.banner {
-  @apply bg-white shadow rounded-lg p-5 mt-0;
+.toastBody {
+  @apply font-beVietnam text-sm;
 }
 
 .labelDropZone {
@@ -52,8 +40,4 @@
 
 .dropZone {
   @apply flex flex-col items-center justify-center pt-5 pb-6 overflow-hidden rounded-lg;
-}
-
-.toastBody {
-  @apply font-beVietnam text-sm;
 }

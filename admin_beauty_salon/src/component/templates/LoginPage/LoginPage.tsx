@@ -3,43 +3,47 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { useForm } from "react-hook-form";
+
 import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import styles from "./LoginPage.module.css";
 
-import { UsersApi } from "@/services/api/users";
-import { setLoggedIn } from "@/features/redux/slices/authSlice";
+import { AuthApi } from "@/services/api/auth";
+import { setLoggedIn } from "@/features/redux/slices/dataUI/loginSlice";
 
 const LoginPage = () => {
   const router = useNavigate();
   const dispatch = useDispatch();
 
-  const { isLoggedIn } = useSelector((state: any) => state.auth);
+  const login = useSelector(
+    (state: { login: { info: { isLoggedIn: boolean; session: string } } }) =>
+      state.login
+  );
 
   useEffect(() => {
-    if (isLoggedIn) {
+    if (login.info.isLoggedIn) {
       router("/");
       return;
     }
   }, []);
 
+  const [emptyUsername, setEmptyUsername] = useState<boolean>(true);
+  const [emptyPassword, setEmptyPassword] = useState<boolean>(true);
   const [formValue, setFormValue] = useState<iAccount>({
     username: "",
     password: "",
   });
 
-  const [emptyUsername, setEmptyUsername] = useState<boolean>(true);
-  const [emptyPassword, setEmptyPassword] = useState<boolean>(true);
+  const {
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm<FormInputs>();
 
   useEffect(() => {
     if (formValue.username.length > 0) setEmptyUsername(true);
     if (formValue.password.length > 0) setEmptyPassword(true);
   }, [formValue]);
-
-  const {
-    handleSubmit,
-    formState: { isSubmitting },
-  } = useForm<FormInputs>();
 
   const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value }: { name: string; value: string } = e.target;
@@ -55,25 +59,26 @@ const LoginPage = () => {
 
     try {
       if (formValue.username.length > 0 && formValue.password.length > 0) {
-        const result = await UsersApi.login(formValue);
-        if (result.results === "Đăng nhập thành công.") {
-          dispatch(setLoggedIn(true));
+        const result = await AuthApi.login(formValue);
+        if (result.results.message === "Đăng nhập thành công.") {
+          dispatch(
+            setLoggedIn({
+              isLoggedIn: true,
+              session: result.results.session,
+            })
+          );
           router("/");
           return;
         }
-        if (result.results === "Username is not exist") {
-          toast.error("Tài khoản không tồn tại, vui lòng kiểm tra lại!");
-          return;
-        }
-        if (result.results === "Password is incorrect") {
-          toast.error("Sai mật khẩu, vui lòng kiểm tra lại!");
-          return;
-        }
-        return;
       }
     } catch (error: any) {
-      if (error.error) {
-        toast.error("Đăng nhập thất bại, vui lòng kiểm tra lại thông tin!");
+      console.log(error);
+      if (error.results.message === "Tên đăng nhập không tồn tại.") {
+        toast.error("Tài khoản không tồn tại, vui lòng kiểm tra lại!");
+        return;
+      }
+      if (error.results.message === "Mật khẩu không đúng.") {
+        toast.error("Sai mật khẩu, vui lòng kiểm tra lại!");
         return;
       }
     }
@@ -134,6 +139,7 @@ const LoginPage = () => {
                   type="password"
                   id="password"
                   name="password"
+                  autoComplete="on"
                   value={formValue.password}
                   onChange={handleInput}
                   className={`${styles.input} ${

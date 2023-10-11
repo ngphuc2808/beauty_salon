@@ -37,3 +37,7 @@
 .button {
   @apply flex items-center justify-center w-full max-h-[42px] py-3 px-4 bg-red-500 rounded-md hover:bg-red-600 text-white ease-in duration-300;
 }
+
+.toastBody {
+  @apply font-beVietnam text-sm;
+}

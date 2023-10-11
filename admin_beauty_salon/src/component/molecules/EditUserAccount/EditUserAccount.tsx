@@ -1,70 +1,27 @@
 import { ChangeEvent, Fragment, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import styles from "./AddAccount.module.css";
+import styles from "./EditUserAccount.module.css";
 import { setListAccount } from "@/features/redux/slices/componentUI/authComponentSlice";
 import CropImage from "../CropImage";
-import { AuthApi } from "@/services/api/auth";
-import { ImageApi } from "@/services/api/image";
 
 const imageMimeType = /image\/(png|jpg|jpeg)/i;
 
-const AddAccount = () => {
+const EditUserAccount = () => {
   const dispatch = useDispatch();
+
+  const data = useSelector(
+    (state: { editUser: { info: iUserInfo } }) => state.editUser
+  );
 
   const [cropImage, setCropImage] = useState<string | ArrayBuffer | null>(null);
   const [modalCrop, setModalCrop] = useState<boolean>(false);
-  const [previewImg, setPreviewImg] = useState<string>("");
+  const [previewImg, setPreviewImg] = useState<string>(data.info.avatar || "");
   const [file, setFile] = useState<File>();
   const [fileImage, setFileImage] = useState<any>();
-  const [formValue, setFormValue] = useState<iAddAccount>({
-    username: "",
-    password: "",
-    fullName: "",
-    email: "",
-    phone: "",
-    avatar: "",
-    role: "employee",
-    status: false,
-  });
-
-  useEffect(() => {
-    return () => {
-      URL.revokeObjectURL(previewImg);
-    };
-  }, [previewImg]);
-
-  useEffect(() => {
-    let reader: FileReader,
-      isCancel: boolean = false;
-    if (file) {
-      reader = new FileReader();
-      reader.onload = (e: any) => {
-        const { result } = e.target;
-        if (result && !isCancel) {
-          setModalCrop(true);
-          setCropImage(result);
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-    return () => {
-      isCancel = true;
-      if (reader && reader.readyState === 2) {
-        setCropImage("");
-        reader.abort();
-        reader.onload = null;
-      }
-    };
-  }, [file]);
-
-  const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value }: { name: string; value: string } = e.target;
-    setFormValue({ ...formValue, [name]: value });
-  };
 
   const handleCrop = (e: ChangeEvent<HTMLInputElement>) => {
     let input = e.currentTarget;
@@ -78,75 +35,72 @@ const AddAccount = () => {
     }
     e.currentTarget.value = "";
   };
+  useEffect(() => {
+    let reader: FileReader,
+      isCancel: boolean = false;
+    if (file) {
+      reader = new FileReader();
+      reader.onload = (e: any) => {
+        const { result } = e.target;
+        if (result && !isCancel) {
+          setCropImage(result);
+          setModalCrop(true);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+    return () => {
+      isCancel = true;
+      if (reader && reader.readyState === 2) {
+        reader.abort();
+        reader.onload = null;
+      }
+    };
+  }, [file]);
 
-  const uploadFile = async () => {
-    const fileAvt = new File([fileImage], "image", {
-      type: fileImage,
-    });
+  const [formValue, setFormValue] = useState({
+    username: "",
+    password: "",
+    oldPassword: "",
+    fullName: data.info.fullName,
+    email: data.info.email,
+    phone: data.info.phone,
+    avatar: "",
+    role: data.info.role,
+    status: data.info.status,
+  });
 
-    const form = new FormData();
-    form.append("image", fileAvt);
-
-    const upload = await ImageApi.uploadImage(form);
-
-    return upload;
+  const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value }: { name: string; value: string } = e.target;
+    setFormValue({ ...formValue, [name]: value });
   };
 
-  const handleAddAccount = async () => {
+  const handleUpdateInfo = async () => {
     const data = formValue;
     data.status = Boolean(Number(formValue.status));
 
-    // try {
-    //   const result = await AuthApi.createAccount(data);
-    //   if (result) {
-    //     toast.success("Thêm tài khoản thành công!");
-    //     return;
-    //   }
-    // } catch (error: any) {
-    //   if (error.message === "email đã tồn tại.") {
-    //     toast.warning("Email đã tồn tại trong hệ thống!");
-    //     return;
-    //   }
-    //   if (error.message === "phone đã tồn tại.") {
-    //     toast.warning("Số điện thoại đã tồn tại trong hệ thống!");
-    //     return;
-    //   }
-    //   if (error.message === "users validation failed: email: Invalid email") {
-    //     toast.warning("Sai định dạng email!");
-    //     return;
-    //   }
-    //   if (
-    //     error.message === "users validation failed: phone: Invalid phone number"
-    //   ) {
-    //     toast.warning("Sai định dạng số điện thoại!");
-    //     return;
-    //   }
-    //   if (
-    //     error.message ===
-    //     "users validation failed: email: Invalid email, phone: Invalid phone number"
-    //   ) {
-    //     toast.warning("Sai định dạng email và số điện thoại!");
-    //     return;
-    //   }
-    // }
+    console.log(data);
   };
 
   return (
     <Fragment>
       <div className={`${styles.dashBoard}`}>
-        <h1 className="lg:text-xl md:text-base ml-5 text-textHeadingColor">
-          Xác thực và ủy quyền
-        </h1>
-        <div className="w-full lg:w-auto flex items-center gap-3 mr-5 ml-5 lg:ml-0 mt-4 lg:mt-0 flex-col lg:flex-row">
-          <button
-            className={`${styles.buttonListAccount}`}
-            onClick={() => {
-              dispatch(setListAccount());
-            }}
-          >
-            Danh sách tài khoản
-          </button>
+        <div className="flex items-center gap-3">
+          <i
+            className={`${styles.customIconBack} ri-arrow-left-line`}
+            onClick={() => dispatch(setListAccount())}
+          ></i>
+          <h1 className={`lg:text-xl md:text-base text-textHeadingColor`}>
+            Chỉnh sửa {data.info.fullName}
+          </h1>
         </div>
+
+        <button
+          className={`${styles.buttonSaveAccount}`}
+          onClick={handleUpdateInfo}
+        >
+          Lưu cài đặt
+        </button>
       </div>
       <div className="grid grid-cols-12 gap-x-3">
         <div className="col-span-12 lg:col-span-8 order-2 lg:order-none">
@@ -299,28 +253,11 @@ const AddAccount = () => {
               </div>
             </form>
           </div>
-          <div className="mt-5">
-            <div className={`${styles.itemLeftContent}`}>
-              <div className="flex items-center justify-between">
-                <button
-                  className={`${styles.customButton} w-[48%] lg:w-[200px] `}
-                  onClick={handleAddAccount}
-                >
-                  Lưu
-                </button>
-                <button
-                  className={`${styles.customButton} w-[48%] lg:w-[200px]`}
-                >
-                  Thoát
-                </button>
-              </div>
-            </div>
-          </div>
         </div>
-        <div className={`${styles.rightContent}`}>
-          <div className={`${styles.banner}`}>
+        <div className="col-span-12 lg:col-span-4 [&>*]:mb-5">
+          <div className="bg-white shadow rounded-lg p-5 mt-0">
             <div className="flex items-center justify-between mb-3">
-              <h1 className="text-textHeadingColor">Ảnh bài viết</h1>
+              <h1 className="text-textHeadingColor">Ảnh đại diện</h1>
               <div className="flex items-center gap-3 text-sm">
                 <label
                   htmlFor="dropZone"
@@ -398,4 +335,4 @@ const AddAccount = () => {
   );
 };
 
-export default AddAccount;
+export default EditUserAccount;

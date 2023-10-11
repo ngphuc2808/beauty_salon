@@ -9,34 +9,78 @@ import { dataNavigation } from "@/utils/data";
 
 import Navigation from "@/component/organisms/Navigation";
 import Auth from "@/component/organisms/Auth";
-import CropImage from "@/component/molecules/CropImage";
 
-import { setLoggedIn } from "@/features/redux/slices/authSlice";
-import { UsersApi } from "@/services/api/users";
+import { setLoggedIn } from "@/features/redux/slices/dataUI/loginSlice";
+import { AuthApi } from "@/services/api/auth";
+import {
+  setAddAccount,
+  setEditMyAccount,
+} from "@/features/redux/slices/componentUI/authComponentSlice";
+import { setInfoUser } from "@/features/redux/slices/dataUI/userSlice";
+import { setAuthComponent } from "@/features/redux/slices/componentUI/componentSlice";
 
 const HomePage = () => {
   const router = useNavigate();
   const dispatch = useDispatch();
 
-  const [auth, setAuth] = useState<boolean>(false);
-
-  const { isLoggedIn } = useSelector((state: any) => state.auth);
-
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (!login.info.isLoggedIn) {
       router("/login");
-      return;
+    } else {
+      handleGetInfo();
     }
   }, []);
 
-  const handleLogout = async () => {
-    await UsersApi.logout();
-    dispatch(setLoggedIn(false));
-    router("/login");
-  };
+  const component = useSelector(
+    (state: {
+      component: {
+        navigationComponent: boolean;
+        authComponent: boolean;
+      };
+    }) => state.component
+  );
 
+  const login = useSelector(
+    (state: { login: { info: { isLoggedIn: boolean; session: string } } }) =>
+      state.login
+  );
+
+  const [roleAdmin, setRoleAdmin] = useState<string>("");
   const [category, setCategory] = useState<string>(dataNavigation[0].id);
   const [navMobile, setNavMobile] = useState<boolean>(true);
+
+  const handleGetInfo = async () => {
+    try {
+      const result: any = await AuthApi.getInfo(login.info.session);
+      if (result) {
+        setRoleAdmin(result.results.role);
+        dispatch(setInfoUser(result.results));
+        return;
+      }
+    } catch (error: any) {
+      if (error) {
+        await AuthApi.logout();
+        dispatch(
+          setLoggedIn({
+            isLoggedIn: false,
+            session: "",
+          })
+        );
+        router("/login");
+      }
+    }
+  };
+
+  const handleLogout = async () => {
+    await AuthApi.logout();
+    dispatch(
+      setLoggedIn({
+        isLoggedIn: false,
+        session: "",
+      })
+    );
+    router("/login");
+  };
 
   return (
     <section className={`${styles.wrapper}`}>
@@ -69,8 +113,24 @@ const HomePage = () => {
                 </div>
               </div>
               <ul className={`${styles.subList}`}>
-                <li onClick={() => setAuth(true)}>Xác thực và ủy quyền</li>
-                <li onClick={() => setAuth(true)}>Sửa thông tin</li>
+                {roleAdmin === "admin" && (
+                  <li
+                    onClick={() => {
+                      dispatch(setAuthComponent());
+                      dispatch(setAddAccount());
+                    }}
+                  >
+                    Xác thực và ủy quyền
+                  </li>
+                )}
+                <li
+                  onClick={() => {
+                    dispatch(setAuthComponent());
+                    dispatch(setEditMyAccount());
+                  }}
+                >
+                  Sửa thông tin
+                </li>
                 <li onClick={handleLogout}>Đăng xuất</li>
               </ul>
             </div>
@@ -292,8 +352,8 @@ const HomePage = () => {
           </ul>
         </div>
         <div className={`${styles.rightContent}`}>
-          {/* <Navigation category={category} /> */}
-          {auth && <Auth />}
+          {component.navigationComponent && <Navigation category={category} />}
+          {component.authComponent && <Auth />}
         </div>
       </div>
     </section>

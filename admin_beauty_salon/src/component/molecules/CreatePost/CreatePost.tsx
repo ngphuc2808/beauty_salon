@@ -27,27 +27,27 @@ import { TextTransformation } from "@ckeditor/ckeditor5-typing";
 import { Indent, IndentBlock } from "@ckeditor/ckeditor5-indent";
 import { Base64UploadAdapter } from "@ckeditor/ckeditor5-upload";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import styles from "./CreatePost.module.css";
 import CropImage from "../CropImage";
+
+const imageMimeType = /image\/(png|jpg|jpeg)/i;
 
 const CreatePost = () => {
   const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
 
-  const [nameValue, setNameValue] = useState<string>("");
-  const [data, setData] = useState<string>("");
-
-  const handlePost = () => {
-    const result = {
-      title: nameValue,
-      content: data,
-      thumbnail: previewImg,
-    };
-    console.log(result);
-  };
-
-  const [previewImg, setPreviewImg] = useState<string>("");
   const [cropImage, setCropImage] = useState<string | ArrayBuffer | null>(null);
   const [modalCrop, setModalCrop] = useState(false);
+  const [previewImg, setPreviewImg] = useState<string>("");
+  const [fileImage, setFileImage] = useState<any>();
+  const [file, setFile] = useState<File>();
+  const [formValue, setFormValue] = useState({
+    title: "",
+    content: "",
+    thumbnail: "",
+  });
 
   useEffect(() => {
     return () => {
@@ -55,17 +55,49 @@ const CreatePost = () => {
     };
   }, [previewImg]);
 
+  useEffect(() => {
+    let reader: FileReader,
+      isCancel: boolean = false;
+    if (file) {
+      reader = new FileReader();
+      reader.onload = (e: any) => {
+        const { result } = e.target;
+        if (result && !isCancel) {
+          setCropImage(result);
+          setModalCrop(true);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+    return () => {
+      isCancel = true;
+      if (reader && reader.readyState === 2) {
+        reader.abort();
+        reader.onload = null;
+      }
+    };
+  }, [file]);
+
   const handleCrop = (e: ChangeEvent<HTMLInputElement>) => {
     let input = e.currentTarget;
     if (input.files?.length) {
-      const reader = new FileReader();
-      reader.addEventListener("load", () => {
-        setModalCrop(true);
-        setCropImage(reader.result);
-      });
-      reader.readAsDataURL(input.files[0]);
+      const file = input.files[0];
+      if (!file.type.match(imageMimeType)) {
+        toast.error("Vui lòng chọn đúng định dạng hình ảnh!");
+        return;
+      }
+      setFile(file);
     }
     e.currentTarget.value = "";
+  };
+
+  const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value }: { name: string; value: string } = e.target;
+    setFormValue({ ...formValue, [name]: value });
+  };
+
+  const handlePost = () => {
+    console.log(formValue);
   };
 
   // const uploadPlugin = (editor: ClassicEditor) => {
@@ -232,10 +264,9 @@ const CreatePost = () => {
               type="text"
               placeholder="Nhập tên danh mục"
               className={`${styles.inputName}`}
-              value={nameValue}
-              onChange={(e) => {
-                setNameValue(e.target.value);
-              }}
+              name="title"
+              value={formValue.title}
+              onChange={handleInput}
             />
           </div>
           <div className={`${styles.mainItemLeftContent}`}>
@@ -244,7 +275,7 @@ const CreatePost = () => {
               config={configPluginEditor}
               onChange={(_event, editor) => {
                 const newData = editor.getData();
-                setData(newData);
+                setFormValue({ ...formValue, content: newData });
               }}
             />
           </div>
@@ -316,9 +347,23 @@ const CreatePost = () => {
         <CropImage
           image={cropImage}
           setModalCrop={setModalCrop}
+          setFileImage={setFileImage}
           setPreviewImg={setPreviewImg}
         />
       )}
+      <ToastContainer
+        position="bottom-right"
+        autoClose={1500}
+        bodyClassName={`${styles.toastBody}`}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </Fragment>
   );
 };

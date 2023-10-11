@@ -1,11 +1,27 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import Cropper from "react-easy-crop";
 
 import styles from "./CropImage.module.css";
 
 import getCroppedImg from "@/helpers";
+import CropImage from ".";
 
-const CropImage = ({ image, setModalCrop, setPreviewImg }: ICrop) => {
+const CropImagePost = ({
+  image,
+  setModalCrop,
+  setFileImage,
+  setPreviewImg,
+}: ICropImageUser) => {
+  const component = useSelector(
+    (state: {
+      component: {
+        navigationComponent: boolean;
+        authComponent: boolean;
+      };
+    }) => state.component
+  );
+
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [rotation, setRotation] = useState(0);
@@ -21,6 +37,7 @@ const CropImage = ({ image, setModalCrop, setPreviewImg }: ICrop) => {
       croppedAreaPixels,
       rotation
     );
+    setFileImage(croppedImage.file);
     setPreviewImg(croppedImage.url);
     setModalCrop(false);
   };
@@ -40,8 +57,8 @@ const CropImage = ({ image, setModalCrop, setPreviewImg }: ICrop) => {
             zoom={zoom}
             maxZoom={10}
             rotation={rotation}
-            aspect={2}
-            cropShape="rect"
+            aspect={component.authComponent ? 1 : 2}
+            cropShape={component.authComponent ? "round" : "rect"}
             onZoomChange={setZoom}
             onRotationChange={setRotation}
             onCropChange={setCrop}
@@ -90,4 +107,4 @@ const CropImage = ({ image, setModalCrop, setPreviewImg }: ICrop) => {
   );
 };
 
-export default CropImage;
+export default CropImagePost;
