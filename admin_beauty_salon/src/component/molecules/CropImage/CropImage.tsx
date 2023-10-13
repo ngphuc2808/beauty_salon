@@ -2,10 +2,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import Cropper from "react-easy-crop";
 
-import styles from "./CropImage.module.css";
-
 import getCroppedImg from "@/helpers";
-import CropImage from ".";
 
 const CropImagePost = ({
   image,
@@ -43,14 +40,14 @@ const CropImagePost = ({
   };
 
   return (
-    <div className={`${styles.modal}`}>
+    <div className="fixed top-0 left-0 bottom-0 right-0 flex justify-center items-center z-[999]">
       <div
-        className={`${styles.modalOverlay}`}
+        className="w-full h-full absolute bg-black opacity-40 z-0"
         onClick={() => setModalCrop(false)}
       ></div>
-      <div className={`${styles.modalBody}`}>
-        <h1 className={`${styles.title}`}>Cắt hình ảnh</h1>
-        <div className={`${styles.content}`}>
+      <div className="fixed top-[50%] left-[50%] bg-[#fff] w-full max-w-[90%] sm:max-w-lg rounded-lg flex justify-start flex-col z-[999] -translate-x-1/2 -translate-y-1/2 shadow">
+        <h1 className="py-[18px] px-6 text-xl">Cắt hình ảnh</h1>
+        <div className="w-full h-[400px] relative bg-[#000] z-10">
           <Cropper
             image={image as string | undefined}
             crop={crop}
@@ -65,11 +62,11 @@ const CropImagePost = ({
             onCropComplete={cropComplete}
           />
         </div>
-        <div className={`${styles.action}`}>
+        <div className="flex items-center p-2 justify-end flex-col my-4 mx-6 flex-[0_0_auto]">
           <div className="w-full font-bold">
             <p>Zoom: {zoom * 10}%</p>
             <input
-              className={`${styles.slider}`}
+              className="w-full h-2.5 my-5 mx-0 rounded-xl bg-[#d3d3d3] outline-none cursor-pointer appearance-none accent-red-400"
               type="range"
               min={1}
               max={10}
@@ -81,7 +78,7 @@ const CropImagePost = ({
           <div className="w-full font-bold">
             <p>Rotation: {rotation * 10}%</p>
             <input
-              className={`${styles.slider}`}
+              className="w-full h-2.5 my-5 mx-0 rounded-xl bg-[#d3d3d3] outline-none cursor-pointer appearance-none accent-red-400"
               type="range"
               min={0}
               max={360}
@@ -90,12 +87,15 @@ const CropImagePost = ({
               onInput={(e) => setRotation(Number(e.currentTarget.value))}
             />
           </div>
-          <div className={`${styles.buttonCropZone}`}>
-            <button className={`${styles.button}`} onClick={onCrop}>
+          <div className="flex justify-center items-center">
+            <button
+              className="w-[125px] rounded mx-2 bg-red-400 py-1.5 px-0 text-white mt-6 tracking-[1px] hover:bg-red-500"
+              onClick={onCrop}
+            >
               Cắt
             </button>
             <button
-              className={`${styles.button}`}
+              className="w-[125px] rounded mx-2 bg-red-400 py-1.5 px-0 text-white mt-6 tracking-[1px] hover:bg-red-500"
               onClick={() => setModalCrop(false)}
             >
               Hủy

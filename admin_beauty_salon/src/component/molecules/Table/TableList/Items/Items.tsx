@@ -1,13 +1,11 @@
 import { Fragment } from "react";
 
-import styles from "../../Table.module.css";
-
 const Items = ({ currentItems }: iItem) => {
   return (
     <Fragment>
       {currentItems &&
         currentItems?.map((item, index) => (
-          <tr className={`${styles.tableRow}`} key={index}>
+          <tr className="bg-white border-b hover:bg-gray-50" key={index}>
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input

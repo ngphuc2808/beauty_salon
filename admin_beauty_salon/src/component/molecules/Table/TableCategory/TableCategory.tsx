@@ -1,11 +1,12 @@
-import styles from "../Table.module.css";
+import { useDispatch } from "react-redux";
 
 const TableCategory = () => {
+  const dispatch = useDispatch();
   return (
     <div className="w-full max-h-[626px] overflow-y-auto overflow-x-auto">
-      <table className={`${styles.table}`}>
+      <table className="mb-4 min-w-full max-w-full whitespace-nowrap text-sm text-left text-gray-500">
         <tbody>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <th scope="col" className="p-5">
               <div className="flex items-center">
                 <input
@@ -25,7 +26,49 @@ const TableCategory = () => {
               Trạng thái
             </th>
           </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
+            <td className="w-4 p-5">
+              <div className="flex items-center">
+                <input
+                  id="checkbox-table-search-1"
+                  type="checkbox"
+                  className="w-4 h-4 cursor-pointer"
+                />
+              </div>
+            </td>
+            <th
+              scope="row"
+              className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+            >
+              Apple MacBook Pro 17"
+            </th>
+            <td className="px-6 py-4">Trang Landing Page</td>
+            <td className="px-6 py-4">
+              <span className="font-medium text-green-500">Bật</span>
+            </td>
+          </tr>
+          <tr className="bg-white border-b hover:bg-gray-50">
+            <td className="w-4 p-5">
+              <div className="flex items-center">
+                <input
+                  id="checkbox-table-search-1"
+                  type="checkbox"
+                  className="w-4 h-4 cursor-pointer"
+                />
+              </div>
+            </td>
+            <th
+              scope="row"
+              className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+            >
+              Apple MacBook Pro 17"
+            </th>
+            <td className="px-6 py-4">Trang Landing Page</td>
+            <td className="px-6 py-4">
+              <span className="font-medium text-green-500">Bật</span>
+            </td>
+          </tr>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input
@@ -47,7 +90,7 @@ const TableCategory = () => {
               <span className="font-medium text-green-500">Bật</span>
             </td>
           </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input
@@ -69,7 +112,7 @@ const TableCategory = () => {
               <span className="font-medium text-green-500">Bật</span>
             </td>
           </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input
@@ -91,7 +134,7 @@ const TableCategory = () => {
               <span className="font-medium text-green-500">Bật</span>
             </td>
           </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input
@@ -113,7 +156,7 @@ const TableCategory = () => {
               <span className="font-medium text-green-500">Bật</span>
             </td>
           </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input
@@ -135,7 +178,7 @@ const TableCategory = () => {
               <span className="font-medium text-green-500">Bật</span>
             </td>
           </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input
@@ -157,7 +200,7 @@ const TableCategory = () => {
               <span className="font-medium text-green-500">Bật</span>
             </td>
           </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input
@@ -179,7 +222,7 @@ const TableCategory = () => {
               <span className="font-medium text-green-500">Bật</span>
             </td>
           </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input
@@ -201,7 +244,7 @@ const TableCategory = () => {
               <span className="font-medium text-green-500">Bật</span>
             </td>
           </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input
@@ -223,7 +266,7 @@ const TableCategory = () => {
               <span className="font-medium text-green-500">Bật</span>
             </td>
           </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input
@@ -245,7 +288,7 @@ const TableCategory = () => {
               <span className="font-medium text-green-500">Bật</span>
             </td>
           </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input
@@ -267,7 +310,7 @@ const TableCategory = () => {
               <span className="font-medium text-green-500">Bật</span>
             </td>
           </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input
@@ -289,7 +332,7 @@ const TableCategory = () => {
               <span className="font-medium text-green-500">Bật</span>
             </td>
           </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input
@@ -311,51 +354,7 @@ const TableCategory = () => {
               <span className="font-medium text-green-500">Bật</span>
             </td>
           </tr>
-          <tr className={`${styles.tableRow}`}>
-            <td className="w-4 p-5">
-              <div className="flex items-center">
-                <input
-                  id="checkbox-table-search-1"
-                  type="checkbox"
-                  className="w-4 h-4 cursor-pointer"
-                />
-              </div>
-            </td>
-            <th
-              scope="row"
-              className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-            >
-              Apple MacBook Pro 17"
-            </th>
-            <td className="px-6 py-4">Trang Landing Page</td>
-
-            <td className="px-6 py-4">
-              <span className="font-medium text-green-500">Bật</span>
-            </td>
-          </tr>
-          <tr className={`${styles.tableRow}`}>
-            <td className="w-4 p-5">
-              <div className="flex items-center">
-                <input
-                  id="checkbox-table-search-1"
-                  type="checkbox"
-                  className="w-4 h-4 cursor-pointer"
-                />
-              </div>
-            </td>
-            <th
-              scope="row"
-              className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-            >
-              Apple MacBook Pro 17"
-            </th>
-            <td className="px-6 py-4">Trang Landing Page</td>
-
-            <td className="px-6 py-4">
-              <span className="font-medium text-green-500">Bật</span>
-            </td>
-          </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input

@@ -1,6 +1,5 @@
 import { Fragment } from "react";
-
-import styles from "./Table.module.css";
+import { useDispatch } from "react-redux";
 
 import { dataNavigation } from "@/utils/data";
 import Search from "@/component/molecules/Search";
@@ -10,8 +9,10 @@ import TableCategoryLevel from "./TableCategoryLevel";
 import TableList from "./TableList";
 import TableSchedule from "./TableSchedule";
 import TableComment from "./TableComment";
+import { setDetailCategory } from "@/features/redux/slices/componentUI/navComponentSlice";
 
 const Table = ({ category }: iCategory) => {
+  const dispatch = useDispatch();
   const renderTable = () => {
     switch (category) {
       case "Cat1":
@@ -44,29 +45,41 @@ const Table = ({ category }: iCategory) => {
   };
   return (
     <Fragment>
-      <div className={`${styles.dashBoard}`}>
+      <div className="w-full py-4 mb-5 bg-white flex items-center justify-between shadow rounded-lg flex-wrap sm:flex-nowrap">
         <h1 className="lg:text-xl md:text-base lg:ml-5 md:ml-3 ml-5 text-textHeadingColor">
           {dataNavigation.find((item) => item.id === category)?.name}
         </h1>
-        <Search category={category} />
-        {category !== "Cat6" && category !== "Cat7" && (
-          <button className={`${styles.buttonAdd}`}>
-            {category === "Cat4"
-              ? "Thêm bài viết"
-              : category === "Cat5"
-              ? "Thêm sản phẩm"
-              : "Thêm danh mục"}
-          </button>
-        )}
+        {category !== "Cat4" &&
+          category !== "Cat5" &&
+          category !== "Cat6" &&
+          category !== "Cat7" && (
+            <>
+              <Search category={category} />
+              <button
+                className="lg:text-base md:text-sm lg:mr-5 md:mr-3 mr-5 bg-red-500 rounded-md hover:bg-red-600 text-white px-3 py-2"
+                onClick={() => dispatch(setDetailCategory())}
+              >
+                Thêm danh mục
+              </button>
+            </>
+          )}
       </div>
-      <div className={`${styles.content}`}>
-        <div className={`${styles.headerTable}`}>
-          <span className={`${styles.customSpan}`}>0 lượt chọn</span>
-          <button className={`${styles.customButton} `}>Xóa</button>
+      <div className="relative shadow-md rounded-lg mb-5 bg-white overflow-hidden">
+        <div className="flex gap-4 mx-3 mb-3 sm:mx-5 sm:mb-5 border-b border-gray-200 items-center justify-center lg:justify-normal">
+          <span className="lg:px-4 md:py-2 lg:my-5 md:my-3 rounded-md text-sm lg:text-base">
+            0 lượt chọn
+          </span>
+          <button className="min-w-[70px] h-10 py-1 px-1 my-2 md:my-3 rounded-md text-gray-900 text-sm border-2 border-solid">
+            Xóa
+          </button>
           {category !== "Cat6" && category !== "Cat7" && (
             <>
-              <button className={`${styles.customButton}`}>Bật</button>
-              <button className={`${styles.customButton}`}>Tắt</button>
+              <button className="min-w-[70px] h-10 py-1 px-1 my-2 md:my-3 rounded-md text-gray-900 text-sm border-2 border-solid">
+                Bật
+              </button>
+              <button className="min-w-[70px] h-10 py-1 px-1 my-2 md:my-3 rounded-md text-gray-900 text-sm border-2 border-solid">
+                Tắt
+              </button>
             </>
           )}
         </div>

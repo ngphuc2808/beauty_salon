@@ -1,13 +1,10 @@
 import { useState, useEffect, ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { Helmet, HelmetProvider } from "react-helmet-async";
 import { useForm } from "react-hook-form";
-
+import { Helmet, HelmetProvider } from "react-helmet-async";
+import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-import styles from "./LoginPage.module.css";
 
 import { AuthApi } from "@/services/api/auth";
 import { setLoggedIn } from "@/features/redux/slices/dataUI/loginSlice";
@@ -41,8 +38,8 @@ const LoginPage = () => {
   } = useForm<FormInputs>();
 
   useEffect(() => {
-    if (formValue.username.length > 0) setEmptyUsername(true);
-    if (formValue.password.length > 0) setEmptyPassword(true);
+    if (formValue.username.trim().length > 0) setEmptyUsername(true);
+    if (formValue.password.trim().length > 0) setEmptyPassword(true);
   }, [formValue]);
 
   const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -51,14 +48,17 @@ const LoginPage = () => {
   };
 
   const handleLogin = async () => {
-    if (formValue.username.length === 0) setEmptyUsername(false);
+    if (formValue.username.trim().length === 0) setEmptyUsername(false);
     else setEmptyUsername(true);
 
-    if (formValue.password.length === 0) setEmptyPassword(false);
+    if (formValue.password.trim().length === 0) setEmptyPassword(false);
     else setEmptyPassword(true);
 
     try {
-      if (formValue.username.length > 0 && formValue.password.length > 0) {
+      if (
+        formValue.username.trim().length > 0 &&
+        formValue.password.trim().length > 0
+      ) {
         const result = await AuthApi.login(formValue);
         if (result.results.message === "Đăng nhập thành công.") {
           dispatch(
@@ -89,10 +89,10 @@ const LoginPage = () => {
       <Helmet>
         <title>Admin Login</title>
       </Helmet>
-      <section className="wrapper">
-        <div className={`${styles.background}`}>
-          <div className={`${styles.loginArea}`}>
-            <div className={`${styles.logo}`}>
+      <section>
+        <div className="bg-[#f6f6f7] h-screen flex items-center justify-center">
+          <div className="bg-white shadow-loginBox p-10 w-[90%] md:w-[80%] lg:w-[475px] rounded-md">
+            <div className="flex items-center justify-center mb-[30px]">
               <figure className="w-[140px] h-[70px]">
                 <img src="../../logoText.png" />
               </figure>
@@ -101,7 +101,7 @@ const LoginPage = () => {
               <div className="mb-5">
                 <label
                   htmlFor="username"
-                  className={`${styles.label} ${
+                  className={`block mb-2 text-sm font-normal ${
                     !emptyUsername ? "text-red-700" : "text-[#666]"
                   }`}
                 >
@@ -113,15 +113,15 @@ const LoginPage = () => {
                   name="username"
                   value={formValue.username}
                   onChange={handleInput}
-                  className={`${styles.input} ${
+                  className={`border text-sm outline-none rounded-md block w-full p-2.5 ${
                     !emptyUsername
-                      ? `${styles.errorInput}`
-                      : `${styles.normalInput}`
+                      ? "bg-red-50 border-red-500 placeholder-red-400"
+                      : "bg-white border-gray-300"
                   }`}
                   placeholder="Nhập tài khoản"
                 />
                 {!emptyUsername && (
-                  <p className={`${styles.warning}`}>
+                  <p className="mt-2 text-sm text-red-600">
                     Vui lòng nhập tài khoản!
                   </p>
                 )}
@@ -129,7 +129,7 @@ const LoginPage = () => {
               <div>
                 <label
                   htmlFor="password"
-                  className={`${styles.label} ${
+                  className={`block mb-2 text-sm font-normal ${
                     !emptyPassword ? "text-red-700" : "text-[#666]"
                   }`}
                 >
@@ -142,20 +142,22 @@ const LoginPage = () => {
                   autoComplete="on"
                   value={formValue.password}
                   onChange={handleInput}
-                  className={`${styles.input} ${
+                  className={`border text-sm outline-none rounded-md block w-full p-2.5 ${
                     !emptyPassword
-                      ? `${styles.errorInput}`
-                      : `${styles.normalInput}`
+                      ? "bg-red-50 border-red-500 placeholder-red-400"
+                      : "bg-white border-gray-300"
                   }`}
                   placeholder="Nhập mật khẩu"
                 />
                 {!emptyPassword && (
-                  <p className={`${styles.warning}`}>Vui lòng nhập mật khẩu!</p>
+                  <p className="mt-2 text-sm text-red-600">
+                    Vui lòng nhập mật khẩu!
+                  </p>
                 )}
               </div>
-              <div className={`${styles.buttonArea}`}>
+              <div className="mt-5 pt-5 border-t border-gray-300">
                 <button
-                  className={`${styles.button}`}
+                  className="flex items-center justify-center w-full max-h-[42px] py-3 px-4 bg-red-500 rounded-md hover:bg-red-600 text-white"
                   onClick={handleSubmit(handleLogin)}
                 >
                   {isSubmitting ? (
@@ -172,7 +174,7 @@ const LoginPage = () => {
       <ToastContainer
         position="bottom-right"
         autoClose={1500}
-        bodyClassName={`${styles.toastBody}`}
+        bodyClassName="font-beVietnam text-sm"
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

@@ -1,3 +1,4 @@
+// Crop Image //
 export const createImage = (url: any) => {
   return new Promise((resolve, reject) => {
     const image = new Image();

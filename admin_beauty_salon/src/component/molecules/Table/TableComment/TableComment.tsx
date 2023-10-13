@@ -1,9 +1,7 @@
-import styles from "../Table.module.css";
-
 const TableComment = () => {
   return (
     <div className="w-full max-h-[626px] overflow-y-auto overflow-x-auto">
-      <table className={`${styles.table}`}>
+      <table className="mb-4 min-w-full max-w-full whitespace-nowrap text-sm text-left text-gray-500">
         <tbody>
           <tr>
             <th scope="col" className="p-5">
@@ -36,7 +34,7 @@ const TableComment = () => {
               Email
             </th>
           </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input
@@ -54,7 +52,7 @@ const TableComment = () => {
             <td className="px-6 py-4">0901234567</td>
             <td className="px-6 py-4">phuc@gmail.com</td>
           </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input
@@ -72,7 +70,7 @@ const TableComment = () => {
             <td className="px-6 py-4">0901234567</td>
             <td className="px-6 py-4">phuc@gmail.com</td>
           </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input
@@ -90,7 +88,7 @@ const TableComment = () => {
             <td className="px-6 py-4">0901234567</td>
             <td className="px-6 py-4">phuc@gmail.com</td>
           </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input
@@ -108,7 +106,7 @@ const TableComment = () => {
             <td className="px-6 py-4">0901234567</td>
             <td className="px-6 py-4">phuc@gmail.com</td>
           </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input
@@ -126,7 +124,7 @@ const TableComment = () => {
             <td className="px-6 py-4">0901234567</td>
             <td className="px-6 py-4">phuc@gmail.com</td>
           </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input
@@ -144,7 +142,7 @@ const TableComment = () => {
             <td className="px-6 py-4">0901234567</td>
             <td className="px-6 py-4">phuc@gmail.com</td>
           </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input
@@ -162,7 +160,7 @@ const TableComment = () => {
             <td className="px-6 py-4">0901234567</td>
             <td className="px-6 py-4">phuc@gmail.com</td>
           </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input
@@ -180,7 +178,7 @@ const TableComment = () => {
             <td className="px-6 py-4">0901234567</td>
             <td className="px-6 py-4">phuc@gmail.com</td>
           </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input
@@ -198,7 +196,7 @@ const TableComment = () => {
             <td className="px-6 py-4">0901234567</td>
             <td className="px-6 py-4">phuc@gmail.com</td>
           </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input
@@ -216,7 +214,7 @@ const TableComment = () => {
             <td className="px-6 py-4">0901234567</td>
             <td className="px-6 py-4">phuc@gmail.com</td>
           </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input
@@ -234,7 +232,7 @@ const TableComment = () => {
             <td className="px-6 py-4">0901234567</td>
             <td className="px-6 py-4">phuc@gmail.com</td>
           </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input
@@ -252,7 +250,7 @@ const TableComment = () => {
             <td className="px-6 py-4">0901234567</td>
             <td className="px-6 py-4">phuc@gmail.com</td>
           </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input
@@ -270,7 +268,7 @@ const TableComment = () => {
             <td className="px-6 py-4">0901234567</td>
             <td className="px-6 py-4">phuc@gmail.com</td>
           </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input
@@ -288,7 +286,7 @@ const TableComment = () => {
             <td className="px-6 py-4">0901234567</td>
             <td className="px-6 py-4">phuc@gmail.com</td>
           </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input
@@ -306,7 +304,7 @@ const TableComment = () => {
             <td className="px-6 py-4">0901234567</td>
             <td className="px-6 py-4">phuc@gmail.com</td>
           </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input
@@ -324,7 +322,7 @@ const TableComment = () => {
             <td className="px-6 py-4">0901234567</td>
             <td className="px-6 py-4">phuc@gmail.com</td>
           </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input
@@ -342,7 +340,7 @@ const TableComment = () => {
             <td className="px-6 py-4">0901234567</td>
             <td className="px-6 py-4">phuc@gmail.com</td>
           </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input
@@ -360,7 +358,7 @@ const TableComment = () => {
             <td className="px-6 py-4">0901234567</td>
             <td className="px-6 py-4">phuc@gmail.com</td>
           </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input
@@ -378,7 +376,7 @@ const TableComment = () => {
             <td className="px-6 py-4">0901234567</td>
             <td className="px-6 py-4">phuc@gmail.com</td>
           </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input
@@ -396,7 +394,7 @@ const TableComment = () => {
             <td className="px-6 py-4">0901234567</td>
             <td className="px-6 py-4">phuc@gmail.com</td>
           </tr>
-          <tr className={`${styles.tableRow}`}>
+          <tr className="bg-white border-b hover:bg-gray-50">
             <td className="w-4 p-5">
               <div className="flex items-center">
                 <input

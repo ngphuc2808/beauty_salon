@@ -1,9 +1,14 @@
 import { Fragment, useState, useRef } from "react";
+import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import Select from "react-tailwindcss-select";
-
-import styles from "./DetailCategory.module.css";
+import {
+  setCreatePost,
+  setTable,
+} from "@/features/redux/slices/componentUI/navComponentSlice";
 
 const DetailCategory = () => {
+  const dispatch = useDispatch();
   const [nameValue, setNameValue] = useState<string>("");
 
   const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
@@ -22,23 +27,28 @@ const DetailCategory = () => {
 
   return (
     <Fragment>
-      <div className={`${styles.dashBoard}`}>
-        <div className={`${styles.descriptionDashBoard}`}>
-          <i className={`${styles.customIconBack} ri-arrow-left-line`}></i>
-          <h1 className={`${styles.titleDashBoard}`}>Chỉnh sửa phun xăm</h1>
+      <div className="w-full py-4 mb-5 bg-white flex items-center justify-between shadow rounded-lg flex-wrap sm:flex-nowrap">
+        <div className="flex items-center gap-3">
+          <i
+            className="lg:text-2xl text-xl ml-5 w-10 h-10 flex items-center justify-center text-white bg-red-400 hover:bg-red-500 cursor-pointer rounded-md ri-arrow-left-line"
+            onClick={() => dispatch(setTable())}
+          ></i>
+          <h1 className="text-xl text-textHeadingColor">Thêm danh mục</h1>
         </div>
       </div>
-      <div className={`${styles.gridContent}`}>
-        <div className={`${styles.leftContent}`}>
-          <div className={`${styles.firstItemLeftContent}`}>
-            <h1 className={`${styles.headerFirstItem}`}>Tổng quan</h1>
+      <div className="grid grid-cols-12 gap-x-3">
+        <div className="col-span-12 lg:col-span-8 order-2 lg:order-none">
+          <div className="hidden lg:block bg-white shadow rounded-lg p-5">
+            <h1 className="text-xl text-textHeadingColor font-medium">
+              Tổng quan
+            </h1>
             <div className="mt-6">
-              <h1 className={`${styles.titleItem}`}>Tên danh mục</h1>
+              <h1 className="text-lg text-textHeadingColor">Tên danh mục</h1>
               <input
                 ref={inputRef}
                 type="text"
                 placeholder="Nhập tên danh mục"
-                className={`${styles.inputNameCategory}`}
+                className="mt-3 w-full border rounded p-3 text-sm focus:outline-none focus:border-red-500 focus:ring focus:ring-red-500/20"
                 value={nameValue}
                 onChange={(e) => {
                   setNameValue(e.target.value);
@@ -46,27 +56,43 @@ const DetailCategory = () => {
               />
             </div>
           </div>
-          <div className={`${styles.itemLeftContent}`}>
+          <div className="bg-white shadow rounded-lg p-5 mt-5">
             <div className="sm:flex items-center justify-between">
-              <h1 className={`${styles.titleItem}`}>
+              <h1 className="text-lg text-textHeadingColor">
                 Trang landing page cho danh mục
               </h1>
-              <button
-                className={`${styles.customButtonCategory} mt-3 sm:mt-0 w-full sm:w-auto`}
+              <Link
+                to={"/create-landing-page"}
+                className="text-textPrimaryColor text-sm px-4 py-3 bg-red-400 hover:bg-red-500 text-white rounded-md mt-3 sm:mt-0 w-full sm:w-auto"
               >
                 Tạo trang landing page
+              </Link>
+            </div>
+          </div>
+          <div className="bg-white shadow rounded-lg p-5 mt-5">
+            <div className="sm:flex items-center justify-between">
+              <h1 className="text-lg text-textHeadingColor">
+                Trang SEO cho danh mục
+              </h1>
+              <button
+                className="text-textPrimaryColor text-sm px-4 py-3 bg-red-400 hover:bg-red-500 text-white rounded-md mt-3 sm:mt-0 w-full sm:w-auto"
+                onClick={() => dispatch(setCreatePost())}
+              >
+                Tạo trang SEO
               </button>
             </div>
           </div>
-          <div className={`${styles.itemLeftContent}`}>
+          <div className="bg-white shadow rounded-lg p-5 mt-5">
             <div className="[&>:nth-child(2)]:h-[46px]">
               <div className="sm:flex items-center justify-between mb-3">
-                <h1 className={`${styles.titleItem}`}>Danh mục cấp 2</h1>
+                <h1 className="text-lg text-textHeadingColor">
+                  Danh mục cấp 2
+                </h1>
               </div>
               <Select
                 classNames={{
                   menuButton: ({ isDisabled }: any) =>
-                    `${styles.customSelect} ${
+                    `flex text-sm text-gray-500 py-1 border border-gray-300 rounded shadow-sm focus:outline-none cursor-pointer ${
                       isDisabled
                         ? "bg-gray-200"
                         : "bg-white hover:border-gray-400 focus:border-red-500 focus:ring focus:ring-red-500/20"
@@ -80,57 +106,57 @@ const DetailCategory = () => {
                 isMultiple
                 isClearable
               />
-              <ul className={`${styles.listCategory}`}>
-                <li className={`${styles.itemCategory}`}>
+              <ul className="mt-4 max-h-[400px] overflow-auto text-textPrimaryColor text-sm [&>li]:border-b [&>:last-child]:border-none">
+                <li className="flex items-center justify-between  px-4 py-3 hover:bg-red-100 mt-2 rounded">
                   <span>Tên</span>
                   <button className="text-red-500">Xóa</button>
                 </li>
-                <li className={`${styles.itemCategory}`}>
+                <li className="flex items-center justify-between  px-4 py-3 hover:bg-red-100 mt-2 rounded">
                   <span>Tên</span>
                   <button className="text-red-500">Xóa</button>
                 </li>
-                <li className={`${styles.itemCategory}`}>
+                <li className="flex items-center justify-between  px-4 py-3 hover:bg-red-100 mt-2 rounded">
                   <span>Tên</span>
                   <button className="text-red-500">Xóa</button>
                 </li>
-                <li className={`${styles.itemCategory}`}>
+                <li className="flex items-center justify-between  px-4 py-3 hover:bg-red-100 mt-2 rounded">
                   <span>Tên</span>
                   <button className="text-red-500">Xóa</button>
                 </li>
-                <li className={`${styles.itemCategory}`}>
+                <li className="flex items-center justify-between  px-4 py-3 hover:bg-red-100 mt-2 rounded">
                   <span>Tên</span>
                   <button className="text-red-500">Xóa</button>
                 </li>
-                <li className={`${styles.itemCategory}`}>
+                <li className="flex items-center justify-between  px-4 py-3 hover:bg-red-100 mt-2 rounded">
                   <span>Tên</span>
                   <button className="text-red-500">Xóa</button>
                 </li>
-                <li className={`${styles.itemCategory}`}>
+                <li className="flex items-center justify-between  px-4 py-3 hover:bg-red-100 mt-2 rounded">
                   <span>Tên</span>
                   <button className="text-red-500">Xóa</button>
                 </li>
-                <li className={`${styles.itemCategory}`}>
+                <li className="flex items-center justify-between  px-4 py-3 hover:bg-red-100 mt-2 rounded">
                   <span>Tên</span>
                   <button className="text-red-500">Xóa</button>
                 </li>
               </ul>
             </div>
           </div>
-          <div className={`${styles.itemLeftContent}`}>
+          <div className="bg-white shadow rounded-lg p-5 mt-5">
             <div className="[&>:first-child]:mb-3 [&>*]:mb-4">
-              <h1 className={`${styles.titleItem}`}>
+              <h1 className="text-lg text-textHeadingColor">
                 Tối ưu hóa công cụ tìm kiếm
               </h1>
               <div className="relative z-0">
                 <input
                   type="text"
                   id="url"
-                  className={`${styles.customInput} peer`}
+                  className="block py-2.5 px-0 w-full text-sm text-textPrimaryColor bg-transparent border-0 border-b border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-red-500 peer"
                   placeholder=" "
                 />
                 <label
                   htmlFor="url"
-                  className={`${styles.customLabel} peer-focus:left-0 peer-focus:text-red-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6`}
+                  className="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-red-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                 >
                   URL key
                 </label>
@@ -139,12 +165,12 @@ const DetailCategory = () => {
                 <input
                   type="text"
                   id="metaTitle"
-                  className={`${styles.customInput} peer`}
+                  className="block py-2.5 px-0 w-full text-sm text-textPrimaryColor bg-transparent border-0 border-b border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-red-500 peer"
                   placeholder=" "
                 />
                 <label
                   htmlFor="metaTitle"
-                  className={`${styles.customLabel} peer-focus:left-0 peer-focus:text-red-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6`}
+                  className="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-red-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                 >
                   Meta title
                 </label>
@@ -153,12 +179,12 @@ const DetailCategory = () => {
                 <input
                   type="text"
                   id="metaKeyWords"
-                  className={`${styles.customInput} peer`}
+                  className="block py-2.5 px-0 w-full text-sm text-textPrimaryColor bg-transparent border-0 border-b border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-red-500 peer"
                   placeholder=" "
                 />
                 <label
                   htmlFor="metaKeyWords"
-                  className={`${styles.customLabel} peer-focus:left-0 peer-focus:text-red-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6`}
+                  className="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-red-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                 >
                   Meta keywords
                 </label>
@@ -167,43 +193,41 @@ const DetailCategory = () => {
                 <input
                   type="text"
                   id="metaDescription"
-                  className={`${styles.customInput} peer`}
+                  className="block py-2.5 px-0 w-full text-sm text-textPrimaryColor bg-transparent border-0 border-b border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-red-500 peer"
                   placeholder=" "
                 />
                 <label
                   htmlFor="metaDescription"
-                  className={`${styles.customLabel} peer-focus:left-0 peer-focus:text-red-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6`}
+                  className="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-red-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                 >
                   Meta description
                 </label>
               </div>
             </div>
           </div>
-          <div className={`${styles.itemLeftContent}`}>
+          <div className="bg-white shadow rounded-lg p-5 mt-5">
             <div className="flex items-center justify-between">
-              <button
-                className={`${styles.customButtonCategory} w-[48%] lg:w-[200px] `}
-              >
+              <button className="text-textPrimaryColor text-sm px-4 py-3 bg-red-400 hover:bg-red-500 text-white rounded-md w-[48%] lg:w-[200px]">
                 Lưu
               </button>
-              <button
-                className={`${styles.customButtonCategory} w-[48%] lg:w-[200px]`}
-              >
+              <button className="text-textPrimaryColor text-sm px-4 py-3 bg-red-400 hover:bg-red-500 text-white rounded-md w-[48%] lg:w-[200px]">
                 Thoát
               </button>
             </div>
           </div>
         </div>
-        <div className={`${styles.rightContent}`}>
-          <div className={`${styles.firstItemRightContent}`}>
-            <h1 className={`${styles.headerFirstItem}`}>Tổng quan</h1>
+        <div className="col-span-12 lg:col-span-4 [&>*]:mb-5">
+          <div className="block lg:hidden bg-white shadow rounded-lg p-5">
+            <h1 className="text-xl text-textHeadingColor font-medium">
+              Tổng quan
+            </h1>
             <div className="mt-6">
-              <h1 className={`${styles.titleItem}`}>Tên danh mục</h1>
+              <h1 className="text-lg text-textHeadingColor">Tên danh mục</h1>
               <input
                 ref={inputRef}
                 type="text"
                 placeholder="Nhập tên danh mục"
-                className={`${styles.inputNameCategory}`}
+                className="mt-3 w-full border rounded p-3 text-sm focus:outline-none focus:border-red-500 focus:ring focus:ring-red-500/20"
                 value={nameValue}
                 onChange={(e) => {
                   setNameValue(e.target.value);
@@ -211,7 +235,7 @@ const DetailCategory = () => {
               />
             </div>
           </div>
-          <div className={`${styles.secondItemRightContent}`}>
+          <div className="bg-white shadow rounded-lg p-5 mt-0">
             <div className="flex items-center justify-between mb-3">
               <h1 className="text-textHeadingColor">Ảnh danh mục</h1>
               <div className="flex items-center gap-3 text-sm">
@@ -222,8 +246,11 @@ const DetailCategory = () => {
               </div>
             </div>
             <div className="flex items-center justify-center w-full">
-              <label htmlFor="dropZone" className={`${styles.labelDropZone}`}>
-                <div className={`${styles.dropZone}`}>
+              <label
+                htmlFor="dropZone"
+                className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
+              >
+                <div className="flex flex-col items-center justify-center pt-5 pb-6">
                   <i className="ri-upload-cloud-2-line mb-1 text-4xl text-textPrimaryColor"></i>
                   <p className="mb-2 text-sm text-textPrimaryColor">
                     <span className="font-semibold">
@@ -249,7 +276,8 @@ const DetailCategory = () => {
                   type="radio"
                   id="permissionOn"
                   name="permission"
-                  className={`${styles.customRadio}`}
+                  className="after:content-[''] after:cursor-pointer after:w-4 after:h-4 after:rounded-full after:relative after:top-[-2px] after:left-0 after:bg-[#d1d3d1]  after:inline-block visible
+                      checked:after:content-[''] checked:after:cursor-pointer checked:after:w-4 checked:after:h-4 checked:after:rounded-full checked:after:relative checked:after:top-[-2px] checked:after:left-0 checked:after:bg-green-500 checked:after:inline-block checked:after:visible"
                 />
                 Bật hiển thị
               </label>
@@ -261,7 +289,8 @@ const DetailCategory = () => {
                   type="radio"
                   id="permissionOff"
                   name="permission"
-                  className={`${styles.customRadio}`}
+                  className="after:content-[''] after:cursor-pointer after:w-4 after:h-4 after:rounded-full after:relative after:top-[-2px] after:left-0 after:bg-[#d1d3d1]  after:inline-block visible
+                      checked:after:content-[''] checked:after:cursor-pointer checked:after:w-4 checked:after:h-4 checked:after:rounded-full checked:after:relative checked:after:top-[-2px] checked:after:left-0 checked:after:bg-green-500 checked:after:inline-block checked:after:visible"
                 />
                 Tắt hiển thị
               </label>
@@ -278,7 +307,8 @@ const DetailCategory = () => {
                   type="radio"
                   id="permissionDisplay1"
                   name="permissionDisplay"
-                  className={`${styles.customRadio}`}
+                  className="after:content-[''] after:cursor-pointer after:w-4 after:h-4 after:rounded-full after:relative after:top-[-2px] after:left-0 after:bg-[#d1d3d1]  after:inline-block visible
+                      checked:after:content-[''] checked:after:cursor-pointer checked:after:w-4 checked:after:h-4 checked:after:rounded-full checked:after:relative checked:after:top-[-2px] checked:after:left-0 checked:after:bg-green-500 checked:after:inline-block checked:after:visible"
                 />
                 Trang landing page, menu danh mục cấp 2
               </label>
@@ -290,7 +320,8 @@ const DetailCategory = () => {
                   type="radio"
                   id="permissionDisplay2"
                   name="permissionDisplay"
-                  className={`${styles.customRadio}`}
+                  className="after:content-[''] after:cursor-pointer after:w-4 after:h-4 after:rounded-full after:relative after:top-[-2px] after:left-0 after:bg-[#d1d3d1]  after:inline-block visible
+                      checked:after:content-[''] checked:after:cursor-pointer checked:after:w-4 checked:after:h-4 checked:after:rounded-full checked:after:relative checked:after:top-[-2px] checked:after:left-0 checked:after:bg-green-500 checked:after:inline-block checked:after:visible"
                 />
                 Trang SEO, menu danh mục cấp 2
               </label>
@@ -302,7 +333,8 @@ const DetailCategory = () => {
                   type="radio"
                   id="permissionDisplay3"
                   name="permissionDisplay"
-                  className={`${styles.customRadio}`}
+                  className="after:content-[''] after:cursor-pointer after:w-4 after:h-4 after:rounded-full after:relative after:top-[-2px] after:left-0 after:bg-[#d1d3d1]  after:inline-block visible
+                      checked:after:content-[''] checked:after:cursor-pointer checked:after:w-4 checked:after:h-4 checked:after:rounded-full checked:after:relative checked:after:top-[-2px] checked:after:left-0 checked:after:bg-green-500 checked:after:inline-block checked:after:visible"
                 />
                 Danh mục cấp 2
               </label>
@@ -314,7 +346,8 @@ const DetailCategory = () => {
                   type="radio"
                   id="permissionDisplay4"
                   name="permissionDisplay"
-                  className={`${styles.customRadio}`}
+                  className="after:content-[''] after:cursor-pointer after:w-4 after:h-4 after:rounded-full after:relative after:top-[-2px] after:left-0 after:bg-[#d1d3d1]  after:inline-block visible
+                      checked:after:content-[''] checked:after:cursor-pointer checked:after:w-4 checked:after:h-4 checked:after:rounded-full checked:after:relative checked:after:top-[-2px] checked:after:left-0 checked:after:bg-green-500 checked:after:inline-block checked:after:visible"
                 />
                 Trang landing page
               </label>
@@ -326,7 +359,8 @@ const DetailCategory = () => {
                   type="radio"
                   id="permissionDisplay5"
                   name="permissionDisplay"
-                  className={`${styles.customRadio}`}
+                  className="after:content-[''] after:cursor-pointer after:w-4 after:h-4 after:rounded-full after:relative after:top-[-2px] after:left-0 after:bg-[#d1d3d1]  after:inline-block visible
+                      checked:after:content-[''] checked:after:cursor-pointer checked:after:w-4 checked:after:h-4 checked:after:rounded-full checked:after:relative checked:after:top-[-2px] checked:after:left-0 checked:after:bg-green-500 checked:after:inline-block checked:after:visible"
                 />
                 Trang SEO
               </label>

@@ -1,9 +1,8 @@
 import { InvalidEvent, KeyboardEvent, Fragment, useState, useId } from "react";
 import ReactPaginate from "react-paginate";
 
-import styles from "../Table.module.css";
-
 import { dataList } from "@/utils/data";
+
 import Items from "./Items";
 
 const TableList = () => {
@@ -33,7 +32,7 @@ const TableList = () => {
   return (
     <Fragment>
       <div className="w-full overflow-x-auto">
-        <table className={`${styles.table}`}>
+        <table className="mb-4 min-w-full max-w-full whitespace-nowrap text-sm text-left text-gray-500">
           <tbody>
             <tr>
               <th scope="col" className="p-5">
@@ -74,26 +73,26 @@ const TableList = () => {
           <input
             type="number"
             id={idItemPerPage}
-            className={`${styles.customItemsPerpage}`}
+            className="w-[55px] p-2 border border-solid border-gray-300 outline-none rounded appearance-none"
             onChange={handleChange}
             onKeyDown={handleKeyDown}
           />
           bài trên trang
         </label>
         <ReactPaginate
-          activeClassName={`${styles.item} ${styles.active}`}
-          breakClassName={`${styles.item}`}
+          activeClassName="flex items-center justify-center w-10 h-10 text-sm text-gray-500 border border-solid [&>a]:w-full [&>a]:h-full [&>a]:flex [&>a]:items-center [&>a]:justify-center w-14 h-12 text-red-500 shadow-xl text-base"
+          breakClassName="flex items-center justify-center w-10 h-10 text-sm text-gray-500 border border-solid [&>a]:w-full [&>a]:h-full [&>a]:flex [&>a]:items-center [&>a]:justify-center"
           breakLabel={"..."}
-          containerClassName={`${styles.pagination}`}
-          disabledClassName={`${styles.disabledPage}`}
+          containerClassName="flex items-center justify-center sm:min-h-[112px] py-6 sm:py-8 list-none"
+          disabledClassName="text-[#808e9b]"
           marginPagesDisplayed={2}
-          nextClassName={`${styles.iconRight} ${styles.next}`}
+          nextClassName="flex items-center justify-center w-10 h-10 text-sm text-red-500 ml-2 text-3xl rounded-full hover:bg-red-50"
           nextLabel={<i className="ri-arrow-drop-right-line"></i>}
           onPageChange={handlePageClick}
           pageCount={pageCount}
-          pageClassName={`${styles.item} ${styles.paginationPage}`}
+          pageClassName="flex items-center justify-center w-10 h-10 text-sm text-gray-500 border border-solid [&>a]:w-full [&>a]:h-full [&>a]:flex [&>a]:items-center [&>a]:justify-center font-medium"
           pageRangeDisplayed={2}
-          previousClassName={`${styles.iconLeft} ${styles.previous}`}
+          previousClassName="flex items-center justify-center w-10 h-10 text-sm text-red-500 mr-2 text-3xl rounded-full hover:bg-red-50"
           previousLabel={<i className="ri-arrow-drop-left-line"></i>}
         />
       </div>

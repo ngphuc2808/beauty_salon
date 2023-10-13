@@ -26,6 +26,13 @@ interface iItem {
   currentItems: iData[];
 }
 
+interface iPost {
+  title: string;
+  content: string;
+  thumbnail: string;
+  status: boolean;
+}
+
 interface iDataList {
   id: string;
   imgUrl: string;
@@ -75,6 +82,18 @@ interface iAccountAuth {
 interface iAddAccount {
   username: string;
   password: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  avatar: string;
+  role: string;
+  status: boolean;
+}
+
+interface iEditAccount {
+  username: string;
+  password: string;
+  oldPassword: string;
   fullName: string;
   email: string;
   phone: string;

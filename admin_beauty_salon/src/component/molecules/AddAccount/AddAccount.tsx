@@ -4,9 +4,8 @@ import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import styles from "./AddAccount.module.css";
-import { setListAccount } from "@/features/redux/slices/componentUI/authComponentSlice";
 import CropImage from "../CropImage";
+import { setListAccount } from "@/features/redux/slices/componentUI/authComponentSlice";
 import { AuthApi } from "@/services/api/auth";
 import { ImageApi } from "@/services/api/image";
 
@@ -30,6 +29,19 @@ const AddAccount = () => {
     role: "employee",
     status: false,
   });
+  const [emptyFullName, setEmptyFullName] = useState<boolean>(true);
+  const [emptyUsername, setEmptyUsername] = useState<boolean>(true);
+  const [emptyPassword, setEmptyPassword] = useState<boolean>(true);
+  const [emptyEmail, setEmptyEmail] = useState<boolean>(true);
+  const [emptyPhone, setEmptyPhone] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (formValue.fullName.trim().length > 0) setEmptyFullName(true);
+    if (formValue.username.trim().length > 0) setEmptyUsername(true);
+    if (formValue.password.trim().length > 0) setEmptyPassword(true);
+    if (formValue.email.trim().length > 0) setEmptyEmail(true);
+    if (formValue.phone.trim().length > 0) setEmptyPhone(true);
+  }, [formValue]);
 
   useEffect(() => {
     return () => {
@@ -80,66 +92,112 @@ const AddAccount = () => {
   };
 
   const uploadFile = async () => {
-    const fileAvt = new File([fileImage], "image", {
-      type: fileImage,
-    });
+    const fileAvt = new File(
+      [fileImage],
+      `image-${formValue.username}-${Math.floor(Math.random() * 1000)}.${
+        fileImage.type.split("/")[1]
+      }`,
+      {
+        type: fileImage.type,
+      }
+    );
+    const formData = new FormData();
+    formData.append("image", fileAvt);
 
-    const form = new FormData();
-    form.append("image", fileAvt);
-
-    const upload = await ImageApi.uploadImage(form);
-
+    let upload;
+    try {
+      upload = await ImageApi.uploadImage(formData);
+    } catch (error: any) {
+      console.log(error);
+    }
     return upload;
   };
 
   const handleAddAccount = async () => {
-    const data = formValue;
-    data.status = Boolean(Number(formValue.status));
+    if (formValue.fullName.trim().length === 0) setEmptyFullName(false);
+    else setEmptyFullName(true);
 
-    // try {
-    //   const result = await AuthApi.createAccount(data);
-    //   if (result) {
-    //     toast.success("Thêm tài khoản thành công!");
-    //     return;
-    //   }
-    // } catch (error: any) {
-    //   if (error.message === "email đã tồn tại.") {
-    //     toast.warning("Email đã tồn tại trong hệ thống!");
-    //     return;
-    //   }
-    //   if (error.message === "phone đã tồn tại.") {
-    //     toast.warning("Số điện thoại đã tồn tại trong hệ thống!");
-    //     return;
-    //   }
-    //   if (error.message === "users validation failed: email: Invalid email") {
-    //     toast.warning("Sai định dạng email!");
-    //     return;
-    //   }
-    //   if (
-    //     error.message === "users validation failed: phone: Invalid phone number"
-    //   ) {
-    //     toast.warning("Sai định dạng số điện thoại!");
-    //     return;
-    //   }
-    //   if (
-    //     error.message ===
-    //     "users validation failed: email: Invalid email, phone: Invalid phone number"
-    //   ) {
-    //     toast.warning("Sai định dạng email và số điện thoại!");
-    //     return;
-    //   }
-    // }
+    if (formValue.username.trim().length === 0) setEmptyUsername(false);
+    else setEmptyUsername(true);
+
+    if (formValue.password.trim().length === 0) setEmptyPassword(false);
+    else setEmptyPassword(true);
+
+    if (formValue.email.trim().length === 0) setEmptyEmail(false);
+    else setEmptyEmail(true);
+
+    if (formValue.phone.trim().length === 0) setEmptyPhone(false);
+    else setEmptyPhone(true);
+
+    try {
+      if (
+        formValue.fullName.trim().length > 0 &&
+        formValue.username.trim().length > 0 &&
+        formValue.password.trim().length > 0 &&
+        formValue.email.trim().length > 0 &&
+        formValue.phone.trim().length > 0
+      ) {
+        if (fileImage) {
+          const avatar = await uploadFile();
+          formValue.avatar = avatar.results;
+        } else {
+          formValue.avatar = "";
+        }
+        const result = await AuthApi.createAccount(formValue);
+        if (result) {
+          setPreviewImg("");
+          setFormValue({
+            username: "",
+            password: "",
+            fullName: "",
+            email: "",
+            phone: "",
+            avatar: "",
+            role: "employee",
+            status: false,
+          });
+          toast.success("Thêm tài khoản thành công!");
+          return;
+        }
+      }
+    } catch (error: any) {
+      if (error.message === "email đã tồn tại.") {
+        toast.warning("Email đã tồn tại trong hệ thống!");
+        return;
+      }
+      if (error.message === "phone đã tồn tại.") {
+        toast.warning("Số điện thoại đã tồn tại trong hệ thống!");
+        return;
+      }
+      if (error.message === "users validation failed: email: Invalid email") {
+        toast.warning("Sai định dạng email!");
+        return;
+      }
+      if (
+        error.message === "users validation failed: phone: Invalid phone number"
+      ) {
+        toast.warning("Sai định dạng số điện thoại!");
+        return;
+      }
+      if (
+        error.message ===
+        "users validation failed: email: Invalid email, phone: Invalid phone number"
+      ) {
+        toast.warning("Sai định dạng email và số điện thoại!");
+        return;
+      }
+    }
   };
 
   return (
     <Fragment>
-      <div className={`${styles.dashBoard}`}>
+      <div className="w-full py-4 mb-5 bg-white flex items-center justify-between shadow rounded-lg flex-wrap lg:flex-nowrap">
         <h1 className="lg:text-xl md:text-base ml-5 text-textHeadingColor">
           Xác thực và ủy quyền
         </h1>
         <div className="w-full lg:w-auto flex items-center gap-3 mr-5 ml-5 lg:ml-0 mt-4 lg:mt-0 flex-col lg:flex-row">
           <button
-            className={`${styles.buttonListAccount}`}
+            className="w-full lg:w-auto lg:text-base md:text-sm bg-red-500 rounded-md hover:bg-red-600 text-white px-3 py-2"
             onClick={() => {
               dispatch(setListAccount());
             }}
@@ -153,7 +211,12 @@ const AddAccount = () => {
           <div className="bg-white shadow rounded-lg p-5">
             <form>
               <div className="mb-5">
-                <label htmlFor="username" className={`${styles.label}`}>
+                <label
+                  htmlFor="username"
+                  className={`block mb-2 text-sm font-normal ${
+                    !emptyUsername ? "text-red-700" : "text-[#666]"
+                  }`}
+                >
                   Tài khoản
                 </label>
                 <input
@@ -162,12 +225,26 @@ const AddAccount = () => {
                   name="username"
                   value={formValue.username}
                   onChange={handleInput}
-                  className={`${styles.input}`}
+                  className={`border text-sm outline-none rounded-md block w-full p-2.5 ${
+                    !emptyUsername
+                      ? "bg-red-50 border-red-500 placeholder-red-400"
+                      : "bg-white border-gray-300"
+                  }`}
                   placeholder="Tài khoản"
                 />
+                {!emptyUsername && (
+                  <p className="mt-2 text-sm text-red-600">
+                    Vui lòng nhập tài khoản!
+                  </p>
+                )}
               </div>
               <div className="mb-5">
-                <label htmlFor="name" className={`${styles.label}`}>
+                <label
+                  htmlFor="name"
+                  className={`block mb-2 text-sm font-normal ${
+                    !emptyFullName ? "text-red-700" : "text-[#666]"
+                  }`}
+                >
                   Họ và tên
                 </label>
                 <input
@@ -176,12 +253,26 @@ const AddAccount = () => {
                   name="fullName"
                   value={formValue.fullName}
                   onChange={handleInput}
-                  className={`${styles.input}`}
+                  className={`border text-sm outline-none rounded-md block w-full p-2.5 ${
+                    !emptyFullName
+                      ? "bg-red-50 border-red-500 placeholder-red-400"
+                      : "bg-white border-gray-300"
+                  }`}
                   placeholder="Họ và tên"
                 />
+                {!emptyFullName && (
+                  <p className="mt-2 text-sm text-red-600">
+                    Vui lòng nhập họ và tên!
+                  </p>
+                )}
               </div>
               <div className="mb-5">
-                <label htmlFor="email" className={`${styles.label}`}>
+                <label
+                  htmlFor="email"
+                  className={`block mb-2 text-sm font-normal ${
+                    !emptyEmail ? "text-red-700" : "text-[#666]"
+                  }`}
+                >
                   Email
                 </label>
                 <input
@@ -190,12 +281,26 @@ const AddAccount = () => {
                   name="email"
                   value={formValue.email}
                   onChange={handleInput}
-                  className={`${styles.input}`}
+                  className={`border text-sm outline-none rounded-md block w-full p-2.5 ${
+                    !emptyEmail
+                      ? "bg-red-50 border-red-500 placeholder-red-400"
+                      : "bg-white border-gray-300"
+                  }`}
                   placeholder="Email"
                 />
+                {!emptyEmail && (
+                  <p className="mt-2 text-sm text-red-600">
+                    Vui lòng nhập email!
+                  </p>
+                )}
               </div>
               <div className="mb-5">
-                <label htmlFor="phone" className={`${styles.label}`}>
+                <label
+                  htmlFor="phone"
+                  className={`block mb-2 text-sm font-normal ${
+                    !emptyPhone ? "text-red-700" : "text-[#666]"
+                  }`}
+                >
                   Số điện thoại
                 </label>
                 <input
@@ -204,12 +309,26 @@ const AddAccount = () => {
                   name="phone"
                   value={formValue.phone}
                   onChange={handleInput}
-                  className={`${styles.input}`}
+                  className={`border text-sm outline-none rounded-md block w-full p-2.5 ${
+                    !emptyPhone
+                      ? "bg-red-50 border-red-500 placeholder-red-400"
+                      : "bg-white border-gray-300"
+                  }`}
                   placeholder="Số điện thoại"
                 />
+                {!emptyPhone && (
+                  <p className="mt-2 text-sm text-red-600">
+                    Vui lòng nhập số điện thoại!
+                  </p>
+                )}
               </div>
               <div className="mb-5">
-                <label htmlFor="password" className={`${styles.label}`}>
+                <label
+                  htmlFor="password"
+                  className={`block mb-2 text-sm font-normal ${
+                    !emptyPassword ? "text-red-700" : "text-[#666]"
+                  }`}
+                >
                   Mật khẩu
                 </label>
                 <input
@@ -219,9 +338,18 @@ const AddAccount = () => {
                   value={formValue.password}
                   autoComplete="on"
                   onChange={handleInput}
-                  className={`${styles.input}`}
+                  className={`border text-sm outline-none rounded-md block w-full p-2.5 ${
+                    !emptyPassword
+                      ? "bg-red-50 border-red-500 placeholder-red-400"
+                      : "bg-white border-gray-300"
+                  }`}
                   placeholder="Mật khẩu"
                 />
+                {!emptyPassword && (
+                  <p className="mt-2 text-sm text-red-600">
+                    Vui lòng nhập mật khẩu!
+                  </p>
+                )}
               </div>
               <div className="mb-5">
                 <h1 className="text-sm text-textHeadingColor mb-2">
@@ -237,9 +365,11 @@ const AddAccount = () => {
                       checked={formValue.status ? true : false}
                       id="statusOn"
                       name="status"
-                      value={1}
-                      onChange={handleInput}
-                      className={`${styles.customRadio}`}
+                      onChange={() =>
+                        setFormValue({ ...formValue, status: true })
+                      }
+                      className="after:content-[''] after:cursor-pointer after:w-4 after:h-4 after:rounded-full after:relative after:top-[-2px] after:left-0 after:bg-[#d1d3d1]  after:inline-block visible
+                      checked:after:content-[''] checked:after:cursor-pointer checked:after:w-4 checked:after:h-4 checked:after:rounded-full checked:after:relative checked:after:top-[-2px] checked:after:left-0 checked:after:bg-green-500 checked:after:inline-block checked:after:visible"
                     />
                     Bật
                   </label>
@@ -252,9 +382,11 @@ const AddAccount = () => {
                       checked={!formValue.status ? true : false}
                       id="statusOff"
                       name="status"
-                      value={0}
-                      onChange={handleInput}
-                      className={`${styles.customRadio}`}
+                      onChange={() =>
+                        setFormValue({ ...formValue, status: false })
+                      }
+                      className="after:content-[''] after:cursor-pointer after:w-4 after:h-4 after:rounded-full after:relative after:top-[-2px] after:left-0 after:bg-[#d1d3d1]  after:inline-block visible
+                      checked:after:content-[''] checked:after:cursor-pointer checked:after:w-4 checked:after:h-4 checked:after:rounded-full checked:after:relative checked:after:top-[-2px] checked:after:left-0 checked:after:bg-green-500 checked:after:inline-block checked:after:visible"
                     />
                     Tắt
                   </label>
@@ -276,7 +408,8 @@ const AddAccount = () => {
                       name="role"
                       value="admin"
                       onChange={handleInput}
-                      className={`${styles.customRadio}`}
+                      className="after:content-[''] after:cursor-pointer after:w-4 after:h-4 after:rounded-full after:relative after:top-[-2px] after:left-0 after:bg-[#d1d3d1]  after:inline-block visible
+                      checked:after:content-[''] checked:after:cursor-pointer checked:after:w-4 checked:after:h-4 checked:after:rounded-full checked:after:relative checked:after:top-[-2px] checked:after:left-0 checked:after:bg-green-500 checked:after:inline-block checked:after:visible"
                     />
                     Quản trị viên
                   </label>
@@ -291,7 +424,8 @@ const AddAccount = () => {
                       name="role"
                       value="employee"
                       onChange={handleInput}
-                      className={`${styles.customRadio}`}
+                      className="after:content-[''] after:cursor-pointer after:w-4 after:h-4 after:rounded-full after:relative after:top-[-2px] after:left-0 after:bg-[#d1d3d1]  after:inline-block visible
+                      checked:after:content-[''] checked:after:cursor-pointer checked:after:w-4 checked:after:h-4 checked:after:rounded-full checked:after:relative checked:after:top-[-2px] checked:after:left-0 checked:after:bg-green-500 checked:after:inline-block checked:after:visible"
                     />
                     Nhân viên
                   </label>
@@ -300,25 +434,23 @@ const AddAccount = () => {
             </form>
           </div>
           <div className="mt-5">
-            <div className={`${styles.itemLeftContent}`}>
+            <div className="bg-white shadow rounded-lg p-5">
               <div className="flex items-center justify-between">
                 <button
-                  className={`${styles.customButton} w-[48%] lg:w-[200px] `}
+                  className="text-textPrimaryColor text-sm px-4 py-3 bg-red-400 hover:bg-red-500 text-white rounded-md w-[48%] lg:w-[200px]"
                   onClick={handleAddAccount}
                 >
                   Lưu
                 </button>
-                <button
-                  className={`${styles.customButton} w-[48%] lg:w-[200px]`}
-                >
+                <button className="text-textPrimaryColor text-sm px-4 py-3 bg-red-400 hover:bg-red-500 text-white rounded-md w-[48%] lg:w-[200px]">
                   Thoát
                 </button>
               </div>
             </div>
           </div>
         </div>
-        <div className={`${styles.rightContent}`}>
-          <div className={`${styles.banner}`}>
+        <div className="col-span-12 lg:col-span-4 [&>*]:mb-5">
+          <div className="bg-white shadow rounded-lg p-5 mt-0">
             <div className="flex items-center justify-between mb-3">
               <h1 className="text-textHeadingColor">Ảnh bài viết</h1>
               <div className="flex items-center gap-3 text-sm">
@@ -337,8 +469,11 @@ const AddAccount = () => {
               </div>
             </div>
             <div className="flex items-center justify-center w-full">
-              <label htmlFor="dropZone" className={`${styles.labelDropZone}`}>
-                <div className={`${styles.dropZone}`}>
+              <label
+                htmlFor="dropZone"
+                className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
+              >
+                <div className="flex flex-col items-center justify-center pt-5 pb-6 overflow-hidden rounded-lg">
                   {previewImg ? (
                     <figure className="w-full h-full">
                       <img
@@ -384,7 +519,7 @@ const AddAccount = () => {
       <ToastContainer
         position="bottom-right"
         autoClose={1500}
-        bodyClassName={`${styles.toastBody}`}
+        bodyClassName="font-beVietnam text-sm"
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

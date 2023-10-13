@@ -1,7 +1,8 @@
 const routes = {
   home: "/",
   login: "/login",
-  landingPage: "/landing-page",
+  landingPage: "/create-landing-page",
+  testPage: "/test-page",
 };
 
 export default routes;

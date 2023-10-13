@@ -20,7 +20,6 @@ export const componentSlice = createSlice({
   },
 });
 
-// Action creators are generated for each case reducer function
 export const { setNavComponent, setAuthComponent } = componentSlice.actions;
 
 export default componentSlice.reducer;

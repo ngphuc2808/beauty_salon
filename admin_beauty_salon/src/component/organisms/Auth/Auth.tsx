@@ -1,13 +1,10 @@
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
+import { useSelector } from "react-redux";
 
-import styles from "./Auth.module.css";
-
-import Search from "@/component/molecules/Search";
 import ListAccount from "@/component/molecules/ListAccount";
 import AddAccount from "@/component/molecules/AddAccount";
 import EditUserAccount from "@/component/molecules/EditUserAccount";
 import EditMyAccount from "@/component/molecules/EditMyAccount";
-import { useSelector } from "react-redux";
 
 const Auth = () => {
   const result = useSelector(

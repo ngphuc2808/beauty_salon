@@ -10,6 +10,7 @@ import editUserReducer from "./slices/dataUI/editUserSlice";
 
 import authComponentReducer from "./slices/componentUI/authComponentSlice";
 import componentReducer from "./slices/componentUI/componentSlice";
+import navComponentReducer from "./slices/componentUI/navComponentSlice";
 
 const persistConfig = {
   key: "root",
@@ -21,10 +22,11 @@ const persistedReducer = persistReducer(persistConfig, loginReducer);
 export const store = configureStore({
   reducer: {
     login: persistedReducer,
-    authComponent: authComponentReducer,
-    component: componentReducer,
     user: userReducer,
     editUser: editUserReducer,
+    navComponent: navComponentReducer,
+    authComponent: authComponentReducer,
+    component: componentReducer,
   },
   middleware: [thunk],
 });

@@ -1,7 +1,10 @@
 import { ChangeEvent, Fragment, useEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-
 import { ClassicEditor } from "@ckeditor/ckeditor5-editor-classic";
 import { Font } from "@ckeditor/ckeditor5-font";
 import { Essentials } from "@ckeditor/ckeditor5-essentials";
@@ -27,15 +30,13 @@ import { TextTransformation } from "@ckeditor/ckeditor5-typing";
 import { Indent, IndentBlock } from "@ckeditor/ckeditor5-indent";
 import { Base64UploadAdapter } from "@ckeditor/ckeditor5-upload";
 
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
-import styles from "./CreatePost.module.css";
 import CropImage from "../CropImage";
+import { setDetailCategory } from "@/features/redux/slices/componentUI/navComponentSlice";
 
 const imageMimeType = /image\/(png|jpg|jpeg)/i;
 
 const CreatePost = () => {
+  const dispatch = useDispatch();
   const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
 
   const [cropImage, setCropImage] = useState<string | ArrayBuffer | null>(null);
@@ -43,10 +44,11 @@ const CreatePost = () => {
   const [previewImg, setPreviewImg] = useState<string>("");
   const [fileImage, setFileImage] = useState<any>();
   const [file, setFile] = useState<File>();
-  const [formValue, setFormValue] = useState({
+  const [formValue, setFormValue] = useState<iPost>({
     title: "",
     content: "",
     thumbnail: "",
+    status: false,
   });
 
   useEffect(() => {
@@ -106,195 +108,197 @@ const CreatePost = () => {
   //   };
   // }
 
-  const configPluginEditor: any = {
-    plugins: [
-      Autoformat,
-      Essentials,
-      Paragraph,
-      Bold,
-      Italic,
-      Heading,
-      Indent,
-      IndentBlock,
-      Underline,
-      BlockQuote,
-      Font,
-      Alignment,
-      List,
-      Link,
-      MediaEmbed,
-      PasteFromOffice,
-      Image,
-      ImageStyle,
-      ImageToolbar,
-      ImageUpload,
-      ImageResize,
-      Base64UploadAdapter,
-      Table,
-      TableToolbar,
-      TextTransformation,
-    ],
-    toolbar: [
-      "undo",
-      "redo",
-      "|",
-      "heading",
-      "|",
-      "fontFamily",
-      "fontSize",
-      "fontColor",
-      "fontBackgroundColor",
-      "|",
-      "bold",
-      "italic",
-      "underline",
-      "|",
-      "alignment",
-      "outdent",
-      "indent",
-      "bulletedList",
-      "numberedList",
-      "blockQuote",
-      "|",
-      "link",
-      "insertTable",
-      "imageUpload",
-      "mediaEmbed",
-    ],
-    heading: {
-      options: [
-        {
-          model: "paragraph",
-          title: "Paragraph",
-          class: "ck-heading_paragraph",
-        },
-        {
-          model: "heading1",
-          view: "h1",
-          title: "Heading 1",
-          class: "ck-heading_heading1",
-        },
-        {
-          model: "heading2",
-          view: "h2",
-          title: "Heading 2",
-          class: "ck-heading_heading2",
-        },
-        {
-          model: "heading3",
-          view: "h3",
-          title: "Heading 3",
-          class: "ck-heading_heading3",
-        },
-      ],
-    },
-    fontSize: {
-      options: [
-        9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 25, 27, 29, 31,
-        33, 35,
-      ],
-    },
-    fontFamily: {
-      options: [
-        "default",
-        "Arial, Helvetica, sans-serif",
-        "Courier New, Courier, monospace",
-        "Georgia, serif",
-        "Lucida Sans Unicode, Lucida Grande, sans-serif",
-        "Tahoma, Geneva, sans-serif",
-        "Times New Roman, Times, serif",
-        "Trebuchet MS, Helvetica, sans-serif",
-        "Verdana, Geneva, sans-serif",
-      ],
-    },
-    alignment: {
-      options: ["justify", "left", "center", "right"],
-    },
-    table: {
-      contentToolbar: ["tableColumn", "tableRow", "mergeTableCells"],
-    },
-    image: {
-      resizeUnit: "px",
-      toolbar: [
-        "imageStyle:alignLeft",
-        "imageStyle:alignCenter",
-        "imageStyle:alignRight",
-        "|",
-        "imageTextAlternative",
-      ],
-    },
-    typing: {
-      transformations: {
-        include: [
-          // Use only the 'quotes' and 'typography' groups.
-          "quotes",
-          "typography",
-
-          // Plus some custom transformation.
-          { from: "CKE", to: "CKEditor" },
-        ],
-        remove: [
-          "enDash",
-          "emDash",
-          "oneHalf",
-          "oneThird",
-          "twoThirds",
-          "oneForth",
-          "threeQuarters",
-        ],
-      },
-    },
-    placeholder: "Nhập nội dung...",
-  };
-
   return (
     <Fragment>
-      <div className={`${styles.dashBoard}`}>
-        <div className={`${styles.descriptionDashBoard}`}>
-          <i className={`${styles.customIconBack} ri-arrow-left-line`}></i>
-          <h1 className={`${styles.titleDashBoard}`}>Đăng bài</h1>
+      <div className="w-full py-4 mb-5 bg-white flex items-center justify-between shadow rounded-lg flex-wrap sm:flex-nowrap">
+        <div className="flex items-center gap-3">
+          <i
+            className="lg:text-2xl text-xl ml-5 w-10 h-10 flex items-center justify-center text-white bg-red-400 hover:bg-red-500 cursor-pointer rounded-md ri-arrow-left-line"
+            onClick={() => dispatch(setDetailCategory())}
+          ></i>
+          <h1 className="text-xl text-textHeadingColor">Tạo trang SEO</h1>
         </div>
       </div>
-      <div className={`${styles.gridContent}`}>
-        <div className={`${styles.leftContent}`}>
-          <div className={`${styles.itemLeftContent} mb-5`}>
-            <h1 className={`${styles.titleItem}`}>Tên bài viết</h1>
+      <div className="grid grid-cols-12 gap-x-3">
+        <div className="col-span-12 lg:col-span-8 order-2 lg:order-none">
+          <div className="bg-white shadow rounded-lg p-5 mb-5">
+            <h1 className="text-lg text-textHeadingColor">Tên bài viết</h1>
             <input
               ref={inputRef}
               type="text"
               placeholder="Nhập tên danh mục"
-              className={`${styles.inputName}`}
+              className="mt-3 w-full border rounded p-3 text-sm focus:outline-none focus:border-red-500 focus:ring focus:ring-red-500/20"
               name="title"
               value={formValue.title}
               onChange={handleInput}
             />
           </div>
-          <div className={`${styles.mainItemLeftContent}`}>
+          <div className="shadow rounded-lg mb-5 bg-white w-full p-4">
             <CKEditor
               editor={ClassicEditor}
-              config={configPluginEditor}
+              config={{
+                plugins: [
+                  Autoformat,
+                  Essentials,
+                  Paragraph,
+                  Bold,
+                  Italic,
+                  Heading,
+                  Indent,
+                  IndentBlock,
+                  Underline,
+                  BlockQuote,
+                  Font,
+                  Alignment,
+                  List,
+                  Link,
+                  MediaEmbed,
+                  PasteFromOffice,
+                  Image,
+                  ImageStyle,
+                  ImageToolbar,
+                  ImageUpload,
+                  ImageResize,
+                  Base64UploadAdapter,
+                  Table,
+                  TableToolbar,
+                  TextTransformation,
+                ],
+                toolbar: [
+                  "undo",
+                  "redo",
+                  "|",
+                  "heading",
+                  "|",
+                  "fontFamily",
+                  "fontSize",
+                  "fontColor",
+                  "fontBackgroundColor",
+                  "|",
+                  "bold",
+                  "italic",
+                  "underline",
+                  "|",
+                  "alignment",
+                  "outdent",
+                  "indent",
+                  "bulletedList",
+                  "numberedList",
+                  "blockQuote",
+                  "|",
+                  "link",
+                  "insertTable",
+                  "imageUpload",
+                  "mediaEmbed",
+                ],
+                heading: {
+                  options: [
+                    {
+                      model: "paragraph",
+                      title: "Paragraph",
+                      class: "ck-heading_paragraph",
+                    },
+                    {
+                      model: "heading1",
+                      view: "h1",
+                      title: "Heading 1",
+                      class: "ck-heading_heading1",
+                    },
+                    {
+                      model: "heading2",
+                      view: "h2",
+                      title: "Heading 2",
+                      class: "ck-heading_heading2",
+                    },
+                    {
+                      model: "heading3",
+                      view: "h3",
+                      title: "Heading 3",
+                      class: "ck-heading_heading3",
+                    },
+                  ],
+                },
+                fontSize: {
+                  options: [
+                    9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 25,
+                    27, 29, 31, 33, 35,
+                  ],
+                },
+                fontFamily: {
+                  options: [
+                    "default",
+                    "Arial, Helvetica, sans-serif",
+                    "Courier New, Courier, monospace",
+                    "Georgia, serif",
+                    "Lucida Sans Unicode, Lucida Grande, sans-serif",
+                    "Tahoma, Geneva, sans-serif",
+                    "Times New Roman, Times, serif",
+                    "Trebuchet MS, Helvetica, sans-serif",
+                    "Verdana, Geneva, sans-serif",
+                  ],
+                },
+                alignment: {
+                  options: ["justify", "left", "center", "right"],
+                },
+                table: {
+                  contentToolbar: [
+                    "tableColumn",
+                    "tableRow",
+                    "mergeTableCells",
+                  ],
+                },
+                image: {
+                  resizeUnit: "px",
+                  toolbar: [
+                    "imageStyle:alignLeft",
+                    "imageStyle:alignCenter",
+                    "imageStyle:alignRight",
+                    "|",
+                    "imageTextAlternative",
+                  ],
+                },
+                typing: {
+                  transformations: {
+                    include: [
+                      "quotes",
+                      "typography",
+                      { from: "CKE", to: "CKEditor" },
+                    ],
+                    remove: [
+                      "enDash",
+                      "emDash",
+                      "oneHalf",
+                      "oneThird",
+                      "twoThirds",
+                      "oneForth",
+                      "threeQuarters",
+                    ],
+                  },
+                },
+                placeholder: "Nhập nội dung...",
+              }}
               onChange={(_event, editor) => {
                 const newData = editor.getData();
                 setFormValue({ ...formValue, content: newData });
               }}
             />
           </div>
-          <div className={`${styles.itemLeftContent}`}>
+          <div className="bg-white shadow rounded-lg p-5">
             <div className="flex items-center justify-between">
               <button
-                className={`${styles.customButton} w-[48%] lg:w-[200px] `}
+                className="text-textPrimaryColor text-sm px-4 py-3 bg-red-400 hover:bg-red-500 text-white rounded-md w-[48%] lg:w-[200px]"
                 onClick={handlePost}
               >
                 Lưu
               </button>
-              <button className={`${styles.customButton} w-[48%] lg:w-[200px]`}>
+              <button className="text-textPrimaryColor text-sm px-4 py-3 bg-red-400 hover:bg-red-500 text-white rounded-md w-[48%] lg:w-[200px]">
                 Thoát
               </button>
             </div>
           </div>
         </div>
-        <div className={`${styles.rightContent}`}>
-          <div className={`${styles.banner}`}>
+        <div className="col-span-12 lg:col-span-4 [&>*]:mb-5">
+          <div className="bg-white shadow rounded-lg p-5 mt-0">
             <div className="flex items-center justify-between mb-3">
               <h1 className="text-textHeadingColor">Ảnh bài viết</h1>
               <div className="flex items-center gap-3 text-sm">
@@ -313,8 +317,11 @@ const CreatePost = () => {
               </div>
             </div>
             <div className="flex items-center justify-center w-full">
-              <label htmlFor="dropZone" className={`${styles.labelDropZone}`}>
-                <div className={`${styles.dropZone}`}>
+              <label
+                htmlFor="dropZone"
+                className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
+              >
+                <div className="flex flex-col items-center justify-center pt-5 pb-6 overflow-hidden rounded-lg">
                   {previewImg ? (
                     <figure className="w-full h-full">
                       <img
@@ -354,7 +361,7 @@ const CreatePost = () => {
       <ToastContainer
         position="bottom-right"
         autoClose={1500}
-        bodyClassName={`${styles.toastBody}`}
+        bodyClassName="font-beVietnam text-sm"
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

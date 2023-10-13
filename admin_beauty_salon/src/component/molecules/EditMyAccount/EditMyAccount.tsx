@@ -4,8 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import styles from "./EditMyAccount.module.css";
 import CropImage from "../CropImage";
+
+import { AuthApi } from "@/services/api/auth";
 
 const imageMimeType = /image\/(png|jpg|jpeg)/i;
 
@@ -32,6 +33,12 @@ const EditMyAccount = () => {
     role: data.info.role,
     status: data.info.status,
   });
+
+  const [emptyOldPassword, setEmptyOldPassword] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (formValue.oldPassword.trim().length > 0) setEmptyOldPassword(true);
+  }, [formValue]);
 
   useEffect(() => {
     return () => {
@@ -81,23 +88,32 @@ const EditMyAccount = () => {
   };
 
   const handleUpdateInfo = async () => {
-    const data = formValue;
-    data.status = Boolean(Number(formValue.status));
+    if (formValue.oldPassword.trim().length === 0) setEmptyOldPassword(false);
+    else setEmptyOldPassword(true);
 
-    console.log(data);
+    try {
+      if (formValue.oldPassword.trim().length > 0) {
+        const result = await AuthApi.updateAccount(data.info.slug, formValue);
+        if (result) {
+          console.log(result);
+        }
+      }
+    } catch (error: any) {
+      console.log(error);
+    }
   };
 
   return (
     <Fragment>
-      <div className={`${styles.dashBoard}`}>
+      <div className="w-full py-4 mb-5 bg-white flex items-center justify-between shadow rounded-lg flex-wrap lg:flex-nowrap">
         <div className="flex items-center gap-3">
-          <h1 className={`lg:text-xl md:text-base text-textHeadingColor ml-5`}>
+          <h1 className="lg:text-xl md:text-base text-textHeadingColor ml-5">
             Chỉnh sửa thông tin cá nhân
           </h1>
         </div>
 
         <button
-          className={`${styles.buttonSaveAccount}`}
+          className="lg:text-base md:text-sm w-full sm:w-max mx-5 mt-4 sm:mt-0 bg-red-500 rounded-md hover:bg-red-600 text-white px-3 py-2"
           onClick={handleUpdateInfo}
         >
           Lưu cài đặt
@@ -108,7 +124,10 @@ const EditMyAccount = () => {
           <div className="bg-white shadow rounded-lg p-5">
             <form>
               <div className="mb-5">
-                <label htmlFor="username" className={`${styles.label}`}>
+                <label
+                  htmlFor="username"
+                  className="block mb-2 text-sm font-normal"
+                >
                   Tài khoản
                 </label>
                 <input
@@ -117,12 +136,15 @@ const EditMyAccount = () => {
                   name="username"
                   value={formValue.username}
                   onChange={handleInput}
-                  className={`${styles.input}`}
+                  className="border text-sm outline-none rounded-md block w-full p-2.5"
                   placeholder="Tài khoản"
                 />
               </div>
               <div className="mb-5">
-                <label htmlFor="name" className={`${styles.label}`}>
+                <label
+                  htmlFor="name"
+                  className="block mb-2 text-sm font-normal"
+                >
                   Họ và tên
                 </label>
                 <input
@@ -131,12 +153,15 @@ const EditMyAccount = () => {
                   name="fullName"
                   value={formValue.fullName}
                   onChange={handleInput}
-                  className={`${styles.input}`}
+                  className="border text-sm outline-none rounded-md block w-full p-2.5"
                   placeholder="Họ và tên"
                 />
               </div>
               <div className="mb-5">
-                <label htmlFor="email" className={`${styles.label}`}>
+                <label
+                  htmlFor="email"
+                  className="block mb-2 text-sm font-normal"
+                >
                   Email
                 </label>
                 <input
@@ -145,12 +170,15 @@ const EditMyAccount = () => {
                   name="email"
                   value={formValue.email}
                   onChange={handleInput}
-                  className={`${styles.input}`}
+                  className="border text-sm outline-none rounded-md block w-full p-2.5"
                   placeholder="Email"
                 />
               </div>
               <div className="mb-5">
-                <label htmlFor="phone" className={`${styles.label}`}>
+                <label
+                  htmlFor="phone"
+                  className="block mb-2 text-sm font-normal"
+                >
                   Số điện thoại
                 </label>
                 <input
@@ -159,28 +187,18 @@ const EditMyAccount = () => {
                   name="phone"
                   value={formValue.phone}
                   onChange={handleInput}
-                  className={`${styles.input}`}
+                  className="border text-sm outline-none rounded-md block w-full p-2.5"
                   placeholder="Số điện thoại"
                 />
               </div>
               <div className="mb-5">
-                <label htmlFor="password" className={`${styles.label}`}>
+                <label
+                  htmlFor="oldPassword"
+                  className={`block mb-2 text-sm font-normal ${
+                    !emptyOldPassword ? "text-red-700" : "text-[#666]"
+                  }`}
+                >
                   Mật khẩu
-                </label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={formValue.password}
-                  autoComplete="on"
-                  onChange={handleInput}
-                  className={`${styles.input}`}
-                  placeholder="Mật khẩu"
-                />
-              </div>
-              <div className="mb-5">
-                <label htmlFor="oldPassword" className={`${styles.label}`}>
-                  Mật khẩu cũ
                 </label>
                 <input
                   type="password"
@@ -189,8 +207,35 @@ const EditMyAccount = () => {
                   value={formValue.oldPassword}
                   autoComplete="on"
                   onChange={handleInput}
-                  className={`${styles.input}`}
+                  className={`border text-sm outline-none rounded-md block w-full p-2.5 ${
+                    !emptyOldPassword
+                      ? "bg-red-50 border-red-500 placeholder-red-400"
+                      : "bg-white border-gray-300"
+                  }`}
                   placeholder="Mật khẩu"
+                />
+                {!emptyOldPassword && (
+                  <p className="mt-2 text-sm text-red-600">
+                    Vui lòng nhập mật khẩu!
+                  </p>
+                )}
+              </div>
+              <div className="mb-5">
+                <label
+                  htmlFor="password"
+                  className="block mb-2 text-sm font-normal"
+                >
+                  Mật khẩu mới
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  value={formValue.password}
+                  autoComplete="on"
+                  onChange={handleInput}
+                  className="border text-sm outline-none rounded-md block w-full p-2.5"
+                  placeholder="Mật khẩu mới"
                 />
               </div>
             </form>
@@ -216,12 +261,16 @@ const EditMyAccount = () => {
               </div>
             </div>
             <div className="flex items-center justify-center w-full">
-              <label htmlFor="dropZone" className={`${styles.labelDropZone}`}>
-                <div className={`${styles.dropZone}`}>
+              <label
+                htmlFor="dropZone"
+                className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
+              >
+                <div className="flex flex-col items-center justify-center pt-5 pb-6 overflow-hidden rounded-lg">
                   {previewImg ? (
                     <figure className="w-full h-full">
                       <img
                         className="max-h-full max-w-full"
+                        crossOrigin="anonymous"
                         src={previewImg}
                         alt="image"
                       />
@@ -263,7 +312,7 @@ const EditMyAccount = () => {
       <ToastContainer
         position="bottom-right"
         autoClose={1500}
-        bodyClassName={`${styles.toastBody}`}
+        bodyClassName="font-beVietnam text-sm"
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

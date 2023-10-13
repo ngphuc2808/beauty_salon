@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import styles from "./EditUserAccount.module.css";
 import { setListAccount } from "@/features/redux/slices/componentUI/authComponentSlice";
 import CropImage from "../CropImage";
 
@@ -84,19 +83,19 @@ const EditUserAccount = () => {
 
   return (
     <Fragment>
-      <div className={`${styles.dashBoard}`}>
+      <div className="w-full py-4 mb-5 bg-white flex items-center justify-between shadow rounded-lg flex-wrap lg:flex-nowrap">
         <div className="flex items-center gap-3">
           <i
-            className={`${styles.customIconBack} ri-arrow-left-line`}
+            className="lg:text-2xl text-xl ml-5 w-10 h-10 flex items-center justify-center text-white bg-red-400 hover:bg-red-500 cursor-pointer rounded-md ri-arrow-left-line"
             onClick={() => dispatch(setListAccount())}
           ></i>
-          <h1 className={`lg:text-xl md:text-base text-textHeadingColor`}>
+          <h1 className="lg:text-xl md:text-base text-textHeadingColor">
             Chỉnh sửa {data.info.fullName}
           </h1>
         </div>
 
         <button
-          className={`${styles.buttonSaveAccount}`}
+          className="lg:text-base md:text-sm w-full sm:w-max mx-5 mt-4 sm:mt-0 bg-red-500 rounded-md hover:bg-red-600 text-white px-3 py-2"
           onClick={handleUpdateInfo}
         >
           Lưu cài đặt
@@ -107,7 +106,10 @@ const EditUserAccount = () => {
           <div className="bg-white shadow rounded-lg p-5">
             <form>
               <div className="mb-5">
-                <label htmlFor="username" className={`${styles.label}`}>
+                <label
+                  htmlFor="username"
+                  className="block mb-2 text-sm font-normal"
+                >
                   Tài khoản
                 </label>
                 <input
@@ -116,12 +118,15 @@ const EditUserAccount = () => {
                   name="username"
                   value={formValue.username}
                   onChange={handleInput}
-                  className={`${styles.input}`}
+                  className="border text-sm outline-none rounded-md block w-full p-2.5"
                   placeholder="Tài khoản"
                 />
               </div>
               <div className="mb-5">
-                <label htmlFor="name" className={`${styles.label}`}>
+                <label
+                  htmlFor="name"
+                  className="block mb-2 text-sm font-normal"
+                >
                   Họ và tên
                 </label>
                 <input
@@ -130,12 +135,15 @@ const EditUserAccount = () => {
                   name="fullName"
                   value={formValue.fullName}
                   onChange={handleInput}
-                  className={`${styles.input}`}
+                  className="border text-sm outline-none rounded-md block w-full p-2.5"
                   placeholder="Họ và tên"
                 />
               </div>
               <div className="mb-5">
-                <label htmlFor="email" className={`${styles.label}`}>
+                <label
+                  htmlFor="email"
+                  className="block mb-2 text-sm font-normal"
+                >
                   Email
                 </label>
                 <input
@@ -144,12 +152,15 @@ const EditUserAccount = () => {
                   name="email"
                   value={formValue.email}
                   onChange={handleInput}
-                  className={`${styles.input}`}
+                  className="border text-sm outline-none rounded-md block w-full p-2.5"
                   placeholder="Email"
                 />
               </div>
               <div className="mb-5">
-                <label htmlFor="phone" className={`${styles.label}`}>
+                <label
+                  htmlFor="phone"
+                  className="block mb-2 text-sm font-normal"
+                >
                   Số điện thoại
                 </label>
                 <input
@@ -158,12 +169,15 @@ const EditUserAccount = () => {
                   name="phone"
                   value={formValue.phone}
                   onChange={handleInput}
-                  className={`${styles.input}`}
+                  className="border text-sm outline-none rounded-md block w-full p-2.5"
                   placeholder="Số điện thoại"
                 />
               </div>
               <div className="mb-5">
-                <label htmlFor="password" className={`${styles.label}`}>
+                <label
+                  htmlFor="password"
+                  className="block mb-2 text-sm font-normal"
+                >
                   Mật khẩu
                 </label>
                 <input
@@ -173,7 +187,7 @@ const EditUserAccount = () => {
                   value={formValue.password}
                   autoComplete="on"
                   onChange={handleInput}
-                  className={`${styles.input}`}
+                  className="border text-sm outline-none rounded-md block w-full p-2.5"
                   placeholder="Mật khẩu"
                 />
               </div>
@@ -191,9 +205,11 @@ const EditUserAccount = () => {
                       checked={formValue.status ? true : false}
                       id="statusOn"
                       name="status"
-                      value={1}
-                      onChange={handleInput}
-                      className={`${styles.customRadio}`}
+                      onChange={() =>
+                        setFormValue({ ...formValue, status: true })
+                      }
+                      className="after:content-[''] after:cursor-pointer after:w-4 after:h-4 after:rounded-full after:relative after:top-[-2px] after:left-0 after:bg-[#d1d3d1]  after:inline-block visible
+                      checked:after:content-[''] checked:after:cursor-pointer checked:after:w-4 checked:after:h-4 checked:after:rounded-full checked:after:relative checked:after:top-[-2px] checked:after:left-0 checked:after:bg-green-500 checked:after:inline-block checked:after:visible"
                     />
                     Bật
                   </label>
@@ -206,9 +222,11 @@ const EditUserAccount = () => {
                       checked={!formValue.status ? true : false}
                       id="statusOff"
                       name="status"
-                      value={0}
-                      onChange={handleInput}
-                      className={`${styles.customRadio}`}
+                      onChange={() =>
+                        setFormValue({ ...formValue, status: false })
+                      }
+                      className="after:content-[''] after:cursor-pointer after:w-4 after:h-4 after:rounded-full after:relative after:top-[-2px] after:left-0 after:bg-[#d1d3d1]  after:inline-block visible
+                      checked:after:content-[''] checked:after:cursor-pointer checked:after:w-4 checked:after:h-4 checked:after:rounded-full checked:after:relative checked:after:top-[-2px] checked:after:left-0 checked:after:bg-green-500 checked:after:inline-block checked:after:visible"
                     />
                     Tắt
                   </label>
@@ -230,7 +248,8 @@ const EditUserAccount = () => {
                       name="role"
                       value="admin"
                       onChange={handleInput}
-                      className={`${styles.customRadio}`}
+                      className="after:content-[''] after:cursor-pointer after:w-4 after:h-4 after:rounded-full after:relative after:top-[-2px] after:left-0 after:bg-[#d1d3d1]  after:inline-block visible
+                      checked:after:content-[''] checked:after:cursor-pointer checked:after:w-4 checked:after:h-4 checked:after:rounded-full checked:after:relative checked:after:top-[-2px] checked:after:left-0 checked:after:bg-green-500 checked:after:inline-block checked:after:visible"
                     />
                     Quản trị viên
                   </label>
@@ -245,7 +264,8 @@ const EditUserAccount = () => {
                       name="role"
                       value="employee"
                       onChange={handleInput}
-                      className={`${styles.customRadio}`}
+                      className="after:content-[''] after:cursor-pointer after:w-4 after:h-4 after:rounded-full after:relative after:top-[-2px] after:left-0 after:bg-[#d1d3d1]  after:inline-block visible
+                      checked:after:content-[''] checked:after:cursor-pointer checked:after:w-4 checked:after:h-4 checked:after:rounded-full checked:after:relative checked:after:top-[-2px] checked:after:left-0 checked:after:bg-green-500 checked:after:inline-block checked:after:visible"
                     />
                     Nhân viên
                   </label>
@@ -274,12 +294,16 @@ const EditUserAccount = () => {
               </div>
             </div>
             <div className="flex items-center justify-center w-full">
-              <label htmlFor="dropZone" className={`${styles.labelDropZone}`}>
-                <div className={`${styles.dropZone}`}>
+              <label
+                htmlFor="dropZone"
+                className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
+              >
+                <div className="flex flex-col items-center justify-center pt-5 pb-6 overflow-hidden rounded-lg">
                   {previewImg ? (
                     <figure className="w-full h-full">
                       <img
                         className="max-h-full max-w-full"
+                        crossOrigin="anonymous"
                         src={previewImg}
                         alt="image"
                       />
@@ -321,7 +345,7 @@ const EditUserAccount = () => {
       <ToastContainer
         position="bottom-right"
         autoClose={1500}
-        bodyClassName={`${styles.toastBody}`}
+        bodyClassName="font-beVietnam text-sm"
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

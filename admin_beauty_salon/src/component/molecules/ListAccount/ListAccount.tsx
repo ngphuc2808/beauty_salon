@@ -1,8 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import styles from "./ListAccount.module.css";
-
 import ModalDelete from "../ModalDelete";
 import Search from "../Search";
 import {
@@ -12,6 +10,7 @@ import {
 
 import { AuthApi } from "@/services/api/auth";
 import { setEditInfoUser } from "@/features/redux/slices/dataUI/editUserSlice";
+import images from "@/assets/images";
 
 const ListAccount = () => {
   const dispatch = useDispatch();
@@ -93,36 +92,36 @@ const ListAccount = () => {
 
   return (
     <Fragment>
-      <div className={`${styles.dashBoard}`}>
+      <div className="w-full py-4 mb-5 bg-white flex items-center justify-between shadow rounded-lg flex-wrap lg:flex-nowrap">
         <h1 className="lg:text-xl md:text-base ml-5 text-textHeadingColor">
           Danh sách tài khoản
         </h1>
         <Search category={""} />
         <div className="w-full lg:w-auto flex items-center gap-3 mr-5 ml-5 lg:ml-0 mt-4 lg:mt-0 flex-col lg:flex-row">
           <button
-            className={`${styles.buttonAddAccount}`}
+            className="w-full lg:w-auto lg:text-base md:text-sm bg-red-500 rounded-md hover:bg-red-600 text-white px-3 py-2"
             onClick={() => dispatch(setAddAccount())}
           >
             Thêm tài khoản
           </button>
         </div>
       </div>
-      <div className={`${styles.content}`}>
-        <div className={`${styles.headerTable}`}>
-          <span className={`${styles.customSpan}`}>
+      <div className="relative shadow-md rounded-lg mb-5 bg-white overflow-hidden">
+        <div className="flex gap-4 mx-3 mb-3 sm:mx-5 sm:mb-5 border-b border-gray-200 items-center justify-center lg:justify-normal">
+          <span className="lg:px-4 md:py-2 lg:my-5 md:my-3 rounded-md text-sm lg:text-base">
             {checked.length} lượt chọn
           </span>
           <button
-            className={`${styles.customButton} `}
+            className="min-w-[70px] h-10 py-1 px-1 my-2 md:my-3 rounded-md text-gray-900 text-sm border-2 border-solid"
             onClick={handleOpenModal}
           >
             Xóa
           </button>
         </div>
         <div className={`w-full overflow-y-auto overflow-x-auto max-h-[625px]`}>
-          <table className={`${styles.table}`}>
+          <table className="mb-4 min-w-full max-w-full whitespace-nowrap text-sm text-left text-gray-500">
             <tbody>
-              <tr className={`${styles.tableRow}`}>
+              <tr className="bg-white border-b hover:bg-gray-50">
                 <th scope="col" className="p-5">
                   <div className="flex items-center">
                     <input
@@ -155,7 +154,7 @@ const ListAccount = () => {
                 <th scope="col" className="px-6 py-3 text-red-600"></th>
               </tr>
               {dataListAccount.map((item, index) => (
-                <tr className={`${styles.tableRow}`} key={index}>
+                <tr className="bg-white border-b hover:bg-gray-50" key={index}>
                   <td className="w-4 p-5">
                     <div className="flex items-center">
                       <input
@@ -170,7 +169,8 @@ const ListAccount = () => {
                   <th scope="row" className="px-6 py-3">
                     <figure className="w-[70px] h-[70px] flex items-center">
                       <img
-                        src={item.avatar}
+                        crossOrigin="anonymous"
+                        src={item.avatar || images.avatar}
                         className="w-full h-full rounded-full "
                       />
                     </figure>
