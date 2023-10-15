@@ -1,78 +1,36 @@
-import { useState, useEffect, ChangeEvent } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { AuthApi } from "@/services/api/auth";
-import { setLoggedIn } from "@/features/redux/slices/dataUI/loginSlice";
 
 const LoginPage = () => {
   const router = useNavigate();
-  const dispatch = useDispatch();
 
-  const login = useSelector(
-    (state: { login: { info: { isLoggedIn: boolean; session: string } } }) =>
-      state.login
-  );
+  const isLogin = JSON.parse(localStorage.getItem("userLogin")!);
 
   useEffect(() => {
-    if (login.info.isLoggedIn) {
+    if (isLogin) {
       router("/");
       return;
     }
   }, []);
 
-  const [emptyUsername, setEmptyUsername] = useState<boolean>(true);
-  const [emptyPassword, setEmptyPassword] = useState<boolean>(true);
-  const [formValue, setFormValue] = useState<iAccount>({
-    username: "",
-    password: "",
-  });
-
   const {
+    register,
     handleSubmit,
-    formState: { isSubmitting },
-  } = useForm<FormInputs>();
+    formState: { errors, isSubmitting },
+  } = useForm<LoginType>();
 
-  useEffect(() => {
-    if (formValue.username.trim().length > 0) setEmptyUsername(true);
-    if (formValue.password.trim().length > 0) setEmptyPassword(true);
-  }, [formValue]);
-
-  const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value }: { name: string; value: string } = e.target;
-    setFormValue({ ...formValue, [name]: value });
-  };
-
-  const handleLogin = async () => {
-    if (formValue.username.trim().length === 0) setEmptyUsername(false);
-    else setEmptyUsername(true);
-
-    if (formValue.password.trim().length === 0) setEmptyPassword(false);
-    else setEmptyPassword(true);
-
+  const handleLogin = async (data: LoginType) => {
     try {
-      if (
-        formValue.username.trim().length > 0 &&
-        formValue.password.trim().length > 0
-      ) {
-        const result = await AuthApi.login(formValue);
-        if (result.results.message === "Đăng nhập thành công.") {
-          dispatch(
-            setLoggedIn({
-              isLoggedIn: true,
-              session: result.results.session,
-            })
-          );
-          router("/");
-          return;
-        }
-      }
+      const result = await AuthApi.login(data);
+      localStorage.setItem("userLogin", JSON.stringify(result.results));
+      router("/");
     } catch (error: any) {
-      console.log(error);
       if (error.results.message === "Tên đăng nhập không tồn tại.") {
         toast.error("Tài khoản không tồn tại, vui lòng kiểm tra lại!");
         return;
@@ -102,7 +60,7 @@ const LoginPage = () => {
                 <label
                   htmlFor="username"
                   className={`block mb-2 text-sm font-normal ${
-                    !emptyUsername ? "text-red-700" : "text-[#666]"
+                    errors.username ? "text-red-700" : "text-[#666]"
                   }`}
                 >
                   Tài khoản
@@ -110,19 +68,27 @@ const LoginPage = () => {
                 <input
                   type="text"
                   id="username"
-                  name="username"
-                  value={formValue.username}
-                  onChange={handleInput}
+                  {...register("username", {
+                    required: true,
+                    minLength: 5,
+                    maxLength: 80,
+                  })}
                   className={`border text-sm outline-none rounded-md block w-full p-2.5 ${
-                    !emptyUsername
+                    errors.username
                       ? "bg-red-50 border-red-500 placeholder-red-400"
                       : "bg-white border-gray-300"
                   }`}
                   placeholder="Nhập tài khoản"
                 />
-                {!emptyUsername && (
+
+                {errors.username?.type === "required" && (
                   <p className="mt-2 text-sm text-red-600">
                     Vui lòng nhập tài khoản!
+                  </p>
+                )}
+                {errors.username?.type === "minLength" && (
+                  <p className="mt-2 text-sm text-red-600">
+                    Vui lòng nhập tối thiểu 5 ký tự!
                   </p>
                 )}
               </div>
@@ -130,7 +96,7 @@ const LoginPage = () => {
                 <label
                   htmlFor="password"
                   className={`block mb-2 text-sm font-normal ${
-                    !emptyPassword ? "text-red-700" : "text-[#666]"
+                    errors.password ? "text-red-700" : "text-[#666]"
                   }`}
                 >
                   Mật khẩu
@@ -138,18 +104,19 @@ const LoginPage = () => {
                 <input
                   type="password"
                   id="password"
-                  name="password"
+                  {...register("password", {
+                    required: true,
+                    maxLength: 80,
+                  })}
                   autoComplete="on"
-                  value={formValue.password}
-                  onChange={handleInput}
                   className={`border text-sm outline-none rounded-md block w-full p-2.5 ${
-                    !emptyPassword
+                    errors.password
                       ? "bg-red-50 border-red-500 placeholder-red-400"
                       : "bg-white border-gray-300"
                   }`}
                   placeholder="Nhập mật khẩu"
                 />
-                {!emptyPassword && (
+                {errors.password?.type === "required" && (
                   <p className="mt-2 text-sm text-red-600">
                     Vui lòng nhập mật khẩu!
                   </p>

@@ -1,37 +1,23 @@
-import { Fragment, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { Fragment, useContext, useEffect, useState } from "react";
 
 import ModalDelete from "../ModalDelete";
 import Search from "../Search";
-import {
-  setAddAccount,
-  setEditUserAccount,
-} from "@/features/redux/slices/componentUI/authComponentSlice";
 
-import { AuthApi } from "@/services/api/auth";
-import { setEditInfoUser } from "@/features/redux/slices/dataUI/editUserSlice";
 import images from "@/assets/images";
+import { GlobalContext } from "@/contexts/globalContext";
+import { AuthApi } from "@/services/api/auth";
 
 const ListAccount = () => {
-  const dispatch = useDispatch();
+  const { setSelectChildComponent } = useContext(GlobalContext);
 
-  const [dataListAccount, setDataListAccount] = useState<iDataListAccount[]>(
-    []
-  );
+  const [dataListAccount, setDataListAccount] = useState<ListAccountType[]>([]);
   const [checked, setChecked] = useState<string[]>([]);
   const [checkedAll, setCheckedAll] = useState<string[]>([]);
   const [modalDelete, setModalDelete] = useState<boolean>(false);
 
-  const authComponent = useSelector(
-    (state: {
-      authComponent: {
-        addAccount: boolean;
-        listAccount: boolean;
-        editUserAccount: boolean;
-        editMyAccount: boolean;
-      };
-    }) => state.authComponent
-  );
+  useEffect(() => {
+    getListUser();
+  }, []);
 
   const getListUser = async () => {
     try {
@@ -47,10 +33,6 @@ const ListAccount = () => {
     }
     return;
   };
-
-  useEffect(() => {
-    getListUser();
-  }, [authComponent.listAccount, modalDelete]);
 
   const handleCheck = (slug: string) => {
     const isChecked = checked.includes(slug);
@@ -85,9 +67,8 @@ const ListAccount = () => {
     }
   };
 
-  const handleEditInfo = (item: iAccountAuth) => {
-    dispatch(setEditInfoUser(item));
-    dispatch(setEditUserAccount());
+  const handleEditInfo = (item: EditUserAccountType) => {
+    setSelectChildComponent("editUserAccount");
   };
 
   return (
@@ -96,11 +77,11 @@ const ListAccount = () => {
         <h1 className="lg:text-xl md:text-base ml-5 text-textHeadingColor">
           Danh sách tài khoản
         </h1>
-        <Search category={""} />
+        <Search />
         <div className="w-full lg:w-auto flex items-center gap-3 mr-5 ml-5 lg:ml-0 mt-4 lg:mt-0 flex-col lg:flex-row">
           <button
             className="w-full lg:w-auto lg:text-base md:text-sm bg-red-500 rounded-md hover:bg-red-600 text-white px-3 py-2"
-            onClick={() => dispatch(setAddAccount())}
+            onClick={() => setSelectChildComponent("addAccount")}
           >
             Thêm tài khoản
           </button>
@@ -205,7 +186,7 @@ const ListAccount = () => {
         </div>
       </div>
       {modalDelete && (
-        <ModalDelete checked={checked} setModal={setModalDelete} />
+        <ModalDelete checked={checked} setModalDelete={setModalDelete} />
       )}
     </Fragment>
   );

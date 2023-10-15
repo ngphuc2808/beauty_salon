@@ -1,4 +1,11 @@
-import { ChangeEvent, Fragment, useEffect, useRef, useState } from "react";
+import {
+  ChangeEvent,
+  Fragment,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useDispatch } from "react-redux";
 
 import { ToastContainer, toast } from "react-toastify";
@@ -31,11 +38,13 @@ import { Indent, IndentBlock } from "@ckeditor/ckeditor5-indent";
 import { Base64UploadAdapter } from "@ckeditor/ckeditor5-upload";
 
 import CropImage from "../CropImage";
-import { setDetailCategory } from "@/features/redux/slices/componentUI/navComponentSlice";
+import { GlobalContext } from "@/contexts/globalContext";
 
 const imageMimeType = /image\/(png|jpg|jpeg)/i;
 
 const CreatePost = () => {
+  const { setSelectChildComponent } = useContext(GlobalContext);
+
   const dispatch = useDispatch();
   const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
 
@@ -44,7 +53,7 @@ const CreatePost = () => {
   const [previewImg, setPreviewImg] = useState<string>("");
   const [fileImage, setFileImage] = useState<any>();
   const [file, setFile] = useState<File>();
-  const [formValue, setFormValue] = useState<iPost>({
+  const [formValue, setFormValue] = useState<PostType>({
     title: "",
     content: "",
     thumbnail: "",
@@ -114,7 +123,7 @@ const CreatePost = () => {
         <div className="flex items-center gap-3">
           <i
             className="lg:text-2xl text-xl ml-5 w-10 h-10 flex items-center justify-center text-white bg-red-400 hover:bg-red-500 cursor-pointer rounded-md ri-arrow-left-line"
-            onClick={() => dispatch(setDetailCategory())}
+            onClick={() => setSelectChildComponent("detailCategory")}
           ></i>
           <h1 className="text-xl text-textHeadingColor">Tạo trang SEO</h1>
         </div>

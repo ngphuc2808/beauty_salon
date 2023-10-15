@@ -1,29 +1,13 @@
-import { Fragment } from "react";
-import { useSelector } from "react-redux";
+import { Fragment, useContext } from "react";
 
-import ListAccount from "@/component/molecules/ListAccount";
-import AddAccount from "@/component/molecules/AddAccount";
-import EditUserAccount from "@/component/molecules/EditUserAccount";
-import EditMyAccount from "@/component/molecules/EditMyAccount";
+import { GlobalContext } from "@/contexts/globalContext";
+import { listComponent } from "@/helpers/listComponent";
 
 const Auth = () => {
-  const result = useSelector(
-    (state: {
-      authComponent: {
-        addAccount: boolean;
-        listAccount: boolean;
-        editUserAccount: boolean;
-        editMyAccount: boolean;
-      };
-    }) => state.authComponent
-  );
-
+  const { selectChildComponent } = useContext(GlobalContext);
   return (
     <Fragment>
-      {result.addAccount && <AddAccount />}
-      {result.listAccount && <ListAccount />}
-      {result.editUserAccount && <EditUserAccount />}
-      {result.editMyAccount && <EditMyAccount />}
+      {selectChildComponent && listComponent[selectChildComponent]}
     </Fragment>
   );
 };

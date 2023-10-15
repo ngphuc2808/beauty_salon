@@ -1,28 +1,21 @@
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useContext, useState } from "react";
 import Cropper from "react-easy-crop";
 
-import getCroppedImg from "@/helpers";
+import getCroppedImg from "@/helpers/listFunction";
+import { GlobalContext } from "@/contexts/globalContext";
 
-const CropImagePost = ({
+const CropImage = ({
   image,
   setModalCrop,
   setFileImage,
   setPreviewImg,
-}: ICropImageUser) => {
-  const component = useSelector(
-    (state: {
-      component: {
-        navigationComponent: boolean;
-        authComponent: boolean;
-      };
-    }) => state.component
-  );
+}: CropImageType) => {
+  const { selectMainComponent } = useContext(GlobalContext);
 
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
-  const [rotation, setRotation] = useState(0);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>();
+  const [crop, setCrop] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState<number>(1);
+  const [rotation, setRotation] = useState<number>(0);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<BlobPart>();
 
   const cropComplete = (croppedArea: any, croppedAreaPixels: any) => {
     setCroppedAreaPixels(croppedAreaPixels);
@@ -54,8 +47,10 @@ const CropImagePost = ({
             zoom={zoom}
             maxZoom={10}
             rotation={rotation}
-            aspect={component.authComponent ? 1 : 2}
-            cropShape={component.authComponent ? "round" : "rect"}
+            aspect={selectMainComponent === "authComponent" ? 1 : 2}
+            cropShape={
+              selectMainComponent === "authComponent" ? "round" : "rect"
+            }
             onZoomChange={setZoom}
             onRotationChange={setRotation}
             onCropChange={setCrop}
@@ -107,4 +102,4 @@ const CropImagePost = ({
   );
 };
 
-export default CropImagePost;
+export default CropImage;

@@ -1,75 +1,85 @@
-interface iAccount {
+interface iUserInfo {
+  id: string;
+  slug: string;
   username: string;
   password: string;
+  oldPassword: string;
+  avatar: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  role: string;
+  status: boolean;
 }
 
-interface FormInputs {
-  test: string;
-}
+type LoginType = Pick<iUserInfo, "username" | "password">;
 
-interface iFakeData {
-  id: string;
-  name: string;
-  icon: string;
-}
+type EditMyAccountType = Pick<
+  iUserInfo,
+  | "username"
+  | "password"
+  | "oldPassword"
+  | "avatar"
+  | "fullName"
+  | "email"
+  | "phone"
+>;
 
-interface iCategory {
-  category: string;
-}
+type AddAccountType = Pick<
+  iUserInfo,
+  | "username"
+  | "password"
+  | "fullName"
+  | "email"
+  | "phone"
+  | "avatar"
+  | "role"
+  | "status"
+>;
 
-interface iPropCategoryLevel {
+type EditUserAccountType = Pick<
+  iUserInfo,
+  "fullName" | "email" | "phone" | "status" | "role" | "avatar" | "slug"
+>;
+
+type TitleCategoryType = {
   title: string;
   childTitle: string;
-}
+};
 
-interface iItem {
+type ItemType = {
   currentItems: iData[];
-}
+};
 
-interface iPost {
+type PostType = {
   title: string;
   content: string;
   thumbnail: string;
   status: boolean;
-}
+};
 
-interface iDataList {
+type DataListType = {
   id: string;
   imgUrl: string;
   name: string;
   category: string;
   dateTime: string;
   permission: boolean;
-}
+};
 
-interface ICropImageUser {
+type CropImageType = {
   image: string | ArrayBuffer | null;
   setModalCrop: (modalCrop: boolean) => void;
   setFileImage: (fileImage: any) => void;
   setPreviewImg: (previewImg: string) => void;
-}
+};
 
-interface ICropImagePost {
-  image: string | ArrayBuffer | null;
-  setModalCrop: (modalCrop: boolean) => void;
-  formValue: {
-    title: string;
-    content: string;
-    thumbnail: string;
-  };
-  setFormValue: (item: {
-    title: string;
-    content: string;
-    thumbnail: string;
-  }) => void;
-}
-
-interface iModal {
+type ModalType = {
   checked: string[];
-  setModal: (modal: boolean) => void;
-}
+  setModalDelete: (modal: boolean) => void;
+};
 
-interface iAccountAuth {
+type ListAccountType = {
   fullName: string;
   email: string;
   phone: string;
@@ -77,54 +87,4 @@ interface iAccountAuth {
   role: string;
   avatar: string;
   slug: string;
-}
-
-interface iAddAccount {
-  username: string;
-  password: string;
-  fullName: string;
-  email: string;
-  phone: string;
-  avatar: string;
-  role: string;
-  status: boolean;
-}
-
-interface iEditAccount {
-  username: string;
-  password: string;
-  oldPassword: string;
-  fullName: string;
-  email: string;
-  phone: string;
-  avatar: string;
-  role: string;
-  status: boolean;
-}
-
-interface iUserInfo {
-  id: string;
-  username: string;
-  fullName: string;
-  email: string;
-  phone: string;
-  status: boolean;
-  role: string;
-  slug: string;
-  avatar: string;
-}
-
-interface iDataListAccount {
-  fullName: string;
-  email: string;
-  phone: string;
-  status: boolean;
-  role: string;
-  avatar: string;
-  slug: string;
-}
-
-interface iLogin {
-  isLoggedIn: boolean;
-  session: string;
-}
+};

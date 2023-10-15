@@ -1,8 +1,11 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 
 import { dataNavigation } from "@/utils/data";
+import { GlobalContext } from "@/contexts/globalContext";
 
-const Search = ({ category }: iCategory) => {
+const Search = () => {
+  const { selectTable, setSelectChildComponent } = useContext(GlobalContext);
+
   const [searchValue, setSearchValue] = useState<string>("");
 
   const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
@@ -16,7 +19,9 @@ const Search = ({ category }: iCategory) => {
     <div
       className={`w-full md:w-[223px] lg:w-[400px] h-[35px] bg-[#f1f2f3] rounded flex 
       items-center justify-between overflow-hidden order-3 lg:order-none mt-4 lg:mt-0 mx-5 lg:mx-0 basis-full lg:basis-inherit ${
-        category === "Cat6" || category === "Cat7" ? "hidden" : ""
+        selectTable === "appointmentSchedule" || selectTable === "comments"
+          ? "hidden"
+          : ""
       }`}
     >
       <input
@@ -24,7 +29,7 @@ const Search = ({ category }: iCategory) => {
         ref={inputRef}
         type="text"
         placeholder={`Tìm kiếm ${dataNavigation
-          .find((item) => item.id === category)
+          .find((item) => item.id === selectTable)
           ?.name.toLowerCase()}`}
         value={searchValue}
         onChange={(e) => {

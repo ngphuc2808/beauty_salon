@@ -11,7 +11,7 @@ const TableList = () => {
   const [itemsPerPage, setItemsPerPage] = useState<number>(4);
   const [itemsNumber, setItemsNumber] = useState<number>(0);
   const endOffset = itemOffset + itemsPerPage;
-  const currentItems: iDataList[] = dataList.slice(itemOffset, endOffset);
+  const currentItems: DataListType[] = dataList.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(dataList.length / itemsPerPage);
 
   const handlePageClick = (e: { selected: number }) => {

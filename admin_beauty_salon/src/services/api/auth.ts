@@ -3,7 +3,7 @@ import http from "../http";
 import { API_URL } from "../urls";
 
 export const AuthApi = {
-  login: async (user: iAccount): Promise<any> => {
+  login: async (user: LoginType): Promise<any> => {
     return await http.post(API_URL.login, user);
   },
   logout: async (): Promise<any> => {
@@ -12,7 +12,7 @@ export const AuthApi = {
   getInfo: async (slug: string): Promise<any> => {
     return await http.get(`${API_URL.getInfo}/${slug}/view`);
   },
-  createAccount: async (account: iAddAccount): Promise<any> => {
+  createAccount: async (account: AddAccountType): Promise<any> => {
     return await http.post(API_URL.createAccount, account);
   },
   getListUser: async (): Promise<any> => {
@@ -21,7 +21,10 @@ export const AuthApi = {
   deleteAccount: async (slugs: string): Promise<any> => {
     return await http.delete(`${API_URL.deleteAccount}/${slugs}`);
   },
-  updateAccount: async (slug: string, data: iEditAccount): Promise<any> => {
+  updateAccount: async (
+    slug: string,
+    data: EditMyAccountType
+  ): Promise<any> => {
     return await http.put(`${API_URL.updateInfo}/${slug}/update`, { data });
   },
 };

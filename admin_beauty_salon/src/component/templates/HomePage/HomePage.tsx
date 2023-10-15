@@ -1,36 +1,23 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-
 import "remixicon/fonts/remixicon.css";
 
+import { listComponent } from "@/helpers/listComponent";
+import { GlobalContext } from "@/contexts/globalContext";
 import { dataNavigation } from "@/utils/data";
-
-import Navigation from "@/component/organisms/Navigation";
-import Auth from "@/component/organisms/Auth";
-
 import { AuthApi } from "@/services/api/auth";
-
-import { setLoggedIn } from "@/features/redux/slices/dataUI/loginSlice";
-import {
-  setAddAccount,
-  setEditMyAccount,
-} from "@/features/redux/slices/componentUI/authComponentSlice";
 import { setInfoUser } from "@/features/redux/slices/dataUI/userSlice";
-import {
-  setAuthComponent,
-  setNavComponent,
-} from "@/features/redux/slices/componentUI/componentSlice";
-import { setTable } from "@/features/redux/slices/componentUI/navComponentSlice";
-
 import images from "@/assets/images";
 
 const HomePage = () => {
   const router = useNavigate();
   const dispatch = useDispatch();
 
+  const isLogin = JSON.parse(localStorage.getItem("userLogin")!);
+
   useEffect(() => {
-    if (!login.info.isLoggedIn) {
+    if (!isLogin) {
       router("/login");
     } else {
       handleGetInfo();
@@ -41,27 +28,20 @@ const HomePage = () => {
     (state: { user: { info: iUserInfo } }) => state.user
   );
 
-  const component = useSelector(
-    (state: {
-      component: {
-        navigationComponent: boolean;
-        authComponent: boolean;
-      };
-    }) => state.component
-  );
-
-  const login = useSelector(
-    (state: { login: { info: { isLoggedIn: boolean; session: string } } }) =>
-      state.login
-  );
+  const {
+    selectTable,
+    selectMainComponent,
+    setSelectMainComponent,
+    setSelectChildComponent,
+    setSelectTable,
+  } = useContext(GlobalContext);
 
   const [roleAdmin, setRoleAdmin] = useState<string>("");
-  const [category, setCategory] = useState<string>(dataNavigation[0].id);
   const [navMobile, setNavMobile] = useState<boolean>(true);
 
   const handleGetInfo = async () => {
     try {
-      const result: any = await AuthApi.getInfo(login.info.session);
+      const result: any = await AuthApi.getInfo(isLogin.session);
       if (result) {
         setRoleAdmin(result.results.role);
         dispatch(setInfoUser(result.results));
@@ -69,26 +49,14 @@ const HomePage = () => {
       }
     } catch (error: any) {
       if (error) {
-        await AuthApi.logout();
-        dispatch(
-          setLoggedIn({
-            isLoggedIn: false,
-            session: "",
-          })
-        );
-        router("/login");
+        handleLogout();
       }
     }
   };
 
   const handleLogout = async () => {
     await AuthApi.logout();
-    dispatch(
-      setLoggedIn({
-        isLoggedIn: false,
-        session: "",
-      })
-    );
+    localStorage.removeItem("userLogin");
     router("/login");
   };
 
@@ -137,8 +105,8 @@ const HomePage = () => {
                 {roleAdmin === "admin" && (
                   <li
                     onClick={() => {
-                      dispatch(setAuthComponent());
-                      dispatch(setAddAccount());
+                      setSelectMainComponent("authComponent");
+                      setSelectChildComponent("addAccount");
                     }}
                   >
                     Xác thực và ủy quyền
@@ -146,8 +114,8 @@ const HomePage = () => {
                 )}
                 <li
                   onClick={() => {
-                    dispatch(setAuthComponent());
-                    dispatch(setEditMyAccount());
+                    setSelectMainComponent("authComponent");
+                    setSelectChildComponent("editMyAccount");
                   }}
                 >
                   Sửa thông tin
@@ -173,20 +141,20 @@ const HomePage = () => {
                     className="flex gap-2 items-center group mb-[3px]"
                     key={index}
                     onClick={() => {
-                      item.id !== category && setCategory(item.id);
-                      dispatch(setNavComponent());
-                      dispatch(setTable());
+                      setSelectMainComponent("navigationComponent");
+                      setSelectChildComponent("table");
+                      setSelectTable(item.id);
                     }}
                   >
-                    {item.id === category ? (
+                    {item.id === selectTable ? (
                       <span className="border-2 bg-red-500 h-11 w-1.5 rounded-full border-red-500"></span>
                     ) : (
                       <span className="h-11 w-1.5 rounded-full "></span>
                     )}
                     <div
                       className={`w-full flex items-center gap-2 p-2 hover:bg-red-100 ${
-                        component.navigationComponent &&
-                        item.id === category &&
+                        selectMainComponent === "navigationComponent" &&
+                        selectTable === item.id &&
                         "text-red-600 bg-red-100 rounded"
                       }`}
                     >
@@ -300,13 +268,15 @@ const HomePage = () => {
                     className="flex gap-2 items-center group"
                     key={index}
                     onClick={() => {
-                      item.id !== category && setCategory(item.id);
+                      setSelectMainComponent("navigationComponent");
+                      setSelectChildComponent("table");
+                      setSelectTable(item.id);
                     }}
                   >
                     <div
                       className={`w-full flex items-center gap-2 p-2 hover:bg-red-100 ${
-                        component.navigationComponent &&
-                        item.id === category &&
+                        selectMainComponent === "navigationComponent" &&
+                        selectTable === item.id &&
                         "text-red-600 bg-red-100 rounded"
                       }`}
                     >
@@ -377,8 +347,7 @@ const HomePage = () => {
           </ul>
         </div>
         <div className="col-span-12 md:col-span-9 lg:col-span-10 p-5">
-          {component.navigationComponent && <Navigation category={category} />}
-          {component.authComponent && <Auth />}
+          {selectMainComponent && listComponent[selectMainComponent]}
         </div>
       </div>
     </section>

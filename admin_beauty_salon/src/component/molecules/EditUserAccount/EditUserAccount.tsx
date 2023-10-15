@@ -1,16 +1,16 @@
-import { ChangeEvent, Fragment, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { ChangeEvent, Fragment, useContext, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { setListAccount } from "@/features/redux/slices/componentUI/authComponentSlice";
 import CropImage from "../CropImage";
+import { GlobalContext } from "@/contexts/globalContext";
 
 const imageMimeType = /image\/(png|jpg|jpeg)/i;
 
 const EditUserAccount = () => {
-  const dispatch = useDispatch();
+  const { setSelectChildComponent } = useContext(GlobalContext);
 
   const data = useSelector(
     (state: { editUser: { info: iUserInfo } }) => state.editUser
@@ -87,7 +87,7 @@ const EditUserAccount = () => {
         <div className="flex items-center gap-3">
           <i
             className="lg:text-2xl text-xl ml-5 w-10 h-10 flex items-center justify-center text-white bg-red-400 hover:bg-red-500 cursor-pointer rounded-md ri-arrow-left-line"
-            onClick={() => dispatch(setListAccount())}
+            onClick={() => setSelectChildComponent("listAccount")}
           ></i>
           <h1 className="lg:text-xl md:text-base text-textHeadingColor">
             Chỉnh sửa {data.info.fullName}

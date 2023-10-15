@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 
-const Items = ({ currentItems }: iItem) => {
+const Items = ({ currentItems }: ItemType) => {
   return (
     <Fragment>
       {currentItems &&

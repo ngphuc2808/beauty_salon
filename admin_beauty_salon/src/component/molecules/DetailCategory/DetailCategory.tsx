@@ -1,14 +1,12 @@
-import { Fragment, useState, useRef } from "react";
+import { Fragment, useState, useRef, useContext } from "react";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import Select from "react-tailwindcss-select";
-import {
-  setCreatePost,
-  setTable,
-} from "@/features/redux/slices/componentUI/navComponentSlice";
+
+import { GlobalContext } from "@/contexts/globalContext";
 
 const DetailCategory = () => {
-  const dispatch = useDispatch();
+  const { setSelectChildComponent } = useContext(GlobalContext);
+
   const [nameValue, setNameValue] = useState<string>("");
 
   const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
@@ -31,7 +29,7 @@ const DetailCategory = () => {
         <div className="flex items-center gap-3">
           <i
             className="lg:text-2xl text-xl ml-5 w-10 h-10 flex items-center justify-center text-white bg-red-400 hover:bg-red-500 cursor-pointer rounded-md ri-arrow-left-line"
-            onClick={() => dispatch(setTable())}
+            onClick={() => setSelectChildComponent("table")}
           ></i>
           <h1 className="text-xl text-textHeadingColor">Thêm danh mục</h1>
         </div>
@@ -76,7 +74,7 @@ const DetailCategory = () => {
               </h1>
               <button
                 className="text-textPrimaryColor text-sm px-4 py-3 bg-red-400 hover:bg-red-500 text-white rounded-md mt-3 sm:mt-0 w-full sm:w-auto"
-                onClick={() => dispatch(setCreatePost())}
+                onClick={() => setSelectChildComponent("createPost")}
               >
                 Tạo trang SEO
               </button>

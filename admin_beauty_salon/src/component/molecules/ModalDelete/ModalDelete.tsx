@@ -4,14 +4,15 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { AuthApi } from "@/services/api/auth";
-const ModalDelete = ({ checked, setModal }: iModal) => {
+const ModalDelete = ({ checked, setModalDelete }: ModalType) => {
   const handleDeleteAccount = async () => {
     try {
       const result: any = await AuthApi.deleteAccount(checked.toString());
       if (result) {
-        setModal(false);
+        setModalDelete(false);
       }
     } catch (error: any) {
+      toast.error("Xóa thất bại, vui lòng kiểm tra lại!");
       console.log(error);
     }
   };
@@ -24,7 +25,7 @@ const ModalDelete = ({ checked, setModal }: iModal) => {
           <div className="relative bg-white rounded-md shadow">
             <i
               className="ri-close-line absolute right-4 top-2 text-2xl hover:text-red-500 cursor-pointer"
-              onClick={() => setModal(false)}
+              onClick={() => setModalDelete(false)}
             ></i>
             <div className="p-8 text-center">
               <div className="mb-5">
@@ -47,7 +48,7 @@ const ModalDelete = ({ checked, setModal }: iModal) => {
                 <button
                   type="button"
                   className="min-w-[105px] text-gray-500 bg-white hover:bg-gray-100 rounded-md border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10"
-                  onClick={() => setModal(false)}
+                  onClick={() => setModalDelete(false)}
                 >
                   Hủy
                 </button>
