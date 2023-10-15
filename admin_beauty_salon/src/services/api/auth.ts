@@ -12,7 +12,7 @@ export const AuthApi = {
   getInfo: async (slug: string): Promise<any> => {
     return await http.get(`${API_URL.getInfo}/${slug}/view`);
   },
-  createAccount: async (account: AddAccountType): Promise<any> => {
+  createAccount: async (account: AccountType): Promise<any> => {
     return await http.post(API_URL.createAccount, account);
   },
   getListUser: async (): Promise<any> => {
@@ -23,7 +23,7 @@ export const AuthApi = {
   },
   updateAccount: async (
     slug: string,
-    data: EditMyAccountType
+    data: EditMyAccountType | AccountType
   ): Promise<any> => {
     return await http.put(`${API_URL.updateInfo}/${slug}/update`, { data });
   },

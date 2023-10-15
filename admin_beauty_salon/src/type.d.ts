@@ -25,7 +25,7 @@ type EditMyAccountType = Pick<
   | "phone"
 >;
 
-type AddAccountType = Pick<
+type AccountType = Pick<
   iUserInfo,
   | "username"
   | "password"
@@ -35,11 +35,6 @@ type AddAccountType = Pick<
   | "avatar"
   | "role"
   | "status"
->;
-
-type EditUserAccountType = Pick<
-  iUserInfo,
-  "fullName" | "email" | "phone" | "status" | "role" | "avatar" | "slug"
 >;
 
 type TitleCategoryType = {

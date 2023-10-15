@@ -1,26 +1,49 @@
 import { ChangeEvent, Fragment, useContext, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import CropImage from "../CropImage";
 import { GlobalContext } from "@/contexts/globalContext";
+import CropImage from "../CropImage";
+import { ImageApi } from "@/services/api/image";
+import { AuthApi } from "@/services/api/auth";
 
 const imageMimeType = /image\/(png|jpg|jpeg)/i;
 
 const EditUserAccount = () => {
   const { setSelectChildComponent } = useContext(GlobalContext);
 
-  const data = useSelector(
+  const dataApi = useSelector(
     (state: { editUser: { info: iUserInfo } }) => state.editUser
   );
 
   const [cropImage, setCropImage] = useState<string | ArrayBuffer | null>(null);
   const [modalCrop, setModalCrop] = useState<boolean>(false);
-  const [previewImg, setPreviewImg] = useState<string>(data.info.avatar || "");
+  const [previewImg, setPreviewImg] = useState<string>("");
   const [file, setFile] = useState<File>();
   const [fileImage, setFileImage] = useState<any>();
+
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    setValue,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<AccountType>({
+    defaultValues: {
+      username: "",
+      password: "",
+      fullName: "",
+      email: "",
+      phone: "",
+      avatar: "",
+      role: "employee",
+      status: true,
+    },
+  });
 
   const handleCrop = (e: ChangeEvent<HTMLInputElement>) => {
     let input = e.currentTarget;
@@ -57,28 +80,47 @@ const EditUserAccount = () => {
     };
   }, [file]);
 
-  const [formValue, setFormValue] = useState({
-    username: "",
-    password: "",
-    oldPassword: "",
-    fullName: data.info.fullName,
-    email: data.info.email,
-    phone: data.info.phone,
-    avatar: "",
-    role: data.info.role,
-    status: data.info.status,
-  });
+  const uploadFile = async (value: AccountType) => {
+    const fileAvt = new File(
+      [fileImage],
+      `image-${value.username}-${Math.floor(Math.random() * 1000)}.${
+        fileImage.type.split("/")[1]
+      }`,
+      {
+        type: fileImage.type,
+      }
+    );
+    const formData = new FormData();
+    formData.append("image", fileAvt);
 
-  const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value }: { name: string; value: string } = e.target;
-    setFormValue({ ...formValue, [name]: value });
+    let upload;
+    try {
+      upload = await ImageApi.uploadImage(formData);
+    } catch (error: any) {
+      console.log(error);
+    }
+    return upload;
   };
 
-  const handleUpdateInfo = async () => {
-    const data = formValue;
-    data.status = Boolean(Number(formValue.status));
+  const handleUpdateInfo = async (data: AccountType) => {
+    try {
+      if (fileImage) {
+        const avatar = await uploadFile(data);
+        setValue("avatar", avatar.results);
+      } else {
+        setValue("avatar", "");
+      }
 
-    console.log(data);
+      const newData = data;
+      newData.status = Boolean(Number(data.status));
+
+      await AuthApi.updateAccount(dataApi.info.slug, newData);
+      setPreviewImg("");
+      reset();
+      toast.success("Sửa thông tin tài khoản thành công!");
+    } catch (error: any) {
+      console.log(error);
+    }
   };
 
   return (
@@ -90,15 +132,19 @@ const EditUserAccount = () => {
             onClick={() => setSelectChildComponent("listAccount")}
           ></i>
           <h1 className="lg:text-xl md:text-base text-textHeadingColor">
-            Chỉnh sửa {data.info.fullName}
+            Chỉnh sửa {dataApi.info.fullName}
           </h1>
         </div>
 
         <button
           className="lg:text-base md:text-sm w-full sm:w-max mx-5 mt-4 sm:mt-0 bg-red-500 rounded-md hover:bg-red-600 text-white px-3 py-2"
-          onClick={handleUpdateInfo}
+          onClick={handleSubmit(handleUpdateInfo)}
         >
-          Lưu cài đặt
+          {isSubmitting ? (
+            <i className="ri-loader-4-line text-2xl animate-spin"></i>
+          ) : (
+            <span>Lưu cài đặt</span>
+          )}
         </button>
       </div>
       <div className="grid grid-cols-12 gap-x-3">
@@ -108,91 +154,156 @@ const EditUserAccount = () => {
               <div className="mb-5">
                 <label
                   htmlFor="username"
-                  className="block mb-2 text-sm font-normal"
+                  className={`block mb-2 text-sm font-normal ${
+                    errors.username ? "text-red-700" : "text-[#666]"
+                  }`}
                 >
                   Tài khoản
                 </label>
                 <input
                   type="text"
                   id="username"
-                  name="username"
-                  value={formValue.username}
-                  onChange={handleInput}
-                  className="border text-sm outline-none rounded-md block w-full p-2.5"
+                  {...register("username", {
+                    minLength: 5,
+                    maxLength: 80,
+                  })}
+                  className={`border text-sm outline-none rounded-md block w-full p-2.5 ${
+                    errors.username
+                      ? "bg-red-50 border-red-500 placeholder-red-400"
+                      : "bg-white border-gray-300"
+                  }`}
                   placeholder="Tài khoản"
                 />
-              </div>
-              <div className="mb-5">
-                <label
-                  htmlFor="name"
-                  className="block mb-2 text-sm font-normal"
-                >
-                  Họ và tên
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="fullName"
-                  value={formValue.fullName}
-                  onChange={handleInput}
-                  className="border text-sm outline-none rounded-md block w-full p-2.5"
-                  placeholder="Họ và tên"
-                />
-              </div>
-              <div className="mb-5">
-                <label
-                  htmlFor="email"
-                  className="block mb-2 text-sm font-normal"
-                >
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formValue.email}
-                  onChange={handleInput}
-                  className="border text-sm outline-none rounded-md block w-full p-2.5"
-                  placeholder="Email"
-                />
-              </div>
-              <div className="mb-5">
-                <label
-                  htmlFor="phone"
-                  className="block mb-2 text-sm font-normal"
-                >
-                  Số điện thoại
-                </label>
-                <input
-                  type="text"
-                  id="phone"
-                  name="phone"
-                  value={formValue.phone}
-                  onChange={handleInput}
-                  className="border text-sm outline-none rounded-md block w-full p-2.5"
-                  placeholder="Số điện thoại"
-                />
+                {errors.username?.type === "minLength" && (
+                  <p className="mt-2 text-sm text-red-600">
+                    Vui lòng nhập tối thiểu 5 ký tự!
+                  </p>
+                )}
               </div>
               <div className="mb-5">
                 <label
                   htmlFor="password"
-                  className="block mb-2 text-sm font-normal"
+                  className={`block mb-2 text-sm font-normal ${
+                    errors.password ? "text-red-700" : "text-[#666]"
+                  }`}
                 >
                   Mật khẩu
                 </label>
                 <input
                   type="password"
                   id="password"
-                  name="password"
-                  value={formValue.password}
+                  {...register("password", {
+                    minLength: 5,
+                    maxLength: 80,
+                  })}
                   autoComplete="on"
-                  onChange={handleInput}
-                  className="border text-sm outline-none rounded-md block w-full p-2.5"
-                  placeholder="Mật khẩu"
+                  className={`border text-sm outline-none rounded-md block w-full p-2.5 ${
+                    errors.password
+                      ? "bg-red-50 border-red-500 placeholder-red-400"
+                      : "bg-white border-gray-300"
+                  }`}
+                  placeholder="Nhập mật khẩu"
                 />
+                {errors.password?.type === "minLength" && (
+                  <p className="mt-2 text-sm text-red-600">
+                    Vui lòng nhập tối thiểu 5 ký tự!
+                  </p>
+                )}
               </div>
               <div className="mb-5">
-                <h1 className="text-sm text-textHeadingColor mb-2">
+                <label
+                  htmlFor="name"
+                  className={`block mb-2 text-sm font-normal ${
+                    errors.fullName ? "text-red-700" : "text-[#666]"
+                  }`}
+                >
+                  Họ và tên
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  {...register("fullName", {
+                    minLength: 5,
+                    maxLength: 80,
+                  })}
+                  className={`border text-sm outline-none rounded-md block w-full p-2.5 ${
+                    errors.fullName
+                      ? "bg-red-50 border-red-500 placeholder-red-400"
+                      : "bg-white border-gray-300"
+                  }`}
+                  placeholder="Họ và tên"
+                />
+                {errors.fullName?.type === "minLength" && (
+                  <p className="mt-2 text-sm text-red-600">
+                    Vui lòng nhập tối thiểu 5 ký tự!
+                  </p>
+                )}
+              </div>
+              <div className="mb-5">
+                <label
+                  htmlFor="email"
+                  className={`block mb-2 text-sm font-normal ${
+                    errors.email ? "text-red-700" : "text-[#666]"
+                  }`}
+                >
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  {...register("email", {
+                    maxLength: 80,
+                    pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+                  })}
+                  className={`border text-sm outline-none rounded-md block w-full p-2.5 ${
+                    errors.email
+                      ? "bg-red-50 border-red-500 placeholder-red-400"
+                      : "bg-white"
+                  }`}
+                  placeholder="Email"
+                />
+                {errors.email?.type === "pattern" && (
+                  <p className="mt-2 text-sm text-red-600">
+                    Vui lòng nhập đúng định dạng email!
+                  </p>
+                )}
+              </div>
+              <div className="mb-5">
+                <label
+                  htmlFor="phone"
+                  className={`block mb-2 text-sm font-normal ${
+                    errors.phone ? "text-red-700" : "text-[#666]"
+                  }`}
+                >
+                  Số điện thoại
+                </label>
+                <input
+                  type="text"
+                  id="phone"
+                  {...register("phone", {
+                    maxLength: 80,
+                    pattern:
+                      /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/,
+                  })}
+                  className={`border text-sm outline-none rounded-md block w-full p-2.5 ${
+                    errors.phone
+                      ? "bg-red-50 border-red-500 placeholder-red-400"
+                      : "bg-white"
+                  }`}
+                  placeholder="Số điện thoại"
+                />
+                {errors.phone?.type === "pattern" && (
+                  <p className="mt-2 text-sm text-red-600">
+                    Vui lòng nhập đúng định dạng số điện thoại!
+                  </p>
+                )}
+              </div>
+              <div className="mb-5">
+                <h1
+                  className={`text-sm mb-2 ${
+                    errors.status ? "text-red-700" : "text-[#666]"
+                  }`}
+                >
                   Trạng thái
                 </h1>
                 <div className="flex gap-10 items-center">
@@ -202,16 +313,20 @@ const EditUserAccount = () => {
                   >
                     <input
                       type="radio"
-                      checked={formValue.status ? true : false}
                       id="statusOn"
-                      name="status"
-                      onChange={() =>
-                        setFormValue({ ...formValue, status: true })
-                      }
+                      {...register("status", {})}
+                      checked={getValues("status") ? true : false}
+                      value={1}
                       className="after:content-[''] after:cursor-pointer after:w-4 after:h-4 after:rounded-full after:relative after:top-[-2px] after:left-0 after:bg-[#d1d3d1]  after:inline-block visible
                       checked:after:content-[''] checked:after:cursor-pointer checked:after:w-4 checked:after:h-4 checked:after:rounded-full checked:after:relative checked:after:top-[-2px] checked:after:left-0 checked:after:bg-green-500 checked:after:inline-block checked:after:visible"
                     />
-                    Bật
+                    <span
+                      className={`${
+                        errors.status ? "text-red-700" : "text-[#666]"
+                      }`}
+                    >
+                      Bật
+                    </span>
                   </label>
                   <label
                     htmlFor="statusOff"
@@ -219,21 +334,34 @@ const EditUserAccount = () => {
                   >
                     <input
                       type="radio"
-                      checked={!formValue.status ? true : false}
                       id="statusOff"
-                      name="status"
-                      onChange={() =>
-                        setFormValue({ ...formValue, status: false })
-                      }
+                      {...register("status", {})}
+                      checked={!getValues("status") ? true : false}
+                      value={0}
                       className="after:content-[''] after:cursor-pointer after:w-4 after:h-4 after:rounded-full after:relative after:top-[-2px] after:left-0 after:bg-[#d1d3d1]  after:inline-block visible
                       checked:after:content-[''] checked:after:cursor-pointer checked:after:w-4 checked:after:h-4 checked:after:rounded-full checked:after:relative checked:after:top-[-2px] checked:after:left-0 checked:after:bg-green-500 checked:after:inline-block checked:after:visible"
                     />
-                    Tắt
+                    <span
+                      className={`${
+                        errors.status ? "text-red-700" : "text-[#666]"
+                      }`}
+                    >
+                      Tắt
+                    </span>
                   </label>
                 </div>
+                {errors.status?.type === "required" && (
+                  <p className="mt-2 text-sm text-red-600">
+                    Vui lòng chọn trạng thái!
+                  </p>
+                )}
               </div>
               <div className="mb-5">
-                <h1 className="text-sm text-textHeadingColor mb-2">
+                <h1
+                  className={`text-sm mb-2 ${
+                    errors.role ? "text-red-700" : "text-[#666]"
+                  }`}
+                >
                   Phân quyền
                 </h1>
                 <div className="flex gap-10 items-center">
@@ -243,15 +371,20 @@ const EditUserAccount = () => {
                   >
                     <input
                       type="radio"
-                      checked={formValue.role === "admin" ? true : false}
                       id="roleAdmin"
-                      name="role"
+                      {...register("role", {})}
+                      checked={getValues("role") === "admin" ? true : false}
                       value="admin"
-                      onChange={handleInput}
                       className="after:content-[''] after:cursor-pointer after:w-4 after:h-4 after:rounded-full after:relative after:top-[-2px] after:left-0 after:bg-[#d1d3d1]  after:inline-block visible
                       checked:after:content-[''] checked:after:cursor-pointer checked:after:w-4 checked:after:h-4 checked:after:rounded-full checked:after:relative checked:after:top-[-2px] checked:after:left-0 checked:after:bg-green-500 checked:after:inline-block checked:after:visible"
                     />
-                    Quản trị viên
+                    <span
+                      className={`${
+                        errors.role ? "text-red-700" : "text-[#666]"
+                      }`}
+                    >
+                      Quản trị viên
+                    </span>
                   </label>
                   <label
                     htmlFor="roleEmployee"
@@ -259,17 +392,27 @@ const EditUserAccount = () => {
                   >
                     <input
                       type="radio"
-                      checked={formValue.role === "employee" ? true : false}
                       id="roleEmployee"
-                      name="role"
+                      {...register("role", {})}
+                      checked={getValues("role") === "employee" ? true : false}
                       value="employee"
-                      onChange={handleInput}
                       className="after:content-[''] after:cursor-pointer after:w-4 after:h-4 after:rounded-full after:relative after:top-[-2px] after:left-0 after:bg-[#d1d3d1]  after:inline-block visible
                       checked:after:content-[''] checked:after:cursor-pointer checked:after:w-4 checked:after:h-4 checked:after:rounded-full checked:after:relative checked:after:top-[-2px] checked:after:left-0 checked:after:bg-green-500 checked:after:inline-block checked:after:visible"
                     />
-                    Nhân viên
+                    <span
+                      className={`${
+                        errors.role ? "text-red-700" : "text-[#666]"
+                      }`}
+                    >
+                      Nhân viên
+                    </span>
                   </label>
                 </div>
+                {errors.role?.type === "required" && (
+                  <p className="mt-2 text-sm text-red-600">
+                    Vui lòng chọn quyền hạn!
+                  </p>
+                )}
               </div>
             </form>
           </div>
@@ -325,6 +468,7 @@ const EditUserAccount = () => {
                 <input
                   id="dropZone"
                   type="file"
+                  {...register("avatar")}
                   onChange={handleCrop}
                   accept=".png, .jpg, .jpeg"
                   hidden

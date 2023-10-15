@@ -27,7 +27,7 @@ const AddAccount = () => {
     setValue,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<AddAccountType>({
+  } = useForm<AccountType>({
     defaultValues: {
       username: "",
       password: "",
@@ -83,7 +83,7 @@ const AddAccount = () => {
     e.currentTarget.value = "";
   };
 
-  const uploadFile = async (value: AddAccountType) => {
+  const uploadFile = async (value: AccountType) => {
     const fileAvt = new File(
       [fileImage],
       `image-${value.username}-${Math.floor(Math.random() * 1000)}.${
@@ -105,7 +105,7 @@ const AddAccount = () => {
     return upload;
   };
 
-  const handleAddAccount = async (data: AddAccountType) => {
+  const handleAddAccount = async (data: AccountType) => {
     try {
       if (fileImage) {
         const avatar = await uploadFile(data);
@@ -367,7 +367,13 @@ const AddAccount = () => {
                       className="after:content-[''] after:cursor-pointer after:w-4 after:h-4 after:rounded-full after:relative after:top-[-2px] after:left-0 after:bg-[#d1d3d1]  after:inline-block visible
                       checked:after:content-[''] checked:after:cursor-pointer checked:after:w-4 checked:after:h-4 checked:after:rounded-full checked:after:relative checked:after:top-[-2px] checked:after:left-0 checked:after:bg-green-500 checked:after:inline-block checked:after:visible"
                     />
-                    Bật
+                    <span
+                      className={`${
+                        errors.status ? "text-red-700" : "text-[#666]"
+                      }`}
+                    >
+                      Bật
+                    </span>
                   </label>
                   <label
                     htmlFor="statusOff"
@@ -383,7 +389,13 @@ const AddAccount = () => {
                       className="after:content-[''] after:cursor-pointer after:w-4 after:h-4 after:rounded-full after:relative after:top-[-2px] after:left-0 after:bg-[#d1d3d1]  after:inline-block visible
                       checked:after:content-[''] checked:after:cursor-pointer checked:after:w-4 checked:after:h-4 checked:after:rounded-full checked:after:relative checked:after:top-[-2px] checked:after:left-0 checked:after:bg-green-500 checked:after:inline-block checked:after:visible"
                     />
-                    Tắt
+                    <span
+                      className={`${
+                        errors.status ? "text-red-700" : "text-[#666]"
+                      }`}
+                    >
+                      Tắt
+                    </span>
                   </label>
                 </div>
                 {errors.status?.type === "required" && (
@@ -415,7 +427,13 @@ const AddAccount = () => {
                       className="after:content-[''] after:cursor-pointer after:w-4 after:h-4 after:rounded-full after:relative after:top-[-2px] after:left-0 after:bg-[#d1d3d1]  after:inline-block visible
                       checked:after:content-[''] checked:after:cursor-pointer checked:after:w-4 checked:after:h-4 checked:after:rounded-full checked:after:relative checked:after:top-[-2px] checked:after:left-0 checked:after:bg-green-500 checked:after:inline-block checked:after:visible"
                     />
-                    Quản trị viên
+                    <span
+                      className={`${
+                        errors.role ? "text-red-700" : "text-[#666]"
+                      }`}
+                    >
+                      Quản trị viên
+                    </span>
                   </label>
                   <label
                     htmlFor="roleEmployee"
@@ -431,7 +449,13 @@ const AddAccount = () => {
                       className="after:content-[''] after:cursor-pointer after:w-4 after:h-4 after:rounded-full after:relative after:top-[-2px] after:left-0 after:bg-[#d1d3d1]  after:inline-block visible
                       checked:after:content-[''] checked:after:cursor-pointer checked:after:w-4 checked:after:h-4 checked:after:rounded-full checked:after:relative checked:after:top-[-2px] checked:after:left-0 checked:after:bg-green-500 checked:after:inline-block checked:after:visible"
                     />
-                    Nhân viên
+                    <span
+                      className={`${
+                        errors.role ? "text-red-700" : "text-[#666]"
+                      }`}
+                    >
+                      Nhân viên
+                    </span>
                   </label>
                 </div>
                 {errors.role?.type === "required" && (
