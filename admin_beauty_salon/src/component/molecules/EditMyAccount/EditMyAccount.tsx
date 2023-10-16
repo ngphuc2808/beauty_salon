@@ -1,6 +1,6 @@
-import { ChangeEvent, Fragment, useEffect, useState } from "react";
+import { ChangeEvent, Fragment, useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
+import { useQuery } from "react-query";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -8,36 +8,49 @@ import CropImage from "../CropImage";
 
 import { AuthApi } from "@/services/api/auth";
 import { ImageApi } from "@/services/api/image";
+import { useNavigate } from "react-router-dom";
+import { GlobalContext } from "@/contexts/globalContext";
 
 const imageMimeType = /image\/(png|jpg|jpeg)/i;
 
 const EditMyAccount = () => {
-  const dataApi = useSelector(
-    (state: { user: { info: iUserInfo } }) => state.user
-  );
+  const router = useNavigate();
+
+  const isLogin = JSON.parse(localStorage.getItem("userLogin")!);
+
+  const { data } = useQuery({
+    queryKey: ["userinfo"],
+    queryFn: () => handleGetInfo(),
+    keepPreviousData: true,
+  });
+
+  const { setSelectMainComponent, setSelectChildComponent } =
+    useContext(GlobalContext);
 
   const [cropImage, setCropImage] = useState<string | ArrayBuffer | null>(null);
   const [modalCrop, setModalCrop] = useState<boolean>(false);
   const [previewImg, setPreviewImg] = useState<string>(
-    dataApi.info.avatar || ""
+    data?.results.avatar || ""
   );
   const [file, setFile] = useState<File>();
-  const [fileImage, setFileImage] = useState<any>();
+  const [fileImage, setFileImage] = useState<Blob>(new Blob());
 
   const {
     register,
     handleSubmit,
     setValue,
     formState: { errors, isSubmitting },
-  } = useForm<EditMyAccountType>({
+  } = useForm<EditAccountType>({
     defaultValues: {
       username: "",
       password: "",
       oldPassword: "",
-      fullName: dataApi.info.fullName,
-      email: dataApi.info.email,
-      phone: dataApi.info.phone,
-      avatar: dataApi.info.avatar,
+      fullName: data?.results.fullName,
+      email: data?.results.email,
+      phone: data?.results.phone,
+      avatar: data?.results.avatar,
+      role: "",
+      status: "",
     },
   });
 
@@ -70,6 +83,14 @@ const EditMyAccount = () => {
     };
   }, [file]);
 
+  const handleGetInfo = async () => {
+    try {
+      return await AuthApi.getInfo(isLogin.session);
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
+
   const handleCrop = (e: ChangeEvent<HTMLInputElement>) => {
     let input = e.currentTarget;
     if (input.files?.length) {
@@ -83,7 +104,7 @@ const EditMyAccount = () => {
     e.currentTarget.value = "";
   };
 
-  const uploadFile = async (value: EditMyAccountType) => {
+  const uploadFile = async (value: EditAccountType) => {
     const fileAvt = new File(
       [fileImage],
       `image-${value.username}-${Math.floor(Math.random() * 1000)}.${
@@ -105,18 +126,32 @@ const EditMyAccount = () => {
     return upload;
   };
 
-  const handleUpdateInfo = async (data: EditMyAccountType) => {
+  const handleUpdateInfo = async (value: EditAccountType) => {
     try {
       if (fileImage) {
-        const avatar = await uploadFile(data);
+        const avatar = await uploadFile(value);
+        console.log(avatar.results);
         setValue("avatar", avatar.results);
       } else {
         setValue("avatar", "");
       }
-      await AuthApi.updateAccount(dataApi.info.slug, data);
-      toast.success("Cập nhật thông tin thành công");
+      await AuthApi.updateAccount(data?.results.slug, value);
+
+      toast.success("Cập nhật thông tin thành công, vui lòng đăng nhập lại!", {
+        autoClose: 1000,
+      });
+
+      setTimeout(() => {
+        localStorage.removeItem("userLogin");
+        setSelectMainComponent("navigationComponent");
+        setSelectChildComponent("table");
+        router("/login");
+      }, 1500);
     } catch (error: any) {
-      console.log(error);
+      if (error.message === "Mật khẩu cũ không đúng.") {
+        toast.error("Sai mật khẩu cũ, vui lòng nhập lại!");
+        return;
+      }
     }
   };
 
@@ -163,8 +198,10 @@ const EditMyAccount = () => {
               </div>
               <div className="mb-5">
                 <label
-                  htmlFor="oldPassword"
-                  className="block mb-2 text-sm font-normal"
+                  htmlFor="password"
+                  className={`block mb-2 text-sm font-normal ${
+                    errors.password ? "text-red-700" : "text-[#666]"
+                  }`}
                 >
                   Mật khẩu
                 </label>
@@ -173,11 +210,25 @@ const EditMyAccount = () => {
                   id="password"
                   {...register("password", {
                     maxLength: 80,
+                    pattern:
+                      /^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9!@#\$%\^\&*\)\(+=._-]{8,}$/,
                   })}
                   autoComplete="on"
-                  className="border text-sm outline-none rounded-md block w-full p-2.5"
-                  placeholder="Mật khẩu"
+                  className={`border text-sm outline-none rounded-md block w-full p-2.5 ${
+                    errors.password
+                      ? "bg-red-50 border-red-500 placeholder-red-400"
+                      : "bg-white"
+                  }`}
+                  placeholder="Nhập mật khẩu"
                 />
+                {errors.password?.type === "pattern" && (
+                  <p className="mt-2 text-sm text-red-600">
+                    Vui lòng nhập đúng định dạng mật khẩu!
+                    <br />
+                    Bao gồm ít nhất 8 ký tự, 1 chữ cái viết thường, 1 chữ cái
+                    viết hoa và 1 chữ số!
+                  </p>
+                )}
               </div>
               <div className="mb-5">
                 <label
@@ -213,7 +264,9 @@ const EditMyAccount = () => {
               <div className="mb-5">
                 <label
                   htmlFor="name"
-                  className="block mb-2 text-sm font-normal"
+                  className={`block mb-2 text-sm font-normal ${
+                    errors.fullName ? "text-red-700" : "text-[#666]"
+                  }`}
                 >
                   Họ và tên
                 </label>
@@ -221,11 +274,21 @@ const EditMyAccount = () => {
                   type="text"
                   id="name"
                   {...register("fullName", {
+                    required: true,
                     maxLength: 80,
                   })}
-                  className="border text-sm outline-none rounded-md block w-full p-2.5"
+                  className={`border text-sm outline-none rounded-md block w-full p-2.5 ${
+                    errors.fullName
+                      ? "bg-red-50 border-red-500 placeholder-red-400"
+                      : "bg-white"
+                  }`}
                   placeholder="Họ và tên"
                 />
+                {errors.fullName?.type === "required" && (
+                  <p className="mt-2 text-sm text-red-600">
+                    Vui lòng nhập họ và tên!
+                  </p>
+                )}
               </div>
               <div className="mb-5">
                 <label
@@ -240,6 +303,7 @@ const EditMyAccount = () => {
                   type="email"
                   id="email"
                   {...register("email", {
+                    required: true,
                     maxLength: 80,
                     pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
                   })}
@@ -250,6 +314,11 @@ const EditMyAccount = () => {
                   }`}
                   placeholder="Email"
                 />
+                {errors.email?.type === "required" && (
+                  <p className="mt-2 text-sm text-red-600">
+                    Vui lòng nhập email!
+                  </p>
+                )}
                 {errors.email?.type === "pattern" && (
                   <p className="mt-2 text-sm text-red-600">
                     Vui lòng nhập đúng định dạng email!
@@ -269,6 +338,7 @@ const EditMyAccount = () => {
                   type="text"
                   id="phone"
                   {...register("phone", {
+                    required: true,
                     maxLength: 80,
                     pattern:
                       /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/,
@@ -280,6 +350,11 @@ const EditMyAccount = () => {
                   }`}
                   placeholder="Số điện thoại"
                 />
+                {errors.phone?.type === "required" && (
+                  <p className="mt-2 text-sm text-red-600">
+                    Vui lòng nhập số điện thoại!
+                  </p>
+                )}
                 {errors.phone?.type === "pattern" && (
                   <p className="mt-2 text-sm text-red-600">
                     Vui lòng nhập đúng định dạng số điện thoại!
@@ -302,7 +377,10 @@ const EditMyAccount = () => {
                 </label>
                 <span
                   className="cursor-pointer text-red-500"
-                  onClick={() => setPreviewImg("")}
+                  onClick={() => {
+                    setPreviewImg("");
+                    setValue("avatar", "");
+                  }}
                 >
                   Xóa
                 </span>
@@ -360,7 +438,6 @@ const EditMyAccount = () => {
       )}
       <ToastContainer
         position="bottom-right"
-        autoClose={1500}
         bodyClassName="font-beVietnam text-sm"
         hideProgressBar={false}
         newestOnTop={false}

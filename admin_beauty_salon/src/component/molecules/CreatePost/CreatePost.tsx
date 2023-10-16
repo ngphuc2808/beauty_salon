@@ -6,7 +6,6 @@ import {
   useRef,
   useState,
 } from "react";
-import { useDispatch } from "react-redux";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -45,13 +44,12 @@ const imageMimeType = /image\/(png|jpg|jpeg)/i;
 const CreatePost = () => {
   const { setSelectChildComponent } = useContext(GlobalContext);
 
-  const dispatch = useDispatch();
   const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
 
   const [cropImage, setCropImage] = useState<string | ArrayBuffer | null>(null);
   const [modalCrop, setModalCrop] = useState(false);
   const [previewImg, setPreviewImg] = useState<string>("");
-  const [fileImage, setFileImage] = useState<any>();
+  const [fileImage, setFileImage] = useState<Blob>(new Blob());
   const [file, setFile] = useState<File>();
   const [formValue, setFormValue] = useState<PostType>({
     title: "",
@@ -295,12 +293,12 @@ const CreatePost = () => {
           <div className="bg-white shadow rounded-lg p-5">
             <div className="flex items-center justify-between">
               <button
-                className="text-textPrimaryColor text-sm px-4 py-3 bg-red-400 hover:bg-red-500 text-white rounded-md w-[48%] lg:w-[200px]"
+                className="text-sm px-4 py-3 bg-red-400 hover:bg-red-500 text-white rounded-md w-[48%] lg:w-[200px]"
                 onClick={handlePost}
               >
                 Lưu
               </button>
-              <button className="text-textPrimaryColor text-sm px-4 py-3 bg-red-400 hover:bg-red-500 text-white rounded-md w-[48%] lg:w-[200px]">
+              <button className="text-sm px-4 py-3 bg-red-400 hover:bg-red-500 text-white rounded-md w-[48%] lg:w-[200px]">
                 Thoát
               </button>
             </div>

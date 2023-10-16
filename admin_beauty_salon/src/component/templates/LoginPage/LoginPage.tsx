@@ -107,6 +107,8 @@ const LoginPage = () => {
                   {...register("password", {
                     required: true,
                     maxLength: 80,
+                    pattern:
+                      /^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9!@#\$%\^\&*\)\(+=._-]{8,}$/,
                   })}
                   autoComplete="on"
                   className={`border text-sm outline-none rounded-md block w-full p-2.5 ${
@@ -119,6 +121,14 @@ const LoginPage = () => {
                 {errors.password?.type === "required" && (
                   <p className="mt-2 text-sm text-red-600">
                     Vui lòng nhập mật khẩu!
+                  </p>
+                )}
+                {errors.password?.type === "pattern" && (
+                  <p className="mt-2 text-sm text-red-600">
+                    Vui lòng nhập đúng định dạng mật khẩu!
+                    <br />
+                    Bao gồm ít nhất 8 ký tự, 1 chữ cái viết thường, 1 chữ cái
+                    viết hoa và 1 chữ số!
                   </p>
                 )}
               </div>

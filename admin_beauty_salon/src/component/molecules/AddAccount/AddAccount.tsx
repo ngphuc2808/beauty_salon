@@ -19,7 +19,7 @@ const AddAccount = () => {
   const [modalCrop, setModalCrop] = useState<boolean>(false);
   const [previewImg, setPreviewImg] = useState<string>("");
   const [file, setFile] = useState<File>();
-  const [fileImage, setFileImage] = useState<any>();
+  const [fileImage, setFileImage] = useState<Blob>(new Blob());
 
   const {
     register,
@@ -27,7 +27,7 @@ const AddAccount = () => {
     setValue,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<AccountType>({
+  } = useForm<AddAccountType>({
     defaultValues: {
       username: "",
       password: "",
@@ -36,7 +36,7 @@ const AddAccount = () => {
       email: "",
       phone: "",
       role: "",
-      status: false,
+      status: "",
     },
   });
 
@@ -83,7 +83,7 @@ const AddAccount = () => {
     e.currentTarget.value = "";
   };
 
-  const uploadFile = async (value: AccountType) => {
+  const uploadFile = async (value: AddAccountType) => {
     const fileAvt = new File(
       [fileImage],
       `image-${value.username}-${Math.floor(Math.random() * 1000)}.${
@@ -105,7 +105,7 @@ const AddAccount = () => {
     return upload;
   };
 
-  const handleAddAccount = async (data: AccountType) => {
+  const handleAddAccount = async (data: AddAccountType) => {
     try {
       if (fileImage) {
         const avatar = await uploadFile(data);
@@ -114,9 +114,7 @@ const AddAccount = () => {
         setValue("avatar", "");
       }
 
-      const newData = data;
-      newData.status = Boolean(Number(data.status));
-      await AuthApi.createAccount(newData);
+      await AuthApi.createAccount(data);
       setPreviewImg("");
       reset();
       toast.success("Thêm tài khoản thành công!");
@@ -199,7 +197,7 @@ const AddAccount = () => {
                   className={`border text-sm outline-none rounded-md block w-full p-2.5 ${
                     errors.username
                       ? "bg-red-50 border-red-500 placeholder-red-400"
-                      : "bg-white border-gray-300"
+                      : "bg-white"
                   }`}
                   placeholder="Tài khoản"
                 />
@@ -229,18 +227,28 @@ const AddAccount = () => {
                   {...register("password", {
                     required: true,
                     maxLength: 80,
+                    pattern:
+                      /^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9!@#\$%\^\&*\)\(+=._-]{8,}$/,
                   })}
                   autoComplete="on"
                   className={`border text-sm outline-none rounded-md block w-full p-2.5 ${
                     errors.password
                       ? "bg-red-50 border-red-500 placeholder-red-400"
-                      : "bg-white border-gray-300"
+                      : "bg-white"
                   }`}
                   placeholder="Nhập mật khẩu"
                 />
                 {errors.password?.type === "required" && (
                   <p className="mt-2 text-sm text-red-600">
                     Vui lòng nhập mật khẩu!
+                  </p>
+                )}
+                {errors.password?.type === "pattern" && (
+                  <p className="mt-2 text-sm text-red-600">
+                    Vui lòng nhập đúng định dạng mật khẩu!
+                    <br />
+                    Bao gồm ít nhất 8 ký tự, 1 chữ cái viết thường, 1 chữ cái
+                    viết hoa và 1 chữ số!
                   </p>
                 )}
               </div>
@@ -263,7 +271,7 @@ const AddAccount = () => {
                   className={`border text-sm outline-none rounded-md block w-full p-2.5 ${
                     errors.fullName
                       ? "bg-red-50 border-red-500 placeholder-red-400"
-                      : "bg-white border-gray-300"
+                      : "bg-white"
                   }`}
                   placeholder="Họ và tên"
                 />
@@ -363,7 +371,7 @@ const AddAccount = () => {
                       {...register("status", {
                         required: true,
                       })}
-                      value={1}
+                      value="true"
                       className="after:content-[''] after:cursor-pointer after:w-4 after:h-4 after:rounded-full after:relative after:top-[-2px] after:left-0 after:bg-[#d1d3d1]  after:inline-block visible
                       checked:after:content-[''] checked:after:cursor-pointer checked:after:w-4 checked:after:h-4 checked:after:rounded-full checked:after:relative checked:after:top-[-2px] checked:after:left-0 checked:after:bg-green-500 checked:after:inline-block checked:after:visible"
                     />
@@ -385,7 +393,7 @@ const AddAccount = () => {
                       {...register("status", {
                         required: true,
                       })}
-                      value={0}
+                      value="false"
                       className="after:content-[''] after:cursor-pointer after:w-4 after:h-4 after:rounded-full after:relative after:top-[-2px] after:left-0 after:bg-[#d1d3d1]  after:inline-block visible
                       checked:after:content-[''] checked:after:cursor-pointer checked:after:w-4 checked:after:h-4 checked:after:rounded-full checked:after:relative checked:after:top-[-2px] checked:after:left-0 checked:after:bg-green-500 checked:after:inline-block checked:after:visible"
                     />
@@ -470,7 +478,7 @@ const AddAccount = () => {
             <div className="bg-white shadow rounded-lg p-5">
               <div className="flex items-center justify-between">
                 <button
-                  className="text-textPrimaryColor text-sm px-4 py-3 bg-red-400 hover:bg-red-500 text-white rounded-md w-[48%] lg:w-[200px]"
+                  className="text-sm px-4 py-3 bg-red-400 hover:bg-red-500 text-white rounded-md w-[48%] lg:w-[200px]"
                   onClick={handleSubmit(handleAddAccount)}
                 >
                   {isSubmitting ? (
@@ -479,7 +487,7 @@ const AddAccount = () => {
                     <span>Lưu</span>
                   )}
                 </button>
-                <button className="text-textPrimaryColor text-sm px-4 py-3 bg-red-400 hover:bg-red-500 text-white rounded-md w-[48%] lg:w-[200px]">
+                <button className="text-sm px-4 py-3 bg-red-400 hover:bg-red-500 text-white rounded-md w-[48%] lg:w-[200px]">
                   Thoát
                 </button>
               </div>
@@ -499,7 +507,10 @@ const AddAccount = () => {
                 </label>
                 <span
                   className="cursor-pointer text-red-500"
-                  onClick={() => setPreviewImg("")}
+                  onClick={() => {
+                    setPreviewImg("");
+                    setValue("avatar", "");
+                  }}
                 >
                   Xóa
                 </span>

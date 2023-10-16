@@ -1,11 +1,11 @@
 // Crop Image //
-export const createImage = (url: any) => {
+export const createImage = (url: string | ArrayBuffer | null) => {
   return new Promise((resolve, reject) => {
     const image = new Image();
     image.addEventListener("load", () => resolve(image));
     image.addEventListener("error", (error) => reject(error));
     image.setAttribute("crossOrigin", "anonymous");
-    image.src = url;
+    image.src = url as string;
   });
 };
 
@@ -25,15 +25,14 @@ export function rotateSize(width: number, height: number, rotation: number) {
 }
 
 export default async function getCroppedImg(
-  imageSrc: any,
-  pixelCrop: any,
+  imageSrc: string | ArrayBuffer | null,
+  pixelCrop: CropPixel,
   rotation = 0,
   flip = { horizontal: false, vertical: false }
 ) {
   const image: any = await createImage(imageSrc);
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
-
   if (!ctx) {
     return null;
   }
@@ -68,10 +67,9 @@ export default async function getCroppedImg(
 
   ctx.putImageData(data, 0, 0);
 
-  return new Promise((resolve, reject) => {
-    canvas.toBlob((file: any) => {
-      file.name = "cropped.jpeg";
-      resolve({ file: file, url: URL.createObjectURL(file) });
+  return new Promise((resolve) => {
+    canvas.toBlob((file) => {
+      resolve({ file: file, url: URL.createObjectURL(file as Blob) });
     }, "image/jpeg");
   });
 }

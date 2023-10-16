@@ -12,7 +12,7 @@ export const AuthApi = {
   getInfo: async (slug: string): Promise<any> => {
     return await http.get(`${API_URL.getInfo}/${slug}/view`);
   },
-  createAccount: async (account: AccountType): Promise<any> => {
+  createAccount: async (account: AddAccountType): Promise<any> => {
     return await http.post(API_URL.createAccount, account);
   },
   getListUser: async (): Promise<any> => {
@@ -21,10 +21,7 @@ export const AuthApi = {
   deleteAccount: async (slugs: string): Promise<any> => {
     return await http.delete(`${API_URL.deleteAccount}/${slugs}`);
   },
-  updateAccount: async (
-    slug: string,
-    data: EditMyAccountType | AccountType
-  ): Promise<any> => {
-    return await http.put(`${API_URL.updateInfo}/${slug}/update`, { data });
+  updateAccount: async (slug: string, data: EditAccountType): Promise<any> => {
+    return await http.put(`${API_URL.updateInfo}/${slug}/update`, data);
   },
 };

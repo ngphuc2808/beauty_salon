@@ -1,32 +1,33 @@
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useQuery } from "react-query";
 import "remixicon/fonts/remixicon.css";
 
 import { listComponent } from "@/helpers/listComponent";
 import { GlobalContext } from "@/contexts/globalContext";
 import { dataNavigation } from "@/utils/data";
 import { AuthApi } from "@/services/api/auth";
-import { setInfoUser } from "@/features/redux/slices/dataUI/userSlice";
 import images from "@/assets/images";
 
 const HomePage = () => {
   const router = useNavigate();
-  const dispatch = useDispatch();
 
   const isLogin = JSON.parse(localStorage.getItem("userLogin")!);
 
   useEffect(() => {
     if (!isLogin) {
       router("/login");
-    } else {
-      handleGetInfo();
+      return;
     }
   }, []);
 
-  const data = useSelector(
-    (state: { user: { info: iUserInfo } }) => state.user
-  );
+  const { data } = useQuery({
+    queryKey: ["userinfo"],
+    queryFn: () => handleGetInfo(),
+    keepPreviousData: true,
+  });
+
+  const [navMobile, setNavMobile] = useState<boolean>(true);
 
   const {
     selectTable,
@@ -36,21 +37,11 @@ const HomePage = () => {
     setSelectTable,
   } = useContext(GlobalContext);
 
-  const [roleAdmin, setRoleAdmin] = useState<string>("");
-  const [navMobile, setNavMobile] = useState<boolean>(true);
-
   const handleGetInfo = async () => {
     try {
-      const result: any = await AuthApi.getInfo(isLogin.session);
-      if (result) {
-        setRoleAdmin(result.results.role);
-        dispatch(setInfoUser(result.results));
-        return;
-      }
+      return await AuthApi.getInfo(isLogin.session);
     } catch (error: any) {
-      if (error) {
-        handleLogout();
-      }
+      console.log(error);
     }
   };
 
@@ -78,13 +69,13 @@ const HomePage = () => {
         <div className="flex items-center gap-2">
           <div className="flex flex-col sm:flex-row text-sm text-textPrimaryColor">
             <p>Xin chào, </p>
-            <p>{data.info.fullName}</p>
+            <p>{data?.results.fullName}</p>
           </div>
           <div className="relative group">
             <figure className="w-[35px] h-[35px] bg-red-100 rounded-full hover:cursor-pointer">
               <img
                 crossOrigin="anonymous"
-                src={data.info.avatar || images.avatar}
+                src={data?.results.avatar || images.avatar}
                 className="rounded-full"
               />
             </figure>
@@ -93,7 +84,7 @@ const HomePage = () => {
                 <figure className="w-[75px] h-[75px]">
                   <img
                     crossOrigin="anonymous"
-                    src={data.info.avatar || images.avatar}
+                    src={data?.results.avatar || images.avatar}
                     className="rounded-full"
                   />
                 </figure>
@@ -102,7 +93,7 @@ const HomePage = () => {
                 </div>
               </div>
               <ul className="[&>li]:py-2 [&>li]:px-3 [&>li]:cursor-pointer text-sm text-textPrimaryColor [&>:hover]:text-red-600 [&>:hover]:bg-red-50">
-                {roleAdmin === "admin" && (
+                {data?.results.role === "admin" && (
                   <li
                     onClick={() => {
                       setSelectMainComponent("authComponent");
@@ -128,7 +119,7 @@ const HomePage = () => {
       </header>
 
       {/* Content */}
-      <div className="min-h-screen max-h-full mt-16 bg-[#f6f6f7] grid grid-cols-12 grid-rows-maxContent gap-y-0">
+      <div className="min-h-screen max-h-full mt-16 bg-[#f6f6f7] grid grid-cols-12 gap-y-0">
         <div className="min-h-full col-span-3 lg:col-span-2 border-r-4 border-solid border-red-500 overflow-y-auto hidden sm:block">
           <ul className="bg-white sm:bg-inherit [&>*:first-child]:mt-5 [&>*:last-child]:mb-5 pr-[10px]">
             <li>
@@ -302,7 +293,7 @@ const HomePage = () => {
                   Liên kết nhanh
                 </span>
               </div>
-              <ul className="max-h-[800px] overflow-auto text-sm text-textPrimaryColor pl-4 relative text-lg">
+              <ul className="max-h-[800px] overflow-auto text-textPrimaryColor pl-4 relative text-lg">
                 <li className="after:content-[''] after:absolute after:top-2 after:left-[1px] after:h-full after:border-l after:border-dashed after:border-gray-500 relative">
                   <p className="my-2">Danh sách sản phẩm</p>
                   <ul className="ml-6">

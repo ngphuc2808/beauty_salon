@@ -15,9 +15,17 @@ const CropImage = ({
   const [crop, setCrop] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState<number>(1);
   const [rotation, setRotation] = useState<number>(0);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<BlobPart>();
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<CropPixel>({
+    width: 0,
+    height: 0,
+    x: 0,
+    y: 0,
+  });
 
-  const cropComplete = (croppedArea: any, croppedAreaPixels: any) => {
+  const cropComplete = (
+    croppedArea: CropPixel,
+    croppedAreaPixels: CropPixel
+  ) => {
     setCroppedAreaPixels(croppedAreaPixels);
   };
 

@@ -9,23 +9,25 @@ interface iUserInfo {
   email: string;
   phone: string;
   role: string;
-  status: boolean;
+  status: string;
 }
 
 type LoginType = Pick<iUserInfo, "username" | "password">;
 
-type EditMyAccountType = Pick<
+type EditAccountType = Pick<
   iUserInfo,
   | "username"
   | "password"
   | "oldPassword"
-  | "avatar"
   | "fullName"
   | "email"
   | "phone"
+  | "avatar"
+  | "role"
+  | "status"
 >;
 
-type AccountType = Pick<
+type AddAccountType = Pick<
   iUserInfo,
   | "username"
   | "password"
@@ -65,8 +67,15 @@ type DataListType = {
 type CropImageType = {
   image: string | ArrayBuffer | null;
   setModalCrop: (modalCrop: boolean) => void;
-  setFileImage: (fileImage: any) => void;
+  setFileImage: (fileImage: Blob) => void;
   setPreviewImg: (previewImg: string) => void;
+};
+
+type CropPixel = {
+  width: number;
+  height: number;
+  x: number;
+  y: number;
 };
 
 type ModalType = {

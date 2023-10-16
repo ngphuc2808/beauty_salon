@@ -23,7 +23,7 @@ const EditUserAccount = () => {
   const [modalCrop, setModalCrop] = useState<boolean>(false);
   const [previewImg, setPreviewImg] = useState<string>("");
   const [file, setFile] = useState<File>();
-  const [fileImage, setFileImage] = useState<any>();
+  const [fileImage, setFileImage] = useState<Blob>(new Blob());
 
   const {
     register,
@@ -32,16 +32,17 @@ const EditUserAccount = () => {
     setValue,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<AccountType>({
+  } = useForm<EditAccountType>({
     defaultValues: {
       username: "",
       password: "",
+      oldPassword: "",
       fullName: "",
       email: "",
       phone: "",
       avatar: "",
       role: "employee",
-      status: true,
+      status: "true",
     },
   });
 
@@ -80,7 +81,7 @@ const EditUserAccount = () => {
     };
   }, [file]);
 
-  const uploadFile = async (value: AccountType) => {
+  const uploadFile = async (value: EditAccountType) => {
     const fileAvt = new File(
       [fileImage],
       `image-${value.username}-${Math.floor(Math.random() * 1000)}.${
@@ -102,7 +103,7 @@ const EditUserAccount = () => {
     return upload;
   };
 
-  const handleUpdateInfo = async (data: AccountType) => {
+  const handleUpdateInfo = async (data: EditAccountType) => {
     try {
       if (fileImage) {
         const avatar = await uploadFile(data);
@@ -110,11 +111,8 @@ const EditUserAccount = () => {
       } else {
         setValue("avatar", "");
       }
-
-      const newData = data;
-      newData.status = Boolean(Number(data.status));
-
-      await AuthApi.updateAccount(dataApi.info.slug, newData);
+      console.log(data);
+      await AuthApi.updateAccount(dataApi.info.slug, data);
       setPreviewImg("");
       reset();
       toast.success("Sửa thông tin tài khoản thành công!");
@@ -170,7 +168,7 @@ const EditUserAccount = () => {
                   className={`border text-sm outline-none rounded-md block w-full p-2.5 ${
                     errors.username
                       ? "bg-red-50 border-red-500 placeholder-red-400"
-                      : "bg-white border-gray-300"
+                      : "bg-white"
                   }`}
                   placeholder="Tài khoản"
                 />
@@ -200,7 +198,7 @@ const EditUserAccount = () => {
                   className={`border text-sm outline-none rounded-md block w-full p-2.5 ${
                     errors.password
                       ? "bg-red-50 border-red-500 placeholder-red-400"
-                      : "bg-white border-gray-300"
+                      : "bg-white"
                   }`}
                   placeholder="Nhập mật khẩu"
                 />
@@ -229,7 +227,7 @@ const EditUserAccount = () => {
                   className={`border text-sm outline-none rounded-md block w-full p-2.5 ${
                     errors.fullName
                       ? "bg-red-50 border-red-500 placeholder-red-400"
-                      : "bg-white border-gray-300"
+                      : "bg-white"
                   }`}
                   placeholder="Họ và tên"
                 />
@@ -315,8 +313,8 @@ const EditUserAccount = () => {
                       type="radio"
                       id="statusOn"
                       {...register("status", {})}
-                      checked={getValues("status") ? true : false}
-                      value={1}
+                      checked={getValues("status") === "true" ? true : false}
+                      value="true"
                       className="after:content-[''] after:cursor-pointer after:w-4 after:h-4 after:rounded-full after:relative after:top-[-2px] after:left-0 after:bg-[#d1d3d1]  after:inline-block visible
                       checked:after:content-[''] checked:after:cursor-pointer checked:after:w-4 checked:after:h-4 checked:after:rounded-full checked:after:relative checked:after:top-[-2px] checked:after:left-0 checked:after:bg-green-500 checked:after:inline-block checked:after:visible"
                     />
@@ -336,8 +334,8 @@ const EditUserAccount = () => {
                       type="radio"
                       id="statusOff"
                       {...register("status", {})}
-                      checked={!getValues("status") ? true : false}
-                      value={0}
+                      checked={getValues("status") === "false" ? true : false}
+                      value="false"
                       className="after:content-[''] after:cursor-pointer after:w-4 after:h-4 after:rounded-full after:relative after:top-[-2px] after:left-0 after:bg-[#d1d3d1]  after:inline-block visible
                       checked:after:content-[''] checked:after:cursor-pointer checked:after:w-4 checked:after:h-4 checked:after:rounded-full checked:after:relative checked:after:top-[-2px] checked:after:left-0 checked:after:bg-green-500 checked:after:inline-block checked:after:visible"
                     />
@@ -430,7 +428,10 @@ const EditUserAccount = () => {
                 </label>
                 <span
                   className="cursor-pointer text-red-500"
-                  onClick={() => setPreviewImg("")}
+                  onClick={() => {
+                    setPreviewImg("");
+                    setValue("avatar", "");
+                  }}
                 >
                   Xóa
                 </span>
