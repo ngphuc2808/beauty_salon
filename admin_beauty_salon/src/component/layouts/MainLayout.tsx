@@ -14,6 +14,8 @@ const MainLayout = ({ children }: Props) => {
 
   const isLogin = JSON.parse(localStorage.getItem("userLogin")!);
 
+  console.log(isLogin);
+
   useEffect(() => {
     if (!isLogin) {
       router("/login");
@@ -21,7 +23,7 @@ const MainLayout = ({ children }: Props) => {
     }
   }, []);
 
-  const userInfo = useGetUserInfo(isLogin.session);
+  const userInfo = useGetUserInfo(isLogin?.session);
 
   const [navMobile, setNavMobile] = useState<boolean>(true);
 
