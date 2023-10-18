@@ -1,7 +1,4 @@
-import { useDispatch } from "react-redux";
-
 const TableCategory = () => {
-  const dispatch = useDispatch();
   return (
     <div className="w-full max-h-[626px] overflow-y-auto overflow-x-auto">
       <table className="mb-4 min-w-full max-w-full whitespace-nowrap text-sm text-left text-gray-500">
