@@ -86,12 +86,12 @@ const EditMyAccount = () => {
     e.currentTarget.value = "";
   };
 
-  const uploadFile = async (value: EditAccountType) => {
+  const uploadFile = async () => {
     const fileAvt = new File(
       [fileImage],
-      `image-${value.username}-${Math.floor(Math.random() * 1000)}.${
-        fileImage.type.split("/")[1]
-      }`,
+      `image-${userInfo.data?.results.slug}-${Math.floor(
+        Math.random() * 1000
+      )}.${fileImage.type.split("/")[1]}`,
       {
         type: fileImage.type,
       }
@@ -112,11 +112,12 @@ const EditMyAccount = () => {
     try {
       const newValue = value;
       if (fileImage.size !== 0) {
-        const avatar = await uploadFile(value);
+        const avatar = await uploadFile();
         newValue.avatar = avatar.results;
       } else {
         newValue.avatar = "";
       }
+
       await AuthApi.updateAccount(userInfo.data.results.slug, newValue);
 
       toast.success("Cập nhật thông tin thành công, vui lòng đăng nhập lại!", {
@@ -162,20 +163,43 @@ const EditMyAccount = () => {
             <form>
               <div className="mb-5">
                 <label
-                  htmlFor="username"
-                  className="block mb-2 text-sm font-normal"
+                  htmlFor="password"
+                  className={`block mb-2 text-sm font-normal ${
+                    errors.oldPassword ? "text-red-700" : "text-[#666]"
+                  }`}
                 >
-                  Tài khoản
+                  Mật khẩu hiện tại
                 </label>
                 <input
-                  type="text"
-                  id="username"
-                  {...register("username", {
+                  type="password"
+                  id="oldPassword"
+                  {...register("oldPassword", {
+                    required: true,
                     maxLength: 80,
+                    pattern:
+                      /^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9!@#\$%\^\&*\)\(+=._-]{8,}$/,
                   })}
-                  className="border text-sm outline-none rounded-md block w-full p-2.5"
-                  placeholder="Tài khoản"
+                  autoComplete="on"
+                  className={`border text-sm outline-none rounded-md block w-full p-2.5 ${
+                    errors.oldPassword
+                      ? "bg-red-50 border-red-500 placeholder-red-400"
+                      : "bg-white"
+                  }`}
+                  placeholder="Mật khẩu cũ"
                 />
+                {errors.oldPassword?.type === "required" && (
+                  <p className="mt-2 text-sm text-red-600">
+                    Vui lòng nhập mật khẩu!
+                  </p>
+                )}
+                {errors.oldPassword?.type === "pattern" && (
+                  <p className="mt-2 text-sm text-red-600">
+                    Vui lòng nhập đúng định dạng mật khẩu!
+                    <br />
+                    Bao gồm ít nhất 8 ký tự, 1 chữ cái viết thường, 1 chữ cái
+                    viết hoa và 1 chữ số!
+                  </p>
+                )}
               </div>
               <div className="mb-5">
                 <label
@@ -184,7 +208,7 @@ const EditMyAccount = () => {
                     errors.password ? "text-red-700" : "text-[#666]"
                   }`}
                 >
-                  Mật khẩu
+                  Mật khẩu mới
                 </label>
                 <input
                   type="password"
@@ -208,36 +232,6 @@ const EditMyAccount = () => {
                     <br />
                     Bao gồm ít nhất 8 ký tự, 1 chữ cái viết thường, 1 chữ cái
                     viết hoa và 1 chữ số!
-                  </p>
-                )}
-              </div>
-              <div className="mb-5">
-                <label
-                  htmlFor="password"
-                  className={`block mb-2 text-sm font-normal ${
-                    errors.oldPassword ? "text-red-700" : "text-[#666]"
-                  }`}
-                >
-                  Mật khẩu cũ
-                </label>
-                <input
-                  type="password"
-                  id="oldPassword"
-                  {...register("oldPassword", {
-                    required: true,
-                    maxLength: 80,
-                  })}
-                  autoComplete="on"
-                  className={`border text-sm outline-none rounded-md block w-full p-2.5 ${
-                    errors.oldPassword
-                      ? "bg-red-50 border-red-500 placeholder-red-400"
-                      : "bg-white"
-                  }`}
-                  placeholder="Mật khẩu cũ"
-                />
-                {errors.oldPassword?.type === "required" && (
-                  <p className="mt-2 text-sm text-red-600">
-                    Vui lòng nhập mật khẩu!
                   </p>
                 )}
               </div>

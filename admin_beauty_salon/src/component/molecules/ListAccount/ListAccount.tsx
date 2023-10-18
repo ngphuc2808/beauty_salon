@@ -61,10 +61,6 @@ const ListAccount = () => {
     }
   };
 
-  const handleEditInfo = (item: ListAccountType) => {
-    console.log(item);
-  };
-
   return (
     <Fragment>
       <div className="w-full py-4 mb-5 bg-white flex items-center justify-between shadow rounded-lg flex-wrap lg:flex-nowrap">

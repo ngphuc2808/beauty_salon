@@ -18,30 +18,9 @@ interface iUserInfo {
 
 type LoginType = Pick<iUserInfo, "username" | "password">;
 
-type EditAccountType = Pick<
-  iUserInfo,
-  | "username"
-  | "password"
-  | "oldPassword"
-  | "fullName"
-  | "email"
-  | "phone"
-  | "avatar"
-  | "role"
-  | "status"
->;
+type EditAccountType = Omit<iUserInfo, "id" | "slug" | "username">;
 
-type AddAccountType = Pick<
-  iUserInfo,
-  | "username"
-  | "password"
-  | "fullName"
-  | "email"
-  | "phone"
-  | "avatar"
-  | "role"
-  | "status"
->;
+type AddAccountType = Omit<iUserInfo, "id" | "slug">;
 
 // type EditAccountType = Omit<iUserInfo, "id">;
 

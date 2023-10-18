@@ -1,5 +1,5 @@
 import { ChangeEvent, Fragment, useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import { toast } from "react-toastify";
@@ -79,12 +79,12 @@ const EditUserAccount = () => {
     e.currentTarget.value = "";
   };
 
-  const uploadFile = async (value: EditAccountType) => {
+  const uploadFile = async () => {
     const fileAvt = new File(
       [fileImage],
-      `image-${value.username}-${Math.floor(Math.random() * 1000)}.${
-        fileImage.type.split("/")[1]
-      }`,
+      `image-${userInfo.data?.results.slug}-${Math.floor(
+        Math.random() * 1000
+      )}.${fileImage.type.split("/")[1]}`,
       {
         type: fileImage.type,
       }
@@ -105,14 +105,13 @@ const EditUserAccount = () => {
     try {
       const newValue = value;
       if (fileImage.size !== 0) {
-        const avatar = await uploadFile(value);
+        const avatar = await uploadFile();
         newValue.avatar = avatar.results;
+        setPreviewImg(avatar.results);
       } else {
         newValue.avatar = "";
       }
       await AuthApi.updateAccount(userInfo.data?.results.slug, newValue);
-      setPreviewImg("");
-      reset();
       toast.success("Sửa thông tin tài khoản thành công!");
     } catch (error) {
       console.log(error);
@@ -148,35 +147,6 @@ const EditUserAccount = () => {
             <form>
               <div className="mb-5">
                 <label
-                  htmlFor="username"
-                  className={`block mb-2 text-sm font-normal ${
-                    errors.username ? "text-red-700" : "text-[#666]"
-                  }`}
-                >
-                  Tài khoản
-                </label>
-                <input
-                  type="text"
-                  id="username"
-                  {...register("username", {
-                    minLength: 5,
-                    maxLength: 80,
-                  })}
-                  className={`border text-sm outline-none rounded-md block w-full p-2.5 ${
-                    errors.username
-                      ? "bg-red-50 border-red-500 placeholder-red-400"
-                      : "bg-white"
-                  }`}
-                  placeholder="Tài khoản"
-                />
-                {errors.username?.type === "minLength" && (
-                  <p className="mt-2 text-sm text-red-600">
-                    Vui lòng nhập tối thiểu 5 ký tự!
-                  </p>
-                )}
-              </div>
-              <div className="mb-5">
-                <label
                   htmlFor="password"
                   className={`block mb-2 text-sm font-normal ${
                     errors.password ? "text-red-700" : "text-[#666]"
@@ -190,6 +160,8 @@ const EditUserAccount = () => {
                   {...register("password", {
                     minLength: 5,
                     maxLength: 80,
+                    pattern:
+                      /^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9!@#\$%\^\&*\)\(+=._-]{8,}$/,
                   })}
                   autoComplete="on"
                   className={`border text-sm outline-none rounded-md block w-full p-2.5 ${
@@ -202,6 +174,14 @@ const EditUserAccount = () => {
                 {errors.password?.type === "minLength" && (
                   <p className="mt-2 text-sm text-red-600">
                     Vui lòng nhập tối thiểu 5 ký tự!
+                  </p>
+                )}
+                {errors.password?.type === "pattern" && (
+                  <p className="mt-2 text-sm text-red-600">
+                    Vui lòng nhập đúng định dạng mật khẩu!
+                    <br />
+                    Bao gồm ít nhất 8 ký tự, 1 chữ cái viết thường, 1 chữ cái
+                    viết hoa và 1 chữ số!
                   </p>
                 )}
               </div>

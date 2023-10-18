@@ -14,8 +14,6 @@ const MainLayout = ({ children }: Props) => {
 
   const isLogin = JSON.parse(localStorage.getItem("userLogin")!);
 
-  console.log(isLogin);
-
   useEffect(() => {
     if (!isLogin) {
       router("/login");
