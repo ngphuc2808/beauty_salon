@@ -1,20 +1,18 @@
-import { ChangeEvent, Fragment, useContext, useEffect, useState } from "react";
+import { ChangeEvent, Fragment, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import CropImage from "../CropImage";
 
-import { GlobalContext } from "@/contexts/globalContext";
 import { AuthApi } from "@/services/api/auth";
 import { ImageApi } from "@/services/api/image";
 
 const imageMimeType = /image\/(png|jpg|jpeg)/i;
 
 const AddAccount = () => {
-  const { setSelectChildComponent } = useContext(GlobalContext);
-
   const [cropImage, setCropImage] = useState<string | ArrayBuffer | null>(null);
   const [modalCrop, setModalCrop] = useState<boolean>(false);
   const [previewImg, setPreviewImg] = useState<string>("");
@@ -27,18 +25,7 @@ const AddAccount = () => {
     setValue,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<AddAccountType>({
-    defaultValues: {
-      username: "",
-      password: "",
-      avatar: "",
-      fullName: "",
-      email: "",
-      phone: "",
-      role: "",
-      status: "",
-    },
-  });
+  } = useForm<AddAccountType>({});
 
   useEffect(() => {
     return () => {
@@ -99,7 +86,7 @@ const AddAccount = () => {
     let upload;
     try {
       upload = await ImageApi.uploadImage(formData);
-    } catch (error: any) {
+    } catch (error) {
       console.log(error);
     }
     return upload;
@@ -107,18 +94,21 @@ const AddAccount = () => {
 
   const handleAddAccount = async (data: AddAccountType) => {
     try {
-      if (fileImage) {
-        const avatar = await uploadFile(data);
-        setValue("avatar", avatar.results);
-      } else {
-        setValue("avatar", "");
-      }
+      const newValue = data;
 
-      await AuthApi.createAccount(data);
+      if (fileImage.size !== 0) {
+        const avatar = await uploadFile(data);
+        newValue.avatar = avatar.results;
+      } else {
+        newValue.avatar = "";
+      }
+      newValue.status = Boolean(data.status);
+      await AuthApi.createAccount(newValue);
       setPreviewImg("");
       reset();
       toast.success("Thêm tài khoản thành công!");
-    } catch (error: any) {
+    } catch (err) {
+      const error = err as ErrorType;
       if (
         error.message ===
         "Tên đăng nhập chỉ chứa các ký tự chữ cái, chữ số, dấu gạch dưới và có độ dài từ 3 đến 30 kí tự."
@@ -163,14 +153,12 @@ const AddAccount = () => {
           Xác thực và ủy quyền
         </h1>
         <div className="w-full lg:w-auto flex items-center gap-3 mr-5 ml-5 lg:ml-0 mt-4 lg:mt-0 flex-col lg:flex-row">
-          <button
+          <Link
+            to={"/list-user"}
             className="w-full lg:w-auto lg:text-base md:text-sm bg-red-500 rounded-md hover:bg-red-600 text-white px-3 py-2"
-            onClick={() => {
-              setSelectChildComponent("listAccount");
-            }}
           >
             Danh sách tài khoản
-          </button>
+          </Link>
         </div>
       </div>
       <div className="grid grid-cols-12 gap-x-3">
@@ -478,7 +466,7 @@ const AddAccount = () => {
             <div className="bg-white shadow rounded-lg p-5">
               <div className="flex items-center justify-between">
                 <button
-                  className="text-sm px-4 py-3 bg-red-400 hover:bg-red-500 text-white rounded-md w-[48%] lg:w-[200px]"
+                  className="flex items-center justify-center max-h-[42px] text-sm px-4 py-3 bg-red-400 hover:bg-red-500 text-white rounded-md w-[48%] lg:w-[200px]"
                   onClick={handleSubmit(handleAddAccount)}
                 >
                   {isSubmitting ? (
@@ -487,9 +475,12 @@ const AddAccount = () => {
                     <span>Lưu</span>
                   )}
                 </button>
-                <button className="text-sm px-4 py-3 bg-red-400 hover:bg-red-500 text-white rounded-md w-[48%] lg:w-[200px]">
+                <Link
+                  to={"/"}
+                  className="flex justify-center text-sm px-4 py-3 bg-red-400 hover:bg-red-500 text-white rounded-md w-[48%] lg:w-[200px]"
+                >
                   Thoát
-                </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -565,19 +556,6 @@ const AddAccount = () => {
           setPreviewImg={setPreviewImg}
         />
       )}
-      <ToastContainer
-        position="bottom-right"
-        autoClose={1500}
-        bodyClassName="font-beVietnam text-sm"
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
     </Fragment>
   );
 };

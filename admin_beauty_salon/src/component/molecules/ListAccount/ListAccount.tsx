@@ -1,35 +1,29 @@
-import { Fragment, useContext, useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
+import { useQuery } from "react-query";
+import { Link } from "react-router-dom";
 
 import ModalDelete from "../ModalDelete";
 import Search from "../Search";
 
 import images from "@/assets/images";
-import { GlobalContext } from "@/contexts/globalContext";
 import { AuthApi } from "@/services/api/auth";
 
 const ListAccount = () => {
-  const { setSelectChildComponent } = useContext(GlobalContext);
+  const { data } = useQuery({
+    queryKey: ["listUser"],
+    queryFn: () => getListUser(),
+    keepPreviousData: true,
+  });
 
-  const [dataListAccount, setDataListAccount] = useState<ListAccountType[]>([]);
   const [checked, setChecked] = useState<string[]>([]);
   const [checkedAll, setCheckedAll] = useState<string[]>([]);
   const [modalDelete, setModalDelete] = useState<boolean>(false);
 
-  useEffect(() => {
-    getListUser();
-  }, []);
-
   const getListUser = async () => {
     try {
-      const result: any = await AuthApi.getListUser();
-      if (result) {
-        setDataListAccount(result.results);
-        return;
-      }
-    } catch (error: any) {
-      if (error) {
-        console.log(error);
-      }
+      return await AuthApi.getListUser();
+    } catch (error) {
+      console.log(error);
     }
     return;
   };
@@ -44,14 +38,14 @@ const ListAccount = () => {
   };
 
   useEffect(() => {
-    if (checked.length === dataListAccount.length) {
+    if (checked.length === data?.results.length) {
       setCheckedAll(checked);
     }
   }, [checked.length]);
 
   const handleCheckAll = () => {
-    const newArr = dataListAccount.map((item) => item.slug);
-    if ((checkedAll.length && checked.length) === dataListAccount.length) {
+    const newArr = data?.results.map((item: any) => item.slug);
+    if ((checkedAll.length && checked.length) === data?.results.length) {
       setCheckedAll([]);
       setChecked([]);
     } else {
@@ -67,8 +61,8 @@ const ListAccount = () => {
     }
   };
 
-  const handleEditInfo = (item: EditUserAccountType) => {
-    setSelectChildComponent("editUserAccount");
+  const handleEditInfo = (item: ListAccountType) => {
+    console.log(item);
   };
 
   return (
@@ -77,14 +71,14 @@ const ListAccount = () => {
         <h1 className="lg:text-xl md:text-base ml-5 text-textHeadingColor">
           Danh sách tài khoản
         </h1>
-        <Search />
+        <Search isAuth />
         <div className="w-full lg:w-auto flex items-center gap-3 mr-5 ml-5 lg:ml-0 mt-4 lg:mt-0 flex-col lg:flex-row">
-          <button
+          <Link
+            to={"/auth"}
             className="w-full lg:w-auto lg:text-base md:text-sm bg-red-500 rounded-md hover:bg-red-600 text-white px-3 py-2"
-            onClick={() => setSelectChildComponent("addAccount")}
           >
             Thêm tài khoản
-          </button>
+          </Link>
         </div>
       </div>
       <div className="relative shadow-md rounded-lg mb-5 bg-white overflow-hidden">
@@ -110,8 +104,8 @@ const ListAccount = () => {
                       type="checkbox"
                       className="w-4 h-4 cursor-pointer"
                       checked={
-                        checkedAll.length === dataListAccount.length &&
-                        checked.length === dataListAccount.length
+                        checkedAll.length === data?.results.length &&
+                        checked.length === data?.results.length
                       }
                       onChange={handleCheckAll}
                     />
@@ -120,8 +114,12 @@ const ListAccount = () => {
                 <th scope="col" className="px-6 py-3 text-red-600">
                   Ảnh đại diện
                 </th>
+
                 <th scope="col" className="px-6 py-3 text-red-600">
                   Họ và tên
+                </th>
+                <th scope="col" className="px-6 py-3 text-red-600">
+                  Vai trò
                 </th>
                 <th scope="col" className="px-6 py-3 text-red-600">
                   Email
@@ -134,7 +132,7 @@ const ListAccount = () => {
                 </th>
                 <th scope="col" className="px-6 py-3 text-red-600"></th>
               </tr>
-              {dataListAccount.map((item, index) => (
+              {data?.results.map((item: any, index: number) => (
                 <tr className="bg-white border-b hover:bg-gray-50" key={index}>
                   <td className="w-4 p-5">
                     <div className="flex items-center">
@@ -162,6 +160,7 @@ const ListAccount = () => {
                   >
                     {item.fullName}
                   </th>
+                  <td className="px-6 py-4">{item.role}</td>
                   <td className="px-6 py-4">{item.email}</td>
                   <td className="px-6 py-4">{item.phone}</td>
                   <td className="px-6 py-4">
@@ -174,10 +173,9 @@ const ListAccount = () => {
                     </span>
                   </td>
                   <td className="w-4 p-5">
-                    <i
-                      className="ri-pencil-fill p-3 border border-red-500 rounded text-red-500 cursor-pointer"
-                      onClick={() => handleEditInfo(item)}
-                    ></i>
+                    <Link to={`/edit-account/${item.slug}`}>
+                      <i className="ri-pencil-fill p-3 border border-red-500 rounded text-red-500 cursor-pointer"></i>
+                    </Link>
                   </td>
                 </tr>
               ))}

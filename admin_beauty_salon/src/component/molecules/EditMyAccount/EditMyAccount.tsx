@@ -1,7 +1,6 @@
-import { ChangeEvent, Fragment, useContext, useEffect, useState } from "react";
+import { ChangeEvent, Fragment, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useQuery } from "react-query";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import CropImage from "../CropImage";
@@ -9,7 +8,7 @@ import CropImage from "../CropImage";
 import { AuthApi } from "@/services/api/auth";
 import { ImageApi } from "@/services/api/image";
 import { useNavigate } from "react-router-dom";
-import { GlobalContext } from "@/contexts/globalContext";
+import { useGetUserInfo } from "@/queries/useQueries";
 
 const imageMimeType = /image\/(png|jpg|jpeg)/i;
 
@@ -18,41 +17,32 @@ const EditMyAccount = () => {
 
   const isLogin = JSON.parse(localStorage.getItem("userLogin")!);
 
-  const { data } = useQuery({
-    queryKey: ["userinfo"],
-    queryFn: () => handleGetInfo(),
-    keepPreviousData: true,
-  });
-
-  const { setSelectMainComponent, setSelectChildComponent } =
-    useContext(GlobalContext);
+  const userInfo = useGetUserInfo(isLogin.session);
 
   const [cropImage, setCropImage] = useState<string | ArrayBuffer | null>(null);
   const [modalCrop, setModalCrop] = useState<boolean>(false);
-  const [previewImg, setPreviewImg] = useState<string>(
-    data?.results.avatar || ""
-  );
+  const [previewImg, setPreviewImg] = useState<string>("");
   const [file, setFile] = useState<File>();
   const [fileImage, setFileImage] = useState<Blob>(new Blob());
 
   const {
     register,
     handleSubmit,
-    setValue,
+    reset,
     formState: { errors, isSubmitting },
-  } = useForm<EditAccountType>({
-    defaultValues: {
-      username: "",
-      password: "",
-      oldPassword: "",
-      fullName: data?.results.fullName,
-      email: data?.results.email,
-      phone: data?.results.phone,
-      avatar: data?.results.avatar,
-      role: "",
-      status: "",
-    },
-  });
+  } = useForm<EditAccountType>({});
+
+  useEffect(() => {
+    if (!userInfo.isLoading) {
+      reset({
+        fullName: userInfo.data.results.fullName,
+        email: userInfo.data.results.email,
+        phone: userInfo.data.results.phone,
+        avatar: userInfo.data.results.avatar,
+      });
+      setPreviewImg(userInfo.data.results.avatar);
+    }
+  }, [userInfo.isLoading]);
 
   useEffect(() => {
     return () => {
@@ -83,14 +73,6 @@ const EditMyAccount = () => {
     };
   }, [file]);
 
-  const handleGetInfo = async () => {
-    try {
-      return await AuthApi.getInfo(isLogin.session);
-    } catch (error: any) {
-      console.log(error);
-    }
-  };
-
   const handleCrop = (e: ChangeEvent<HTMLInputElement>) => {
     let input = e.currentTarget;
     if (input.files?.length) {
@@ -120,7 +102,7 @@ const EditMyAccount = () => {
     let upload;
     try {
       upload = await ImageApi.uploadImage(formData);
-    } catch (error: any) {
+    } catch (error) {
       console.log(error);
     }
     return upload;
@@ -128,14 +110,14 @@ const EditMyAccount = () => {
 
   const handleUpdateInfo = async (value: EditAccountType) => {
     try {
-      if (fileImage) {
+      const newValue = value;
+      if (fileImage.size !== 0) {
         const avatar = await uploadFile(value);
-        console.log(avatar.results);
-        setValue("avatar", avatar.results);
+        newValue.avatar = avatar.results;
       } else {
-        setValue("avatar", "");
+        newValue.avatar = "";
       }
-      await AuthApi.updateAccount(data?.results.slug, value);
+      await AuthApi.updateAccount(userInfo.data.results.slug, newValue);
 
       toast.success("Cập nhật thông tin thành công, vui lòng đăng nhập lại!", {
         autoClose: 1000,
@@ -143,11 +125,10 @@ const EditMyAccount = () => {
 
       setTimeout(() => {
         localStorage.removeItem("userLogin");
-        setSelectMainComponent("navigationComponent");
-        setSelectChildComponent("table");
         router("/login");
-      }, 1500);
-    } catch (error: any) {
+      }, 1000);
+    } catch (err) {
+      const error = err as ErrorType;
       if (error.message === "Mật khẩu cũ không đúng.") {
         toast.error("Sai mật khẩu cũ, vui lòng nhập lại!");
         return;
@@ -165,7 +146,7 @@ const EditMyAccount = () => {
         </div>
 
         <button
-          className="lg:text-base md:text-sm w-full sm:w-max mx-5 mt-4 sm:mt-0 bg-red-500 rounded-md hover:bg-red-600 text-white px-3 py-2"
+          className="flex items-center justify-center max-h-[40px] lg:text-base md:text-sm w-full sm:w-max mx-5 mt-4 sm:mt-0 bg-red-500 rounded-md hover:bg-red-600 text-white px-3 py-2"
           onClick={handleSubmit(handleUpdateInfo)}
         >
           {isSubmitting ? (
@@ -244,7 +225,6 @@ const EditMyAccount = () => {
                   id="oldPassword"
                   {...register("oldPassword", {
                     required: true,
-
                     maxLength: 80,
                   })}
                   autoComplete="on"
@@ -379,7 +359,6 @@ const EditMyAccount = () => {
                   className="cursor-pointer text-red-500"
                   onClick={() => {
                     setPreviewImg("");
-                    setValue("avatar", "");
                   }}
                 >
                   Xóa
@@ -436,18 +415,6 @@ const EditMyAccount = () => {
           setPreviewImg={setPreviewImg}
         />
       )}
-      <ToastContainer
-        position="bottom-right"
-        bodyClassName="font-beVietnam text-sm"
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
     </Fragment>
   );
 };

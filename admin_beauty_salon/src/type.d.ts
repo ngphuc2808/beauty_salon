@@ -1,3 +1,7 @@
+interface Props {
+  children?: React.ReactNode;
+}
+
 interface iUserInfo {
   id: string;
   slug: string;
@@ -9,7 +13,7 @@ interface iUserInfo {
   email: string;
   phone: string;
   role: string;
-  status: string;
+  status: string | boolean;
 }
 
 type LoginType = Pick<iUserInfo, "username" | "password">;
@@ -39,13 +43,17 @@ type AddAccountType = Pick<
   | "status"
 >;
 
+// type EditAccountType = Omit<iUserInfo, "id">;
+
+// type AddAccountType = Omit<iUserInfo, "id" | "slug" | "oldPassword">;
+
 type TitleCategoryType = {
   title: string;
   childTitle: string;
 };
 
 type ItemType = {
-  currentItems: iData[];
+  currentItems: DataListType[];
 };
 
 type PostType = {
@@ -91,4 +99,12 @@ type ListAccountType = {
   role: string;
   avatar: string;
   slug: string;
+};
+
+type ErrorType = {
+  success: boolean;
+  message?: string;
+  results: {
+    message: string;
+  };
 };

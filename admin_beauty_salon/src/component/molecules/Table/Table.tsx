@@ -1,4 +1,5 @@
 import { Fragment, useContext } from "react";
+import { Link } from "react-router-dom";
 
 import { GlobalContext } from "@/contexts/globalContext";
 import { dataNavigation } from "@/utils/data";
@@ -6,7 +7,7 @@ import { listComponent } from "@/helpers/listComponent";
 import Search from "@/component/molecules/Search";
 
 const Table = () => {
-  const { selectTable, setSelectChildComponent } = useContext(GlobalContext);
+  const { selectTable } = useContext(GlobalContext);
 
   return (
     <Fragment>
@@ -19,12 +20,12 @@ const Table = () => {
           selectTable === "tableCategoryLevel3") && (
           <>
             <Search />
-            <button
+            <Link
+              to={"/create-category"}
               className="lg:text-base md:text-sm lg:mr-5 md:mr-3 mr-5 bg-red-500 rounded-md hover:bg-red-600 text-white px-3 py-2"
-              onClick={() => setSelectChildComponent("detailCategory")}
             >
               Thêm danh mục
-            </button>
+            </Link>
           </>
         )}
       </div>

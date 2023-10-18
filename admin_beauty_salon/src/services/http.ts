@@ -1,4 +1,4 @@
-import Axios, { AxiosResponse } from "axios";
+import Axios, { AxiosError, AxiosResponse } from "axios";
 
 const http = Axios.create({
   withCredentials: true,
@@ -10,8 +10,10 @@ const http = Axios.create({
 });
 
 http.interceptors.response.use(
-  (response: AxiosResponse) => response.data,
-  (error) => {
+  (response: AxiosResponse) => {
+    return response.data;
+  },
+  (error: AxiosError) => {
     return Promise.reject(error.response?.data ? error.response.data : error);
   }
 );

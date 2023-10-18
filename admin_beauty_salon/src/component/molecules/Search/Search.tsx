@@ -3,8 +3,8 @@ import { useState, useRef, useContext } from "react";
 import { dataNavigation } from "@/utils/data";
 import { GlobalContext } from "@/contexts/globalContext";
 
-const Search = () => {
-  const { selectTable, setSelectChildComponent } = useContext(GlobalContext);
+const Search = ({ isAuth }: { isAuth?: boolean }) => {
+  const { selectTable } = useContext(GlobalContext);
 
   const [searchValue, setSearchValue] = useState<string>("");
 
@@ -28,9 +28,13 @@ const Search = () => {
         className="flex-1 h-full outline-none bg-transparent pl-3 text-textPrimaryColor text-sm"
         ref={inputRef}
         type="text"
-        placeholder={`Tìm kiếm ${dataNavigation
-          .find((item) => item.id === selectTable)
-          ?.name.toLowerCase()}`}
+        placeholder={`Tìm kiếm ${
+          isAuth
+            ? "tài khoản"
+            : dataNavigation
+                .find((item) => item.id === selectTable)
+                ?.name.toLowerCase()
+        }`}
         value={searchValue}
         onChange={(e) => {
           setSearchValue(e.target.value);

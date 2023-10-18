@@ -22,21 +22,24 @@ const CropImage = ({
     y: 0,
   });
 
-  const cropComplete = (
-    croppedArea: CropPixel,
-    croppedAreaPixels: CropPixel
-  ) => {
+  const cropComplete = ({}, croppedAreaPixels: CropPixel) => {
     setCroppedAreaPixels(croppedAreaPixels);
   };
 
   const onCrop = async () => {
-    const croppedImage: any = await getCroppedImg(
+    const croppedImage = await getCroppedImg(
       image,
       croppedAreaPixels,
       rotation
     );
-    setFileImage(croppedImage.file);
-    setPreviewImg(croppedImage.url);
+
+    const result = croppedImage as {
+      file: Blob;
+      url: string;
+    };
+
+    setFileImage(result.file);
+    setPreviewImg(result.url);
     setModalCrop(false);
   };
 
@@ -55,10 +58,8 @@ const CropImage = ({
             zoom={zoom}
             maxZoom={10}
             rotation={rotation}
-            aspect={selectMainComponent === "authComponent" ? 1 : 2}
-            cropShape={
-              selectMainComponent === "authComponent" ? "round" : "rect"
-            }
+            aspect={selectMainComponent !== "table" ? 1 : 2}
+            cropShape={selectMainComponent !== "table" ? "round" : "rect"}
             onZoomChange={setZoom}
             onRotationChange={setRotation}
             onCropChange={setCrop}

@@ -87,13 +87,13 @@ const TableList = () => {
           disabledClassName="text-[#808e9b]"
           marginPagesDisplayed={2}
           nextClassName="flex items-center justify-center w-10 h-10 text-sm text-red-500 ml-2 text-3xl rounded-full hover:bg-red-50"
-          nextLabel={<i className="ri-arrow-drop-right-line"></i>}
+          nextLabel={<i className="ri-arrow-drop-right-line text-2xl"></i>}
           onPageChange={handlePageClick}
           pageCount={pageCount}
           pageClassName="flex items-center justify-center w-10 h-10 text-sm text-gray-500 border border-solid [&>a]:w-full [&>a]:h-full [&>a]:flex [&>a]:items-center [&>a]:justify-center font-medium"
           pageRangeDisplayed={2}
           previousClassName="flex items-center justify-center w-10 h-10 text-sm text-red-500 mr-2 text-3xl rounded-full hover:bg-red-50"
-          previousLabel={<i className="ri-arrow-drop-left-line"></i>}
+          previousLabel={<i className="ri-arrow-drop-left-line text-2xl"></i>}
         />
       </div>
     </Fragment>

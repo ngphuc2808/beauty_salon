@@ -1,13 +1,6 @@
-import {
-  ChangeEvent,
-  Fragment,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-
-import { ToastContainer, toast } from "react-toastify";
+import { ChangeEvent, Fragment, useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { CKEditor } from "@ckeditor/ckeditor5-react";
@@ -18,7 +11,7 @@ import { Autoformat } from "@ckeditor/ckeditor5-autoformat";
 import { Underline, Bold, Italic } from "@ckeditor/ckeditor5-basic-styles";
 import { BlockQuote } from "@ckeditor/ckeditor5-block-quote";
 import { Heading } from "@ckeditor/ckeditor5-heading";
-import { Link } from "@ckeditor/ckeditor5-link";
+import { Link as LinkEditor } from "@ckeditor/ckeditor5-link";
 import { List } from "@ckeditor/ckeditor5-list";
 import { Paragraph } from "@ckeditor/ckeditor5-paragraph";
 import { MediaEmbed } from "@ckeditor/ckeditor5-media-embed";
@@ -37,13 +30,10 @@ import { Indent, IndentBlock } from "@ckeditor/ckeditor5-indent";
 import { Base64UploadAdapter } from "@ckeditor/ckeditor5-upload";
 
 import CropImage from "../CropImage";
-import { GlobalContext } from "@/contexts/globalContext";
 
 const imageMimeType = /image\/(png|jpg|jpeg)/i;
 
 const CreatePost = () => {
-  const { setSelectChildComponent } = useContext(GlobalContext);
-
   const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
 
   const [cropImage, setCropImage] = useState<string | ArrayBuffer | null>(null);
@@ -119,10 +109,9 @@ const CreatePost = () => {
     <Fragment>
       <div className="w-full py-4 mb-5 bg-white flex items-center justify-between shadow rounded-lg flex-wrap sm:flex-nowrap">
         <div className="flex items-center gap-3">
-          <i
-            className="lg:text-2xl text-xl ml-5 w-10 h-10 flex items-center justify-center text-white bg-red-400 hover:bg-red-500 cursor-pointer rounded-md ri-arrow-left-line"
-            onClick={() => setSelectChildComponent("detailCategory")}
-          ></i>
+          <Link to={"/create-category"}>
+            <i className="lg:text-2xl text-xl ml-5 w-10 h-10 flex items-center justify-center text-white bg-red-400 hover:bg-red-500 cursor-pointer rounded-md ri-arrow-left-line"></i>
+          </Link>
           <h1 className="text-xl text-textHeadingColor">Tạo trang SEO</h1>
         </div>
       </div>
@@ -158,7 +147,7 @@ const CreatePost = () => {
                   Font,
                   Alignment,
                   List,
-                  Link,
+                  LinkEditor,
                   MediaEmbed,
                   PasteFromOffice,
                   Image,
@@ -298,9 +287,12 @@ const CreatePost = () => {
               >
                 Lưu
               </button>
-              <button className="text-sm px-4 py-3 bg-red-400 hover:bg-red-500 text-white rounded-md w-[48%] lg:w-[200px]">
+              <Link
+                to={"/create-category"}
+                className="flex justify-center text-sm px-4 py-3 bg-red-400 hover:bg-red-500 text-white rounded-md w-[48%] lg:w-[200px]"
+              >
                 Thoát
-              </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -365,19 +357,6 @@ const CreatePost = () => {
           setPreviewImg={setPreviewImg}
         />
       )}
-      <ToastContainer
-        position="bottom-right"
-        autoClose={1500}
-        bodyClassName="font-beVietnam text-sm"
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
     </Fragment>
   );
 };

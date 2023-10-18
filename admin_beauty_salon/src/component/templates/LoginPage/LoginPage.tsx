@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { AuthApi } from "@/services/api/auth";
@@ -30,7 +30,8 @@ const LoginPage = () => {
       const result = await AuthApi.login(data);
       localStorage.setItem("userLogin", JSON.stringify(result.results));
       router("/");
-    } catch (error: any) {
+    } catch (err) {
+      const error = err as ErrorType;
       if (error.results.message === "Tên đăng nhập không tồn tại.") {
         toast.error("Tài khoản không tồn tại, vui lòng kiểm tra lại!");
         return;
@@ -133,7 +134,8 @@ const LoginPage = () => {
                 )}
               </div>
               <div className="mt-5 pt-5 border-t border-gray-300">
-                <button
+                <Link
+                  to={"/"}
                   className="flex items-center justify-center w-full max-h-[42px] py-3 px-4 bg-red-500 rounded-md hover:bg-red-600 text-white"
                   onClick={handleSubmit(handleLogin)}
                 >
@@ -142,25 +144,12 @@ const LoginPage = () => {
                   ) : (
                     <span>Đăng nhập</span>
                   )}
-                </button>
+                </Link>
               </div>
             </form>
           </div>
         </div>
       </section>
-      <ToastContainer
-        position="bottom-right"
-        autoClose={1500}
-        bodyClassName="font-beVietnam text-sm"
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
     </HelmetProvider>
   );
 };

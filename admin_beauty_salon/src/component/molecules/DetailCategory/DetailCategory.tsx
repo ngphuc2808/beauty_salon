@@ -5,7 +5,7 @@ import Select from "react-tailwindcss-select";
 import { GlobalContext } from "@/contexts/globalContext";
 
 const DetailCategory = () => {
-  const { setSelectChildComponent } = useContext(GlobalContext);
+  const { setSelectMainComponent } = useContext(GlobalContext);
 
   const [nameValue, setNameValue] = useState<string>("");
 
@@ -27,10 +27,9 @@ const DetailCategory = () => {
     <Fragment>
       <div className="w-full py-4 mb-5 bg-white flex items-center justify-between shadow rounded-lg flex-wrap sm:flex-nowrap">
         <div className="flex items-center gap-3">
-          <i
-            className="lg:text-2xl text-xl ml-5 w-10 h-10 flex items-center justify-center text-white bg-red-400 hover:bg-red-500 cursor-pointer rounded-md ri-arrow-left-line"
-            onClick={() => setSelectChildComponent("table")}
-          ></i>
+          <Link to={"/"}>
+            <i className="lg:text-2xl text-xl ml-5 w-10 h-10 flex items-center justify-center text-white bg-red-400 hover:bg-red-500 cursor-pointer rounded-md ri-arrow-left-line"></i>
+          </Link>
           <h1 className="text-xl text-textHeadingColor">Thêm danh mục</h1>
         </div>
       </div>
@@ -61,7 +60,7 @@ const DetailCategory = () => {
               </h1>
               <Link
                 to={"/create-landing-page"}
-                className="text-textPrimaryColor text-sm px-4 py-3 bg-red-400 hover:bg-red-500 text-white rounded-md mt-3 sm:mt-0 w-full sm:w-auto"
+                className="text-sm px-4 py-3 bg-red-400 hover:bg-red-500 text-white rounded-md mt-3 sm:mt-0 w-full sm:w-auto"
               >
                 Tạo trang landing page
               </Link>
@@ -72,12 +71,13 @@ const DetailCategory = () => {
               <h1 className="text-lg text-textHeadingColor">
                 Trang SEO cho danh mục
               </h1>
-              <button
-                className="text-textPrimaryColor text-sm px-4 py-3 bg-red-400 hover:bg-red-500 text-white rounded-md mt-3 sm:mt-0 w-full sm:w-auto"
-                onClick={() => setSelectChildComponent("createPost")}
+              <Link
+                to={"/create-seo-page"}
+                className="text-sm px-4 py-3 bg-red-400 hover:bg-red-500 text-white rounded-md mt-3 sm:mt-0 w-full sm:w-auto"
+                onClick={() => setSelectMainComponent("createPost")}
               >
                 Tạo trang SEO
-              </button>
+              </Link>
             </div>
           </div>
           <div className="bg-white shadow rounded-lg p-5 mt-5">
@@ -205,12 +205,15 @@ const DetailCategory = () => {
           </div>
           <div className="bg-white shadow rounded-lg p-5 mt-5">
             <div className="flex items-center justify-between">
-              <button className="text-textPrimaryColor text-sm px-4 py-3 bg-red-400 hover:bg-red-500 text-white rounded-md w-[48%] lg:w-[200px]">
+              <button className="text-sm px-4 py-3 bg-red-400 hover:bg-red-500 text-white rounded-md w-[48%] lg:w-[200px]">
                 Lưu
               </button>
-              <button className="text-textPrimaryColor text-sm px-4 py-3 bg-red-400 hover:bg-red-500 text-white rounded-md w-[48%] lg:w-[200px]">
+              <Link
+                to={"/"}
+                className="flex justify-center text-sm px-4 py-3 bg-red-400 hover:bg-red-500 text-white rounded-md w-[48%] lg:w-[200px]"
+              >
                 Thoát
-              </button>
+              </Link>
             </div>
           </div>
         </div>

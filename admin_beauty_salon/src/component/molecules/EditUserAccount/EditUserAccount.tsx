@@ -1,23 +1,20 @@
-import { ChangeEvent, Fragment, useContext, useEffect, useState } from "react";
+import { ChangeEvent, Fragment, useEffect, useState } from "react";
+import { useParams, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
 
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { GlobalContext } from "@/contexts/globalContext";
 import CropImage from "../CropImage";
 import { ImageApi } from "@/services/api/image";
 import { AuthApi } from "@/services/api/auth";
+import { useGetEditUserInfo } from "@/queries/useQueries";
 
 const imageMimeType = /image\/(png|jpg|jpeg)/i;
 
 const EditUserAccount = () => {
-  const { setSelectChildComponent } = useContext(GlobalContext);
-
-  const dataApi = useSelector(
-    (state: { editUser: { info: iUserInfo } }) => state.editUser
-  );
+  const { id } = useParams();
+  const userInfo = useGetEditUserInfo(id!);
 
   const [cropImage, setCropImage] = useState<string | ArrayBuffer | null>(null);
   const [modalCrop, setModalCrop] = useState<boolean>(false);
@@ -28,36 +25,24 @@ const EditUserAccount = () => {
   const {
     register,
     handleSubmit,
-    getValues,
-    setValue,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<EditAccountType>({
-    defaultValues: {
-      username: "",
-      password: "",
-      oldPassword: "",
-      fullName: "",
-      email: "",
-      phone: "",
-      avatar: "",
-      role: "employee",
-      status: "true",
-    },
-  });
+  } = useForm<EditAccountType>({});
 
-  const handleCrop = (e: ChangeEvent<HTMLInputElement>) => {
-    let input = e.currentTarget;
-    if (input.files?.length) {
-      const file = input.files[0];
-      if (!file.type.match(imageMimeType)) {
-        toast.error("Vui lòng chọn đúng định dạng hình ảnh!");
-        return;
-      }
-      setFile(file);
+  useEffect(() => {
+    if (!userInfo.isLoading) {
+      reset({
+        fullName: userInfo.data.results.fullName,
+        email: userInfo.data.results.email,
+        phone: userInfo.data.results.phone,
+        avatar: userInfo.data.results.avatar,
+        role: userInfo.data.results.role,
+        status: userInfo.data.results.status.toString(),
+      });
+      setPreviewImg(userInfo.data.results.avatar);
     }
-    e.currentTarget.value = "";
-  };
+  }, [userInfo.isLoading]);
+
   useEffect(() => {
     let reader: FileReader,
       isCancel: boolean = false;
@@ -81,6 +66,19 @@ const EditUserAccount = () => {
     };
   }, [file]);
 
+  const handleCrop = (e: ChangeEvent<HTMLInputElement>) => {
+    let input = e.currentTarget;
+    if (input.files?.length) {
+      const file = input.files[0];
+      if (!file.type.match(imageMimeType)) {
+        toast.error("Vui lòng chọn đúng định dạng hình ảnh!");
+        return;
+      }
+      setFile(file);
+    }
+    e.currentTarget.value = "";
+  };
+
   const uploadFile = async (value: EditAccountType) => {
     const fileAvt = new File(
       [fileImage],
@@ -97,26 +95,26 @@ const EditUserAccount = () => {
     let upload;
     try {
       upload = await ImageApi.uploadImage(formData);
-    } catch (error: any) {
+    } catch (error) {
       console.log(error);
     }
     return upload;
   };
 
-  const handleUpdateInfo = async (data: EditAccountType) => {
+  const handleUpdateInfo = async (value: EditAccountType) => {
     try {
-      if (fileImage) {
-        const avatar = await uploadFile(data);
-        setValue("avatar", avatar.results);
+      const newValue = value;
+      if (fileImage.size !== 0) {
+        const avatar = await uploadFile(value);
+        newValue.avatar = avatar.results;
       } else {
-        setValue("avatar", "");
+        newValue.avatar = "";
       }
-      console.log(data);
-      await AuthApi.updateAccount(dataApi.info.slug, data);
+      await AuthApi.updateAccount(userInfo.data?.results.slug, newValue);
       setPreviewImg("");
       reset();
       toast.success("Sửa thông tin tài khoản thành công!");
-    } catch (error: any) {
+    } catch (error) {
       console.log(error);
     }
   };
@@ -125,17 +123,16 @@ const EditUserAccount = () => {
     <Fragment>
       <div className="w-full py-4 mb-5 bg-white flex items-center justify-between shadow rounded-lg flex-wrap lg:flex-nowrap">
         <div className="flex items-center gap-3">
-          <i
-            className="lg:text-2xl text-xl ml-5 w-10 h-10 flex items-center justify-center text-white bg-red-400 hover:bg-red-500 cursor-pointer rounded-md ri-arrow-left-line"
-            onClick={() => setSelectChildComponent("listAccount")}
-          ></i>
+          <Link to={"/list-user"}>
+            <i className="lg:text-2xl text-xl ml-5 w-10 h-10 flex items-center justify-center text-white bg-red-400 hover:bg-red-500 cursor-pointer rounded-md ri-arrow-left-line"></i>
+          </Link>
           <h1 className="lg:text-xl md:text-base text-textHeadingColor">
-            Chỉnh sửa {dataApi.info.fullName}
+            Chỉnh sửa {userInfo.data?.results.fullName}
           </h1>
         </div>
 
         <button
-          className="lg:text-base md:text-sm w-full sm:w-max mx-5 mt-4 sm:mt-0 bg-red-500 rounded-md hover:bg-red-600 text-white px-3 py-2"
+          className="flex items-center justify-center max-h-[40px] lg:text-base md:text-sm w-full sm:w-max mx-5 mt-4 sm:mt-0 bg-red-500 rounded-md hover:bg-red-600 text-white px-3 py-2"
           onClick={handleSubmit(handleUpdateInfo)}
         >
           {isSubmitting ? (
@@ -313,7 +310,6 @@ const EditUserAccount = () => {
                       type="radio"
                       id="statusOn"
                       {...register("status", {})}
-                      checked={getValues("status") === "true" ? true : false}
                       value="true"
                       className="after:content-[''] after:cursor-pointer after:w-4 after:h-4 after:rounded-full after:relative after:top-[-2px] after:left-0 after:bg-[#d1d3d1]  after:inline-block visible
                       checked:after:content-[''] checked:after:cursor-pointer checked:after:w-4 checked:after:h-4 checked:after:rounded-full checked:after:relative checked:after:top-[-2px] checked:after:left-0 checked:after:bg-green-500 checked:after:inline-block checked:after:visible"
@@ -334,7 +330,6 @@ const EditUserAccount = () => {
                       type="radio"
                       id="statusOff"
                       {...register("status", {})}
-                      checked={getValues("status") === "false" ? true : false}
                       value="false"
                       className="after:content-[''] after:cursor-pointer after:w-4 after:h-4 after:rounded-full after:relative after:top-[-2px] after:left-0 after:bg-[#d1d3d1]  after:inline-block visible
                       checked:after:content-[''] checked:after:cursor-pointer checked:after:w-4 checked:after:h-4 checked:after:rounded-full checked:after:relative checked:after:top-[-2px] checked:after:left-0 checked:after:bg-green-500 checked:after:inline-block checked:after:visible"
@@ -371,7 +366,6 @@ const EditUserAccount = () => {
                       type="radio"
                       id="roleAdmin"
                       {...register("role", {})}
-                      checked={getValues("role") === "admin" ? true : false}
                       value="admin"
                       className="after:content-[''] after:cursor-pointer after:w-4 after:h-4 after:rounded-full after:relative after:top-[-2px] after:left-0 after:bg-[#d1d3d1]  after:inline-block visible
                       checked:after:content-[''] checked:after:cursor-pointer checked:after:w-4 checked:after:h-4 checked:after:rounded-full checked:after:relative checked:after:top-[-2px] checked:after:left-0 checked:after:bg-green-500 checked:after:inline-block checked:after:visible"
@@ -392,7 +386,6 @@ const EditUserAccount = () => {
                       type="radio"
                       id="roleEmployee"
                       {...register("role", {})}
-                      checked={getValues("role") === "employee" ? true : false}
                       value="employee"
                       className="after:content-[''] after:cursor-pointer after:w-4 after:h-4 after:rounded-full after:relative after:top-[-2px] after:left-0 after:bg-[#d1d3d1]  after:inline-block visible
                       checked:after:content-[''] checked:after:cursor-pointer checked:after:w-4 checked:after:h-4 checked:after:rounded-full checked:after:relative checked:after:top-[-2px] checked:after:left-0 checked:after:bg-green-500 checked:after:inline-block checked:after:visible"
@@ -430,7 +423,6 @@ const EditUserAccount = () => {
                   className="cursor-pointer text-red-500"
                   onClick={() => {
                     setPreviewImg("");
-                    setValue("avatar", "");
                   }}
                 >
                   Xóa
@@ -487,19 +479,6 @@ const EditUserAccount = () => {
           setPreviewImg={setPreviewImg}
         />
       )}
-      <ToastContainer
-        position="bottom-right"
-        autoClose={1500}
-        bodyClassName="font-beVietnam text-sm"
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
     </Fragment>
   );
 };

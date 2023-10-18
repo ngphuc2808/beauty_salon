@@ -3,8 +3,6 @@ import { FC, ReactNode, createContext, useContext, useState } from "react";
 export type GlobalContent = {
   selectMainComponent: string;
   setSelectMainComponent: (component: string) => void;
-  selectChildComponent: string;
-  setSelectChildComponent: (component: string) => void;
   selectTable: string;
   setSelectTable: (component: string) => void;
 };
@@ -12,8 +10,6 @@ export type GlobalContent = {
 export const GlobalContext = createContext<GlobalContent>({
   selectMainComponent: "",
   setSelectMainComponent: () => {},
-  selectChildComponent: "",
-  setSelectChildComponent: () => {},
   selectTable: "",
   setSelectTable: () => {},
 });
@@ -23,10 +19,7 @@ export const useGlobalContext = () => useContext(GlobalContext);
 export const GlobalProvider: FC<{
   children: ReactNode;
 }> = ({ children }) => {
-  const [selectMainComponent, setSelectMainComponent] = useState<string>(
-    "navigationComponent"
-  );
-  const [selectChildComponent, setSelectChildComponent] =
+  const [selectMainComponent, setSelectMainComponent] =
     useState<string>("table");
   const [selectTable, setSelectTable] = useState<string>("tableCategoryLevel1");
 
@@ -35,8 +28,6 @@ export const GlobalProvider: FC<{
       value={{
         selectMainComponent,
         setSelectMainComponent,
-        selectChildComponent,
-        setSelectChildComponent,
         selectTable,
         setSelectTable,
       }}

@@ -120,7 +120,7 @@ const EditorLandingPage = () => {
                 if (result) {
                   console.log(result);
                 }
-              } catch (error: any) {
+              } catch (error) {
                 console.log(error);
               }
               return;
