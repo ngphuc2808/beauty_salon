@@ -7,7 +7,7 @@ import { listComponent } from "@/helpers/listComponent";
 import Search from "@/component/molecules/Search";
 
 const Table = () => {
-  const { selectTable } = useContext(GlobalContext);
+  const { selectTable, setSelectMainComponent } = useContext(GlobalContext);
 
   return (
     <Fragment>
@@ -23,6 +23,7 @@ const Table = () => {
             <Link
               to={"/create-category"}
               className="lg:text-base md:text-sm lg:mr-5 md:mr-3 mr-5 bg-red-500 rounded-md hover:bg-red-600 text-white px-3 py-2"
+              onClick={() => setSelectMainComponent("detailCategory")}
             >
               Thêm danh mục
             </Link>

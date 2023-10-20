@@ -5,7 +5,7 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { AuthApi } from "@/services/api/auth";
+import { usePostLogin } from "@/queries/useQueries";
 
 const LoginPage = () => {
   const router = useNavigate();
@@ -19,6 +19,8 @@ const LoginPage = () => {
     }
   }, []);
 
+  const { mutate } = usePostLogin();
+
   const {
     register,
     handleSubmit,
@@ -26,21 +28,27 @@ const LoginPage = () => {
   } = useForm<LoginType>();
 
   const handleLogin = async (data: LoginType) => {
-    try {
-      const result = await AuthApi.login(data);
-      localStorage.setItem("userLogin", JSON.stringify(result.results));
-      router("/");
-    } catch (err) {
-      const error = err as ErrorType;
-      if (error.results.message === "Tên đăng nhập không tồn tại.") {
-        toast.error("Tài khoản không tồn tại, vui lòng kiểm tra lại!");
-        return;
-      }
-      if (error.results.message === "Mật khẩu không đúng.") {
-        toast.error("Sai mật khẩu, vui lòng kiểm tra lại!");
-        return;
-      }
-    }
+    mutate(data, {
+      onSuccess(data) {
+        localStorage.setItem("userLogin", JSON.stringify(data.data.results));
+        router("/");
+      },
+      onError(error) {
+        const err = error as ResponseErrorType;
+        if (err.results.message === "Tên đăng nhập không tồn tại.") {
+          toast.error("Tài khoản không tồn tại, vui lòng kiểm tra lại!");
+          return;
+        }
+        if (err.results.message === "Mật khẩu không đúng.") {
+          toast.error("Sai mật khẩu, vui lòng kiểm tra lại!");
+          return;
+        }
+        if (err.results.message === "Tài khoản đã bị khóa.") {
+          toast.error("Tài khoản đã bị khóa, vui lòng liên hệ quản trị viên!");
+          return;
+        }
+      },
+    });
   };
 
   return (

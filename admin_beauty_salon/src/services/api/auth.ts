@@ -3,25 +3,24 @@ import http from "../http";
 import { API_URL } from "../urls";
 
 export const AuthApi = {
-  login: async (user: LoginType): Promise<any> => {
-    return await http.post(API_URL.login, user);
-  },
-  logout: async (): Promise<any> => {
-    return await http.post(API_URL.logout);
-  },
-  getInfo: async (slug: string): Promise<any> => {
-    return await http.get(`${API_URL.getInfo}/${slug}/view`);
-  },
-  createAccount: async (account: AddAccountType): Promise<any> => {
-    return await http.post(API_URL.createAccount, account);
-  },
-  getListUser: async (): Promise<any> => {
-    return await http.get(API_URL.getListUser);
-  },
-  deleteAccount: async (slugs: string): Promise<any> => {
-    return await http.delete(`${API_URL.deleteAccount}/${slugs}`);
-  },
-  updateAccount: async (slug: string, data: EditAccountType): Promise<any> => {
-    return await http.put(`${API_URL.updateInfo}/${slug}/update`, data);
-  },
+  login: (user: LoginType) => http.post<ResponseLoginType>(API_URL.login, user),
+
+  logout: () => http.post<ResponseLogoutType>(API_URL.logout),
+
+  getInfo: (slug: string) =>
+    http.get<ResponseGetUserInfoType>(`${API_URL.getInfo}/${slug}/view`),
+
+  createAccount: (account: AddAccountType) =>
+    http.post<ResponseCreateUserType>(API_URL.createAccount, account),
+
+  getListUser: () => http.get<ResponseGetListUserType>(API_URL.getListUser),
+
+  deleteAccount: (slugs: string) =>
+    http.delete<ResponseDeleteAccount>(`${API_URL.deleteAccount}/${slugs}`),
+
+  updateAccount: (slug: string, data: EditAccountType) =>
+    http.put<ResponseGetEditUserInfoType>(
+      `${API_URL.updateInfo}/${slug}/update`,
+      data
+    ),
 };

@@ -240,9 +240,12 @@ const DetailCategory = () => {
             <div className="flex items-center justify-between mb-3">
               <h1 className="text-textHeadingColor">Ảnh danh mục</h1>
               <div className="flex items-center gap-3 text-sm">
-                <span className="cursor-pointer text-blue-500">
+                <label
+                  htmlFor="dropZone"
+                  className="cursor-pointer text-blue-500"
+                >
                   Ảnh thay thế
-                </span>
+                </label>
                 <span className="cursor-pointer text-red-500">Xóa</span>
               </div>
             </div>

@@ -4,12 +4,19 @@ import Cropper from "react-easy-crop";
 import getCroppedImg from "@/helpers/listFunction";
 import { GlobalContext } from "@/contexts/globalContext";
 
+type Props = {
+  image: string | ArrayBuffer | null;
+  setModalCrop: (modalCrop: boolean) => void;
+  setFileImage: (fileImage: Blob) => void;
+  setPreviewImg: (previewImg: string) => void;
+};
+
 const CropImage = ({
   image,
   setModalCrop,
   setFileImage,
   setPreviewImg,
-}: CropImageType) => {
+}: Props) => {
   const { selectMainComponent } = useContext(GlobalContext);
 
   const [crop, setCrop] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -58,8 +65,18 @@ const CropImage = ({
             zoom={zoom}
             maxZoom={10}
             rotation={rotation}
-            aspect={selectMainComponent !== "table" ? 1 : 2}
-            cropShape={selectMainComponent !== "table" ? "round" : "rect"}
+            aspect={
+              selectMainComponent !== "createPost" &&
+              selectMainComponent !== "detailCategory"
+                ? 1
+                : 2
+            }
+            cropShape={
+              selectMainComponent !== "createPost" &&
+              selectMainComponent !== "detailCategory"
+                ? "round"
+                : "rect"
+            }
             onZoomChange={setZoom}
             onRotationChange={setRotation}
             onCropChange={setCrop}

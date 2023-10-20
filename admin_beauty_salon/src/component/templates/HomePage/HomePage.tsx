@@ -4,7 +4,11 @@ import MainLayout from "@/component/layouts/MainLayout";
 import { GlobalContext } from "@/contexts/globalContext";
 import { listComponent } from "@/helpers/listComponent";
 
-const HomePage = ({ path }: { path?: string }) => {
+type Props = {
+  path: string;
+};
+
+const HomePage = ({ path }: Props) => {
   const { selectMainComponent, setSelectMainComponent } =
     useContext(GlobalContext);
 

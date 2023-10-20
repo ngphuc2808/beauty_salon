@@ -6,13 +6,15 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import CropImage from "../CropImage";
-
-import { AuthApi } from "@/services/api/auth";
-import { ImageApi } from "@/services/api/image";
+import { usePostCreateUser, usePostImage } from "@/queries/useQueries";
 
 const imageMimeType = /image\/(png|jpg|jpeg)/i;
 
 const AddAccount = () => {
+  const { mutateAsync } = usePostImage();
+
+  const { mutate } = usePostCreateUser();
+
   const [cropImage, setCropImage] = useState<string | ArrayBuffer | null>(null);
   const [modalCrop, setModalCrop] = useState<boolean>(false);
   const [previewImg, setPreviewImg] = useState<string>("");
@@ -70,10 +72,10 @@ const AddAccount = () => {
     e.currentTarget.value = "";
   };
 
-  const uploadFile = async (value: AddAccountType) => {
+  const uploadFile = async () => {
     const fileAvt = new File(
       [fileImage],
-      `image-${value.username}-${Math.floor(Math.random() * 1000)}.${
+      `image-${Math.floor(Math.random() * 100000)}.${
         fileImage.type.split("/")[1]
       }`,
       {
@@ -85,65 +87,66 @@ const AddAccount = () => {
 
     let upload;
     try {
-      upload = await ImageApi.uploadImage(formData);
+      upload = await mutateAsync(formData);
     } catch (error) {
       console.log(error);
     }
     return upload;
   };
 
-  const handleAddAccount = async (data: AddAccountType) => {
-    try {
-      const newValue = data;
-
-      if (fileImage.size !== 0) {
-        const avatar = await uploadFile(data);
-        newValue.avatar = avatar.results;
-      } else {
-        newValue.avatar = "";
-      }
-      newValue.status = Boolean(data.status);
-      await AuthApi.createAccount(newValue);
-      setPreviewImg("");
-      reset();
-      toast.success("Thêm tài khoản thành công!");
-    } catch (err) {
-      const error = err as ErrorType;
-      if (
-        error.message ===
-        "Tên đăng nhập chỉ chứa các ký tự chữ cái, chữ số, dấu gạch dưới và có độ dài từ 3 đến 30 kí tự."
-      ) {
-        toast.warning(
-          "Tạo account thất bại, vui lòng kiểm tra lại định dạng tài khoản!"
-        );
-        return;
-      }
-      if (error.message === "email đã tồn tại.") {
-        toast.warning("Email đã tồn tại trong hệ thống!");
-        return;
-      }
-      if (error.message === "phone đã tồn tại.") {
-        toast.warning("Số điện thoại đã tồn tại trong hệ thống!");
-        return;
-      }
-      if (error.message === "users validation failed: email: Invalid email") {
-        toast.warning("Sai định dạng email!");
-        return;
-      }
-      if (
-        error.message === "users validation failed: phone: Invalid phone number"
-      ) {
-        toast.warning("Sai định dạng số điện thoại!");
-        return;
-      }
-      if (
-        error.message ===
-        "users validation failed: email: Invalid email, phone: Invalid phone number"
-      ) {
-        toast.warning("Sai định dạng email và số điện thoại!");
-        return;
-      }
+  const handleAddAccount = async (value: AddAccountType) => {
+    const newValue = value;
+    if (fileImage.size !== 0) {
+      const avatar = await uploadFile();
+      newValue.avatar = avatar?.data.results as string;
+    } else {
+      newValue.avatar = "";
     }
+
+    mutate(newValue, {
+      onSuccess() {
+        setPreviewImg("");
+        reset();
+        toast.success("Thêm tài khoản thành công!");
+      },
+      onError(error) {
+        const err = error as ResponseErrorType;
+        if (
+          err.message ===
+          "Tên đăng nhập chỉ chứa các ký tự chữ cái, chữ số, dấu gạch dưới và có độ dài từ 3 đến 30 kí tự."
+        ) {
+          toast.error(
+            "Tạo account thất bại, vui lòng kiểm tra lại định dạng tài khoản!"
+          );
+          return;
+        }
+        if (err.message === "email đã tồn tại.") {
+          toast.error("Email đã tồn tại trong hệ thống!");
+          return;
+        }
+        if (err.message === "phone đã tồn tại.") {
+          toast.error("Số điện thoại đã tồn tại trong hệ thống!");
+          return;
+        }
+        if (err.message === "users validation failed: email: Invalid email") {
+          toast.error("Sai định dạng email!");
+          return;
+        }
+        if (
+          err.message === "users validation failed: phone: Invalid phone number"
+        ) {
+          toast.error("Sai định dạng số điện thoại!");
+          return;
+        }
+        if (
+          err.message ===
+          "users validation failed: email: Invalid email, phone: Invalid phone number"
+        ) {
+          toast.error("Sai định dạng email và số điện thoại!");
+          return;
+        }
+      },
+    });
   };
 
   return (

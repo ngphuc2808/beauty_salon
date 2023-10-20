@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { PostApi } from "@/services/api/post";
-import grapesjs from "grapesjs";
 
 const TestPage = () => {
   useEffect(() => {

@@ -1,30 +1,22 @@
-interface Props {
-  children?: React.ReactNode;
-}
-
 interface iUserInfo {
   id: string;
-  slug: string;
+  slug: string; //
   username: string;
   password: string;
   oldPassword: string;
-  avatar: string;
-  fullName: string;
-  email: string;
-  phone: string;
-  role: string;
-  status: string | boolean;
+  avatar: string; //
+  fullName: string; //
+  email: string; //
+  phone: string; //
+  role: string; //
+  status: string | boolean; //
 }
 
 type LoginType = Pick<iUserInfo, "username" | "password">;
 
-type EditAccountType = Omit<iUserInfo, "id" | "slug" | "username">;
+type EditAccountType = Omit<iUserInfo, "id" | "username" | "slug">;
 
-type AddAccountType = Omit<iUserInfo, "id" | "slug">;
-
-// type EditAccountType = Omit<iUserInfo, "id">;
-
-// type AddAccountType = Omit<iUserInfo, "id" | "slug" | "oldPassword">;
+type AddAccountType = Omit<iUserInfo, "id" | "slug" | "oldPassword">;
 
 type TitleCategoryType = {
   title: string;
@@ -51,13 +43,6 @@ type DataListType = {
   permission: boolean;
 };
 
-type CropImageType = {
-  image: string | ArrayBuffer | null;
-  setModalCrop: (modalCrop: boolean) => void;
-  setFileImage: (fileImage: Blob) => void;
-  setPreviewImg: (previewImg: string) => void;
-};
-
 type CropPixel = {
   width: number;
   height: number;
@@ -65,25 +50,53 @@ type CropPixel = {
   y: number;
 };
 
-type ModalType = {
-  checked: string[];
-  setModalDelete: (modal: boolean) => void;
-};
-
-type ListAccountType = {
-  fullName: string;
-  email: string;
-  phone: string;
-  status: boolean;
-  role: string;
-  avatar: string;
-  slug: string;
-};
-
-type ErrorType = {
+type ResponseErrorType = {
   success: boolean;
   message?: string;
   results: {
     message: string;
   };
+};
+
+type ResponseLoginType = {
+  results: {
+    message: string;
+    session: string;
+  };
+  success: boolean;
+};
+
+type ResponseLogoutType = {
+  results: string;
+  success: boolean;
+};
+
+type ResponseUploadImageType = {
+  results: string;
+  success: boolean;
+};
+
+type ResponseGetUserInfoType = {
+  results: Omit<iUserInfo, "password">;
+  success: boolean;
+};
+
+type ResponseGetListUserType = {
+  results: Omit<iUserInfo, "id" | "username" | "password" | "oldPassword">[];
+  success: boolean;
+};
+
+type ResponseCreateUserType = {
+  results: Omit<iUserInfo, "password" | "oldPassword">;
+  success: boolean;
+};
+
+type ResponseGetEditUserInfoType = {
+  results: Omit<iUserInfo, "password" | "oldPassword">;
+  success: boolean;
+};
+
+type ResponseDeleteAccount = {
+  success: boolean;
+  results: boolean;
 };

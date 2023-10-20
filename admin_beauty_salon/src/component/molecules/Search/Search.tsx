@@ -3,7 +3,11 @@ import { useState, useRef, useContext } from "react";
 import { dataNavigation } from "@/utils/data";
 import { GlobalContext } from "@/contexts/globalContext";
 
-const Search = ({ isAuth }: { isAuth?: boolean }) => {
+interface Props {
+  isAuth?: boolean;
+}
+
+const Search = ({ isAuth }: Props) => {
   const { selectTable } = useContext(GlobalContext);
 
   const [searchValue, setSearchValue] = useState<string>("");

@@ -96,6 +96,7 @@ const CreatePost = () => {
   };
 
   const handlePost = () => {
+    console.log(fileImage);
     console.log(formValue);
   };
 
