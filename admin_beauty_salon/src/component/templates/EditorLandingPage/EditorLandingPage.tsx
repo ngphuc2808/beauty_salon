@@ -1,11 +1,3 @@
-import { useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { Helmet, HelmetProvider } from "react-helmet-async";
-
-import grapesjs, { Editor } from "grapesjs";
-import "grapesjs/dist/css/grapes.min.css";
-
-import websitePlugin from "grapesjs-preset-webpage";
 import basicBlockPlugin from "grapesjs-blocks-basic";
 import formPlugin from "grapesjs-plugin-forms";
 import editorPlugin from "grapesjs-plugin-ckeditor";
@@ -16,20 +8,82 @@ import navbarPlugin from "grapesjs-navbar";
 import tooltipsPlugin from "grapesjs-tooltip";
 import imagePlugin from "grapesjs-tui-image-editor";
 
-import { PostApi } from "@/services/api/post";
+import GjsEditor, {
+  AssetsProvider,
+  Canvas,
+  ModalProvider,
+} from "@grapesjs/react";
+import grapesjs from "grapesjs";
+import type { Editor } from "grapesjs";
+import "grapesjs/dist/css/grapes.min.css";
 
-const EditorLandingPage = () => {
-  const editorRef = useRef() as React.MutableRefObject<HTMLInputElement>;
-  const router = useNavigate();
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+
+import CustomModal from "./components/CustomModal";
+import CustomAssetManager from "./components/CustomAssetManager";
+import Topbar from "./components/Topbar";
+import RightSidebar from "./components/RightSidebar";
+import { useGetPost } from "@/hooks/hooks";
+import he from "he";
+import { useGlobalContext } from "@/contexts/globalContext";
+
+const LandingPageEditor = () => {
+  const { projectData } = useGlobalContext();
+
+  const { id } = useParams();
+
+  const isUpdate = Boolean(id);
+
+  const landing = useGetPost(id!);
+
+  const [editor, setEditor] = useState<any>();
+
+  const arrayImage = [
+    "https://via.placeholder.com/350x250/78c5d6/fff",
+    "https://via.placeholder.com/350x250/459ba8/fff",
+    "https://via.placeholder.com/350x250/79c267/fff",
+    "https://via.placeholder.com/350x250/c5d647/fff",
+    "https://via.placeholder.com/350x250/f28c33/fff",
+  ];
 
   useEffect(() => {
-    const editor = grapesjs.init({
-      width: "100%",
-      height: "100vh",
-      container: editorRef.current,
-      fromElement: true,
-      plugins: [
-        websitePlugin,
+    if (editor && projectData.projectData) {
+      editor.loadProjectData(JSON.parse(he.decode(projectData.projectData)));
+      return;
+    }
+    if (isUpdate && !landing.isLoading && landing.data) {
+      editor.loadProjectData(
+        JSON.parse(he.decode(landing.data.results.content.projectData!))
+      );
+      return;
+    }
+  }, [editor]);
+
+  const onEditor = (editor: Editor) => {
+    setEditor(editor);
+    (window as any).editor = editor;
+  };
+
+  return (
+    <GjsEditor
+      className="gjs-custom-editor text-black bg-white"
+      grapesjs={grapesjs}
+      options={{
+        height: "100vh",
+        storageManager: false,
+        undoManager: { trackSelection: false },
+        selectorManager: { componentFirst: true },
+        projectData: {
+          assets: arrayImage,
+          pages: [
+            {
+              name: "Create Landing Page",
+            },
+          ],
+        },
+      }}
+      plugins={[
         basicBlockPlugin,
         formPlugin,
         editorPlugin,
@@ -39,174 +93,37 @@ const EditorLandingPage = () => {
         navbarPlugin,
         tooltipsPlugin,
         imagePlugin,
-      ],
-      storageManager: false,
-    });
-
-    const eConfig: any = editor.getConfig();
-    eConfig.showDevices = 0;
-
-    const pn = editor.Panels;
-
-    pn.getPanels().reset([
-      {
-        id: "commands",
-        buttons: [
-          {
-            id: "back-page",
-            command: () => router(-1),
-            className: "fa fa-arrow-left",
-          },
-        ],
-      },
-      {
-        id: "options",
-        buttons: [
-          {
-            id: "sw-visibility",
-            command: "sw-visibility",
-            className: "fa fa-square-o",
-          },
-          {
-            id: "preview",
-            command: () => editor.runCommand("preview"),
-            className: "fa fa-eye",
-          },
-          {
-            id: "fullscreen",
-            command: "fullscreen",
-            className: "fa fa-arrows-alt",
-          },
-          {
-            id: "undo",
-            className: "fa fa-undo",
-            command: () => editor.runCommand("core:undo"),
-          },
-          {
-            id: "redo",
-            className: "fa fa-repeat",
-            command: () => editor.runCommand("core:redo"),
-          },
-          {
-            id: "core:canvas-clear",
-            className: "fa fa-trash",
-            command: () => {
-              const confrm = window.confirm("Delete template?");
-              if (confrm) {
-                window.alert("Deleted!");
-                return editor.runCommand("core:canvas-clear");
-              }
-              return;
-            },
-          },
-          {
-            id: "save-db",
-            className: "fa fa-floppy-o",
-            command: async (
-              editor: Editor,
-              sender: { set: (arg0: string, arg1: number) => void }
-            ) => {
-              sender && sender.set("active", 0); // turn off the button
-
-              const post = {
-                title: "Test",
-                content: JSON.stringify(editor.getProjectData()),
-                thumbnail: "",
-                status: true,
-              };
-
-              try {
-                const result = await PostApi.createPost(post);
-                if (result) {
-                  console.log(result);
-                }
-              } catch (error) {
-                console.log(error);
-              }
-              return;
-            },
-            attributes: { title: "Save DB" },
-          },
-          {
-            id: "load-db",
-            className: "fa fa-rocket",
-            command: async (
-              editor: Editor,
-              sender: { set: (arg0: string, arg1: number) => void }
-            ) => {
-              sender && sender.set("active", 0);
-              const result = await PostApi.getPost();
-              await editor.loadProjectData(
-                JSON.parse(result.results._doc.content)
-              );
-
-              return;
-            },
-            attributes: { title: "Load DB" },
-          },
-          {
-            id: "set-device-mobile",
-            command: () => {
-              return editor.setDevice("Mobile portrait");
-            },
-            className: "fa fa-mobile",
-          },
-          {
-            id: "set-device-tablet",
-            command: () => {
-              return editor.setDevice("Tablet");
-            },
-            className: "fa fa-tablet",
-          },
-          {
-            id: "set-device-desktopa",
-            command: () => {
-              return editor.setDevice("Desktop");
-            },
-            className: "fa fa-desktop",
-            active: 1,
-          },
-        ],
-      },
-      {
-        id: "views",
-        buttons: [
-          {
-            id: "open-sm",
-            command: "open-sm",
-            active: true,
-            className: "fa fa-paint-brush",
-          },
-          {
-            id: "open-tm",
-            command: "open-tm",
-            className: "fa fa-cog",
-          },
-          {
-            id: "open-layers",
-            command: "open-layers",
-            className: "fa fa-bars",
-          },
-          {
-            id: "open-blocks",
-            command: "open-blocks",
-            className: "fa fa-th-large",
-          },
-        ],
-      },
-    ]);
-
-    return () => editor.destroy();
-  }, []);
-
-  return (
-    <HelmetProvider>
-      <Helmet>
-        <title>Create Landing Page</title>
-      </Helmet>
-      <div ref={editorRef} />
-    </HelmetProvider>
+      ]}
+      onEditor={onEditor}
+    >
+      <div className={`flex h-full border-b border-red-400`}>
+        <div className="gjs-column-m flex flex-col flex-grow">
+          <Topbar className="min-h-[64px] border-b border-red-400 shadow-headerBox" />
+          <Canvas className="flex-grow gjs-custom-editor-canvas bg-slate-300" />
+        </div>
+        <RightSidebar
+          className={`gjs-column-r w-[300px] border-l border-red-400`}
+        />
+      </div>
+      <ModalProvider>
+        {({ open, title, content, close }) => (
+          <CustomModal
+            open={open}
+            title={title}
+            children={content}
+            close={close}
+          />
+        )}
+      </ModalProvider>
+      <AssetsProvider>
+        {({ assets, select, close, Container }) => (
+          <Container>
+            <CustomAssetManager assets={assets} select={select} close={close} />
+          </Container>
+        )}
+      </AssetsProvider>
+    </GjsEditor>
   );
 };
 
-export default EditorLandingPage;
+export default LandingPageEditor;

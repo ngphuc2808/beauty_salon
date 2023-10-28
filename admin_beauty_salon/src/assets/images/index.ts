@@ -1,6 +1,6 @@
-import avatar from "./avatar.jpg";
+import avatar from './avatar.jpg'
 const images = {
   avatar,
-};
+}
 
-export default images;
+export default images

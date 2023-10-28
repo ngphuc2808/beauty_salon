@@ -7,4 +7,9 @@ export const ImageApi = {
     http.post<ResponseUploadImageType>(API_URL.uploadImage, formData, {
       headers: { "content-type": "multipart/form-data" },
     }),
+
+  uploadImages: (formData: FormData[]) =>
+    http.post<ResponseUploadImagesType>(API_URL.uploadImages, formData, {
+      headers: { "content-type": "multipart/form-data" },
+    }),
 };

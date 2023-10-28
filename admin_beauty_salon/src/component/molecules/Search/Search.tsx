@@ -1,62 +1,50 @@
-import { useState, useRef, useContext } from "react";
-
-import { dataNavigation } from "@/utils/data";
-import { GlobalContext } from "@/contexts/globalContext";
+import { useRef, ChangeEvent } from 'react'
 
 interface Props {
-  isAuth?: boolean;
+  title: string
+  isAuth?: boolean
+  searchTerm: string
+  handleSearchChange: (e: ChangeEvent<HTMLInputElement>) => void
+  handleClearChange: () => void
 }
 
-const Search = ({ isAuth }: Props) => {
-  const { selectTable } = useContext(GlobalContext);
-
-  const [searchValue, setSearchValue] = useState<string>("");
-
-  const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
-
-  const handleClear = () => {
-    setSearchValue("");
-    inputRef.current.focus();
-  };
+const Search = ({
+  title,
+  searchTerm,
+  handleSearchChange,
+  handleClearChange,
+}: Props) => {
+  const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>
 
   return (
     <div
-      className={`w-full md:w-[223px] lg:w-[400px] h-[35px] bg-[#f1f2f3] rounded flex 
-      items-center justify-between overflow-hidden order-3 lg:order-none mt-4 lg:mt-0 mx-5 lg:mx-0 basis-full lg:basis-inherit ${
-        selectTable === "appointmentSchedule" || selectTable === "comments"
-          ? "hidden"
-          : ""
-      }`}
+      className={`order-3 mt-4 flex h-[35px] w-full basis-full items-center 
+      justify-between overflow-hidden rounded bg-[#f1f2f3] md:w-[223px] lg:order-none lg:mt-0 lg:w-[400px] lg:basis-inherit`}
     >
       <input
-        className="flex-1 h-full outline-none bg-transparent pl-3 text-textPrimaryColor text-sm"
+        className='h-full flex-1 bg-transparent pl-3 text-sm text-textPrimaryColor outline-none'
         ref={inputRef}
-        type="text"
-        placeholder={`Tìm kiếm ${
-          isAuth
-            ? "tài khoản"
-            : dataNavigation
-                .find((item) => item.id === selectTable)
-                ?.name.toLowerCase()
-        }`}
-        value={searchValue}
-        onChange={(e) => {
-          setSearchValue(e.target.value);
-        }}
+        type='text'
+        placeholder={`Tìm kiếm ${title}`}
+        value={searchTerm}
+        onChange={handleSearchChange}
       />
-      <div className="flex items-center">
+      <div className='flex items-center'>
         <i
-          className={`ri-close-line py-[5px] px-3 hover:text-red-500 cursor-pointer ${
-            searchValue.length > 0 ? "block" : "hidden"
+          className={`ri-close-line cursor-pointer px-3 py-[5px] hover:text-red-500 ${
+            searchTerm.length > 0 ? 'block' : 'hidden'
           }`}
-          onClick={handleClear}
+          onClick={() => {
+            handleClearChange()
+            inputRef.current.focus()
+          }}
         ></i>
-        <i className="ri-loader-3-line py-[5px] px-3 animate-spin hidden"></i>
-        <span className="w-px h-5 bg-[#cecece]"></span>
-        <i className="ri-search-line py-[5px] px-3 hover:text-red-500 cursor-pointer"></i>
+        <i className='ri-loader-3-line hidden animate-spin px-3 py-[5px]'></i>
+        <span className='h-5 w-px bg-[#cecece]'></span>
+        <i className='ri-search-line cursor-pointer px-3 py-[5px] hover:text-red-500'></i>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Search;
+export default Search

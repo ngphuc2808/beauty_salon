@@ -1,35 +1,36 @@
-import { FC, ReactNode, createContext, useContext, useState } from "react";
+import { ReactNode, createContext, useContext, useState } from "react";
+
+type Props = {
+  children: ReactNode;
+};
 
 export type GlobalContent = {
-  selectMainComponent: string;
-  setSelectMainComponent: (component: string) => void;
-  selectTable: string;
-  setSelectTable: (component: string) => void;
+  projectData: iContentInPosts;
+  setProjectData: (ProjectData: iContentInPosts) => void;
 };
 
 export const GlobalContext = createContext<GlobalContent>({
-  selectMainComponent: "",
-  setSelectMainComponent: () => {},
-  selectTable: "",
-  setSelectTable: () => {},
+  projectData: {
+    projectData: "",
+    html: "",
+    css: "",
+  },
+  setProjectData: () => {},
 });
 
 export const useGlobalContext = () => useContext(GlobalContext);
 
-export const GlobalProvider: FC<{
-  children: ReactNode;
-}> = ({ children }) => {
-  const [selectMainComponent, setSelectMainComponent] =
-    useState<string>("table");
-  const [selectTable, setSelectTable] = useState<string>("tableCategoryLevel1");
-
+export const GlobalProvider = ({ children }: Props) => {
+  const [projectData, setProjectData] = useState<iContentInPosts>({
+    projectData: "",
+    html: "",
+    css: "",
+  });
   return (
     <GlobalContext.Provider
       value={{
-        selectMainComponent,
-        setSelectMainComponent,
-        selectTable,
-        setSelectTable,
+        projectData,
+        setProjectData,
       }}
     >
       {children}

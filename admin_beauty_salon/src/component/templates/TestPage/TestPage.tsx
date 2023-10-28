@@ -8,7 +8,6 @@ const TestPage = () => {
 
   const getContent = async () => {
     const result = await PostApi.getPost();
-    console.log(JSON.parse(result.results._doc.content));
   };
 
   return <div></div>;

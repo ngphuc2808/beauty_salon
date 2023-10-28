@@ -1,1 +1,1 @@
-export { default } from "./CropImage";
+export { default } from './CropImage'

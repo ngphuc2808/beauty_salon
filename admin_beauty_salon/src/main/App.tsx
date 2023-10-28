@@ -7,39 +7,87 @@ import EditorLandingPage from "@/component/templates/EditorLandingPage";
 const App: React.FC = () => {
   const elements = useRoutes([
     {
-      path: "/",
-      element: <HomePage path="table" />,
+      path: "/danh-muc-cap-1",
+      element: <HomePage path="tableCategory" />,
     },
     {
-      path: "/auth",
+      path: "/danh-muc-cap-2",
+      element: <HomePage path="tableCategoryWithLevel" />,
+    },
+    {
+      path: "/danh-muc-cap-3",
+      element: <HomePage path="tableCategoryWithLevel" />,
+    },
+    {
+      path: "/danh-sach-bai-viet",
+      element: <HomePage path="tableListPost" />,
+    },
+    {
+      path: "/danh-sach-san-pham",
+      element: <HomePage path="tableListPost" />,
+    },
+    {
+      path: "/danh-sach-lich-hen",
+      element: <HomePage path="tableSchedule" />,
+    },
+    {
+      path: "/danh-sach-binh-luan",
+      element: <HomePage path="tableComments" />,
+    },
+    {
+      path: "/xac-thuc-uy-quyen",
       element: <HomePage path="addAccount" />,
     },
     {
-      path: "/edit-account",
+      path: "/chinh-sua-tai-khoan",
       element: <HomePage path="editMyAccount" />,
     },
     {
-      path: "/edit-account/:id",
+      path: "/chinh-sua-tai-khoan/:id",
       element: <HomePage path="editUserAccount" />,
     },
     {
-      path: "/list-user",
+      path: "/danh-sach-nguoi-dung",
       element: <HomePage path="listAccount" />,
     },
     {
-      path: "/create-category",
-      element: <HomePage path="detailCategory" />,
+      path: "/tao-danh-muc-cap-1",
+      element: <HomePage path="createCategory" />,
     },
     {
-      path: "/create-seo-page",
+      path: "/tao-danh-muc-cap-2",
+      element: <HomePage path="createCategory" />,
+    },
+    {
+      path: "/tao-danh-muc-cap-3",
+      element: <HomePage path="createCategory" />,
+    },
+    {
+      path: "/tao-trang-bai-viet",
       element: <HomePage path="createPost" />,
     },
     {
-      path: "/login",
+      path: "/tao-trang-bai-viet/:id/:slug",
+      element: <HomePage path="createPost" />,
+    },
+    {
+      path: "/tao-trang-san-pham",
+      element: <HomePage path="createPost" />,
+    },
+    {
+      path: "/tao-trang-san-pham/:id/:slug",
+      element: <HomePage path="createPost" />,
+    },
+    {
+      path: "/dang-nhap",
       element: <LoginPage />,
     },
     {
-      path: "/create-landing-page",
+      path: "/tao-trang-landing-page",
+      element: <EditorLandingPage />,
+    },
+    {
+      path: "/tao-trang-landing-page/:id",
       element: <EditorLandingPage />,
     },
   ]);

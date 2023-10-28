@@ -11,15 +11,15 @@ export const AuthApi = {
     http.get<ResponseGetUserInfoType>(`${API_URL.getInfo}/${slug}/view`),
 
   createAccount: (account: AddAccountType) =>
-    http.post<ResponseCreateUserType>(API_URL.createAccount, account),
+    http.post<ResponseCreateAndEditUserType>(API_URL.createAccount, account),
 
-  getListUser: () => http.get<ResponseGetListUserType>(API_URL.getListUser),
+  listUser: () => http.get<ResponseGetListUserType>(API_URL.listUser),
 
   deleteAccount: (slugs: string) =>
-    http.delete<ResponseDeleteAccount>(`${API_URL.deleteAccount}/${slugs}`),
+    http.delete<ResponseDeleteType>(`${API_URL.deleteAccount}/${slugs}`),
 
   updateAccount: (slug: string, data: EditAccountType) =>
-    http.put<ResponseGetEditUserInfoType>(
+    http.put<ResponseCreateAndEditUserType>(
       `${API_URL.updateInfo}/${slug}/update`,
       data
     ),
