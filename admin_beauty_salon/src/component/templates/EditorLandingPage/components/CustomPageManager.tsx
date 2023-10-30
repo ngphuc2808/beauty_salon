@@ -7,8 +7,6 @@ import 'react-toastify/dist/ReactToastify.css'
 export default function CustomPageManager() {
   const { id } = useParams()
 
-  const isUpdate = Boolean(id)
-
   const landing = useGetPost(id!, {
     onSuccess(data) {
       reset({
@@ -32,7 +30,7 @@ export default function CustomPageManager() {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<PostsType>({
+  } = useForm<PostType>({
     defaultValues: {
       title: landing.data?.results.title,
       isLadingPage: true,
@@ -46,7 +44,7 @@ export default function CustomPageManager() {
     },
   })
 
-  const handleSave = (data: PostsType) => {
+  const handleSave = (data: PostType) => {
     data.content.html = (window as any).editor.getHtml()
     data.content.css = (window as any).editor.getCss()
     data.content.projectData = JSON.stringify(

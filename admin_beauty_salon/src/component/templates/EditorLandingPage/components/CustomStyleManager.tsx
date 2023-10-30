@@ -1,23 +1,22 @@
-import * as React from "react";
-import { StylesResultProps } from "@grapesjs/react";
-import { mdiMenuDown } from "@mdi/js";
-import Icon from "@mdi/react";
-import Accordion from "@mui/material/Accordion";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import StylePropertyField from "./StylePropertyField";
+import { StylesResultProps } from '@grapesjs/react'
+import { mdiMenuDown } from '@mdi/js'
+import Icon from '@mdi/react'
+import Accordion from '@mui/material/Accordion'
+import AccordionDetails from '@mui/material/AccordionDetails'
+import AccordionSummary from '@mui/material/AccordionSummary'
+import StylePropertyField from './StylePropertyField'
 
-const accordionIcon = <Icon path={mdiMenuDown} size={0.7} />;
+const accordionIcon = <Icon path={mdiMenuDown} size={0.7} />
 
 export default function CustomStyleManager({
   sectors,
-}: Omit<StylesResultProps, "Container">) {
+}: Omit<StylesResultProps, 'Container'>) {
   return (
-    <div className="gjs-custom-style-manager text-left">
+    <div className='gjs-custom-style-manager text-left'>
       {sectors.map((sector) => (
         <Accordion key={sector.getId()} disableGutters>
-          <AccordionSummary className="!bg-red-400" expandIcon={accordionIcon}>
-            <p className="text-black">{sector.getName()}</p>
+          <AccordionSummary className='!bg-red-400' expandIcon={accordionIcon}>
+            <p className='text-black'>{sector.getName()}</p>
           </AccordionSummary>
           <AccordionDetails className={`flex flex-wrap`}>
             {sector.getProperties().map((prop) => (
@@ -27,5 +26,5 @@ export default function CustomStyleManager({
         </Accordion>
       ))}
     </div>
-  );
+  )
 }

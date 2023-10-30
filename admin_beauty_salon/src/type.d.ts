@@ -91,9 +91,13 @@ interface iPost {
   metaKeyWords: string
   metaDescriptions: string
   comments: string[]
+  updatedAt: string[]
 }
 
-type PostType = Omit<iPost, 'id' | 'slug' | 'createdAt' | 'postId'>
+type PostType = Omit<
+  iPost,
+  'id' | 'slug' | 'createdAt' | 'postId' | 'updatedAt'
+>
 
 type ResponseGetListPostType = {
   success: boolean
@@ -109,7 +113,7 @@ type ResponseGetListPostType = {
   >[]
 }
 
-type ResponseCreateAndEditPostType = {
+type ResponsePostType = {
   success: boolean
   results: Omit<iPost, 'postId'>
 }
@@ -128,12 +132,13 @@ interface iProduct {
   metaKeyWords: string
   metaDescriptions: string
   createdAt: string
+  updatedAt: string
   comments: string[]
 }
 
 type ProductType = Omit<
   iProduct,
-  'id' | 'productId' | 'slug' | 'createdAt' | 'comments'
+  'id' | 'productId' | 'slug' | 'createdAt' | 'comments' | 'updatedAt'
 >
 
 type LinkProductType = {
@@ -141,14 +146,9 @@ type LinkProductType = {
   link: string
 }
 
-type ResponseGetProductType = {
+type ResponseProductType = {
   success: boolean
   results: Omit<iProduct, 'productId'>
-}
-
-type ResponseCreateProductType = {
-  success: boolean
-  results: Omit<iProduct, 'content' | 'productId'>[]
 }
 
 type ResponseGetListProductType = {
@@ -174,8 +174,8 @@ interface iCategory {
   contentType: string
   status: boolean | string
   listChildren: string[]
-  listPost: string[]
-  listProduct: string[]
+  listPosts: string[]
+  listProducts: string[]
   createdAt: string
   updatedAt: string
 }
@@ -185,9 +185,35 @@ type PostCategoryType = Omit<
   'id' | 'slug' | 'createdAt' | 'updatedAt'
 >
 
-type ResponsePostCategory = {
+type ResponsePostCategoryType = {
   success: boolean
   results: iCategory
+}
+
+type ResponseGetCategoryType = {
+  success: boolean
+  message: iCategory
+}
+
+type ResponseGetListCategoryType = {
+  success: boolean
+  message: iCategory[]
+}
+
+type ResponseSearchProductType = {
+  success: boolean
+  results: Pick<
+    iProduct,
+    'name' | 'productId' | 'slug' | 'status' | 'thumbnail' | 'createdAt'
+  >[]
+}
+
+type ResponseSearchPostType = {
+  success: boolean
+  results: Pick<
+    iPost,
+    'title' | 'postId' | 'slug' | 'status' | 'thumbnail' | 'createdAt'
+  >[]
 }
 
 // Other

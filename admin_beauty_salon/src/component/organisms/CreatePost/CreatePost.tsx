@@ -102,9 +102,9 @@ const CreatePost = () => {
 
   const createProductApi = usePostCreateProduct()
 
-  const updatePost = usePutEditPost(id!)
+  const updatePostApi = usePutEditPost(id!)
 
-  const updateProduct = usePutEditProduct(id!)
+  const updateProductApi = usePutEditProduct(id!)
 
   const [cropImage, setCropImage] = useState<string | ArrayBuffer | null>(null)
   const [modalCrop, setModalCrop] = useState(false)
@@ -288,7 +288,7 @@ const CreatePost = () => {
         },
       })
     } else {
-      updatePost.mutate(newValue, {
+      updatePostApi.mutate(newValue, {
         onSuccess() {
           toast.success('Cập nhật bài viết thành công!')
           queryClient.invalidateQueries({ queryKey: ['ListPost'] })
@@ -329,8 +329,8 @@ const CreatePost = () => {
         },
       })
     } else {
-      updateProduct.mutate(newValue, {
-        onSuccess(data) {
+      updateProductApi.mutate(newValue, {
+        onSuccess() {
           toast.success('Cập nhật sản phẩm thành công!')
           queryClient.invalidateQueries({ queryKey: ['ListProduct'] })
           router('/danh-sach-san-pham')

@@ -1,54 +1,46 @@
-import * as React from "react";
+import * as React from 'react'
 import {
   BlocksProvider,
   LayersProvider,
-  PagesProvider,
   SelectorsProvider,
   StylesProvider,
   TraitsProvider,
-} from "@grapesjs/react";
-import {
-  mdiBrush,
-  mdiLayers,
-  mdiViewGridPlus,
-  mdiTextBoxMultiple,
-  mdiCog,
-} from "@mdi/js";
-import Icon from "@mdi/react";
-import Tab from "@mui/material/Tab";
-import Tabs from "@mui/material/Tabs";
-import { useState } from "react";
-import CustomBlockManager from "./CustomBlockManager";
-import { cx } from "./common";
-import CustomPageManager from "./CustomPageManager";
-import CustomLayerManager from "./CustomLayerManager";
-import CustomSelectorManager from "./CustomSelectorManager";
-import CustomStyleManager from "./CustomStyleManager";
-import CustomTraitManager from "./CustomTraitManager";
+} from '@grapesjs/react'
+import { mdiBrush, mdiLayers, mdiViewGridPlus, mdiCog } from '@mdi/js'
+import Icon from '@mdi/react'
+import Tab from '@mui/material/Tab'
+import Tabs from '@mui/material/Tabs'
+import { useState } from 'react'
+import CustomBlockManager from './CustomBlockManager'
+import { cx } from './common'
+import CustomLayerManager from './CustomLayerManager'
+import CustomSelectorManager from './CustomSelectorManager'
+import CustomStyleManager from './CustomStyleManager'
+import CustomTraitManager from './CustomTraitManager'
 
 const defaultTabProps = {
-  className: "!min-w-0",
-};
+  className: '!min-w-0',
+}
 
 export default function RightSidebar({
   className,
 }: React.HTMLAttributes<HTMLDivElement>) {
-  const [selectedTab, setSelectedTab] = useState(0);
+  const [selectedTab, setSelectedTab] = useState(0)
 
   return (
-    <div className={cx("gjs-right-sidebar flex flex-col", className)}>
+    <div className={cx('gjs-right-sidebar flex flex-col', className)}>
       <Tabs
         value={selectedTab}
         onChange={(_, v) => setSelectedTab(v)}
-        variant="fullWidth"
-        className="flex items-center"
+        variant='fullWidth'
+        className='flex items-center'
         TabIndicatorProps={{
           style: {
-            backgroundColor: "#f87171",
+            backgroundColor: '#f87171',
           },
         }}
         style={{
-          minHeight: "64px",
+          minHeight: '64px',
         }}
       >
         <Tab
@@ -57,7 +49,7 @@ export default function RightSidebar({
             <Icon
               size={1}
               path={mdiBrush}
-              className="text-red-400 hover:text-red-500"
+              className='text-red-400 hover:text-red-500'
             />
           }
         />
@@ -67,7 +59,7 @@ export default function RightSidebar({
             <Icon
               size={1}
               path={mdiCog}
-              className="text-red-400 hover:text-red-500"
+              className='text-red-400 hover:text-red-500'
             />
           }
         />
@@ -77,7 +69,7 @@ export default function RightSidebar({
             <Icon
               size={1}
               path={mdiLayers}
-              className="text-red-400 hover:text-red-500"
+              className='text-red-400 hover:text-red-500'
             />
           }
         />
@@ -87,12 +79,12 @@ export default function RightSidebar({
             <Icon
               size={1}
               path={mdiViewGridPlus}
-              className="text-red-400 hover:text-red-500"
+              className='text-red-400 hover:text-red-500'
             />
           }
         />
       </Tabs>
-      <div className={cx("overflow-y-auto flex-grow border-t border-red-400")}>
+      <div className={cx('flex-grow overflow-y-auto border-t border-red-400')}>
         {selectedTab === 0 && (
           <>
             <SelectorsProvider>
@@ -120,5 +112,5 @@ export default function RightSidebar({
         )}
       </div>
     </div>
-  );
+  )
 }

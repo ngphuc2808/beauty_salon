@@ -1,103 +1,119 @@
-import { useRoutes } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
-import HomePage from "@/component/templates/HomePage";
-import LoginPage from "@/component/templates/LoginPage";
-import EditorLandingPage from "@/component/templates/EditorLandingPage";
+import { useRoutes } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
+import HomePage from '@/component/templates/HomePage'
+import LoginPage from '@/component/templates/LoginPage'
+import EditorLandingPage from '@/component/templates/EditorLandingPage'
 
 const App: React.FC = () => {
   const elements = useRoutes([
     {
-      path: "/danh-muc-cap-1",
-      element: <HomePage path="tableCategory" />,
+      path: '/danh-muc-cap-1',
+      element: <HomePage path='tableCategoryWithLevel' />,
     },
     {
-      path: "/danh-muc-cap-2",
-      element: <HomePage path="tableCategoryWithLevel" />,
+      path: '/danh-muc-cap-2',
+      element: <HomePage path='tableCategoryWithLevel' />,
     },
     {
-      path: "/danh-muc-cap-3",
-      element: <HomePage path="tableCategoryWithLevel" />,
+      path: '/danh-muc-cap-3',
+      element: <HomePage path='tableCategory' />,
     },
     {
-      path: "/danh-sach-bai-viet",
-      element: <HomePage path="tableListPost" />,
+      path: '/danh-muc-cap-3/:id',
+      element: <HomePage path='tableCategory' />,
     },
     {
-      path: "/danh-sach-san-pham",
-      element: <HomePage path="tableListPost" />,
+      path: '/danh-sach-bai-viet',
+      element: <HomePage path='tableListPost' />,
     },
     {
-      path: "/danh-sach-lich-hen",
-      element: <HomePage path="tableSchedule" />,
+      path: '/danh-sach-san-pham',
+      element: <HomePage path='tableListPost' />,
     },
     {
-      path: "/danh-sach-binh-luan",
-      element: <HomePage path="tableComments" />,
+      path: '/danh-sach-lich-hen',
+      element: <HomePage path='tableSchedule' />,
     },
     {
-      path: "/xac-thuc-uy-quyen",
-      element: <HomePage path="addAccount" />,
+      path: '/danh-sach-binh-luan',
+      element: <HomePage path='tableComments' />,
     },
     {
-      path: "/chinh-sua-tai-khoan",
-      element: <HomePage path="editMyAccount" />,
+      path: '/xac-thuc-uy-quyen',
+      element: <HomePage path='addAccount' />,
     },
     {
-      path: "/chinh-sua-tai-khoan/:id",
-      element: <HomePage path="editUserAccount" />,
+      path: '/chinh-sua-tai-khoan',
+      element: <HomePage path='editMyAccount' />,
     },
     {
-      path: "/danh-sach-nguoi-dung",
-      element: <HomePage path="listAccount" />,
+      path: '/chinh-sua-tai-khoan/:id',
+      element: <HomePage path='editUserAccount' />,
     },
     {
-      path: "/tao-danh-muc-cap-1",
-      element: <HomePage path="createCategory" />,
+      path: '/danh-sach-nguoi-dung',
+      element: <HomePage path='listAccount' />,
     },
     {
-      path: "/tao-danh-muc-cap-2",
-      element: <HomePage path="createCategory" />,
+      path: '/tao-danh-muc-cap-1',
+      element: <HomePage path='createCategory' />,
     },
     {
-      path: "/tao-danh-muc-cap-3",
-      element: <HomePage path="createCategory" />,
+      path: '/tao-danh-muc-cap-1/:id',
+      element: <HomePage path='createCategory' />,
     },
     {
-      path: "/tao-trang-bai-viet",
-      element: <HomePage path="createPost" />,
+      path: '/tao-danh-muc-cap-2',
+      element: <HomePage path='createCategory' />,
     },
     {
-      path: "/tao-trang-bai-viet/:id/:slug",
-      element: <HomePage path="createPost" />,
+      path: '/tao-danh-muc-cap-2/:id',
+      element: <HomePage path='createCategory' />,
     },
     {
-      path: "/tao-trang-san-pham",
-      element: <HomePage path="createPost" />,
+      path: '/tao-danh-muc-cap-3',
+      element: <HomePage path='createCategory' />,
     },
     {
-      path: "/tao-trang-san-pham/:id/:slug",
-      element: <HomePage path="createPost" />,
+      path: '/tao-danh-muc-cap-3/:id',
+      element: <HomePage path='createCategory' />,
     },
     {
-      path: "/dang-nhap",
+      path: '/tao-trang-bai-viet',
+      element: <HomePage path='createPost' />,
+    },
+    {
+      path: '/tao-trang-bai-viet/:id/:slug',
+      element: <HomePage path='createPost' />,
+    },
+    {
+      path: '/tao-trang-san-pham',
+      element: <HomePage path='createPost' />,
+    },
+    {
+      path: '/tao-trang-san-pham/:id/:slug',
+      element: <HomePage path='createPost' />,
+    },
+    {
+      path: '/dang-nhap',
       element: <LoginPage />,
     },
     {
-      path: "/tao-trang-landing-page",
+      path: '/tao-trang-landing-page',
       element: <EditorLandingPage />,
     },
     {
-      path: "/tao-trang-landing-page/:id",
+      path: '/tao-trang-landing-page/:id',
       element: <EditorLandingPage />,
     },
-  ]);
+  ])
   return (
-    <div className="App">
+    <div className='App'>
       {elements}
       <ToastContainer
-        position="bottom-right"
+        position='bottom-right'
         autoClose={1500}
-        bodyClassName="font-beVietnam text-sm"
+        bodyClassName='font-beVietnam text-sm'
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
@@ -105,10 +121,10 @@ const App: React.FC = () => {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="light"
+        theme='light'
       />
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App

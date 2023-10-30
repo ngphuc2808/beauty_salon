@@ -1,43 +1,43 @@
-import { AssetsResultProps, useEditor } from "@grapesjs/react";
-import { mdiClose } from "@mdi/js";
-import Icon from "@mdi/react";
-import type { Asset } from "grapesjs";
-import { BTN_CLS } from "./common";
+import { AssetsResultProps, useEditor } from '@grapesjs/react'
+import { mdiClose } from '@mdi/js'
+import Icon from '@mdi/react'
+import type { Asset } from 'grapesjs'
+import { BTN_CLS } from './common'
 
 export type CustomAssetManagerProps = Pick<
   AssetsResultProps,
-  "assets" | "close" | "select"
->;
+  'assets' | 'close' | 'select'
+>
 
 export default function CustomAssetManager({
   assets,
   select,
 }: CustomAssetManagerProps) {
-  const editor = useEditor();
+  const editor = useEditor()
 
   const remove = (asset: Asset) => {
-    editor.Assets.remove(asset);
-  };
+    editor.Assets.remove(asset)
+  }
 
   return (
-    <div className="grid grid-cols-3 gap-2 pr-2">
+    <div className='grid grid-cols-3 gap-2 pr-2'>
       {assets.map((asset) => (
         <div
           key={asset.getSrc()}
-          className="relative group rounded overflow-hidden"
+          className='group relative overflow-hidden rounded'
         >
-          <img className="display-block" src={asset.getSrc()} />
-          <div className="flex flex-col items-center justify-end absolute top-0 left-0 w-full h-full p-5 bg-zinc-700/75 group-hover:opacity-100 opacity-0 transition-opacity">
+          <img className='display-block' src={asset.getSrc()} />
+          <div className='absolute left-0 top-0 flex h-full w-full flex-col items-center justify-end bg-zinc-700/75 p-5 opacity-0 transition-opacity group-hover:opacity-100'>
             <button
-              type="button"
+              type='button'
               className={BTN_CLS}
               onClick={() => select(asset, true)}
             >
               Select
             </button>
             <button
-              type="button"
-              className="absolute top-2 right-2"
+              type='button'
+              className='absolute right-2 top-2'
               onClick={() => remove(asset)}
             >
               <Icon size={1} path={mdiClose} />
@@ -46,5 +46,5 @@ export default function CustomAssetManager({
         </div>
       ))}
     </div>
-  );
+  )
 }
