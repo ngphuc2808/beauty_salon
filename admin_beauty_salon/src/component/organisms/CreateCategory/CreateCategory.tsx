@@ -79,7 +79,7 @@ const DetailCategory = () => {
     },
   })
 
-  const listCategoryLevel3Api = useGetListCategory('3', {
+  useGetListCategory('3', {
     onSuccess(data) {
       setOptions(
         data.message.map((item) => ({
@@ -88,15 +88,13 @@ const DetailCategory = () => {
         })),
       )
       setListChildCategory(
-        data.message.filter(
-          (item) => getCategoryApi.data?.message.listChildren.includes(item.id),
-        ),
+        data.message.filter((item) => watch('listChildren').includes(item.id)),
       )
     },
     enabled: isCategoryLevel2,
   })
 
-  const listCategoryLevel2Api = useGetListCategory('2', {
+  useGetListCategory('2', {
     onSuccess(data) {
       setOptions(
         data.message.map((item) => ({
@@ -105,41 +103,11 @@ const DetailCategory = () => {
         })),
       )
       setListChildCategory(
-        data.message.filter(
-          (item) => getCategoryApi.data?.message.listChildren.includes(item.id),
-        ),
+        data.message.filter((item) => watch('listChildren').includes(item.id)),
       )
     },
     enabled: isCategoryLevel1,
   })
-
-  useEffect(() => {
-    if (
-      !listCategoryLevel3Api.isLoading &&
-      listCategoryLevel3Api.data?.message
-    ) {
-      setListChildCategory(
-        listCategoryLevel3Api.data.message.filter(
-          (item) => getCategoryApi.data?.message.listChildren.includes(item.id),
-        ),
-      )
-      return
-    }
-  }, [listCategoryLevel3Api.isLoading])
-
-  useEffect(() => {
-    if (
-      !listCategoryLevel2Api.isLoading &&
-      listCategoryLevel2Api.data?.message
-    ) {
-      setListChildCategory(
-        listCategoryLevel2Api.data.message.filter(
-          (item) => getCategoryApi.data?.message.listChildren.includes(item.id),
-        ),
-      )
-      return
-    }
-  }, [listCategoryLevel2Api.isLoading])
 
   const [options, setOptions] = useState<
     {
@@ -476,7 +444,10 @@ const DetailCategory = () => {
 
   const handleDeleteChildCategory = (item: string) => {
     setListChildCategory(listChildCategory.filter((value) => value.id !== item))
-    getCategoryApi.data?.message.listChildren.filter((value) => value !== item)
+    setValue(
+      'listChildren',
+      watch('listChildren').filter((value) => value !== item),
+    )
   }
 
   return (
@@ -586,9 +557,9 @@ const DetailCategory = () => {
                   isClearable
                   noOptionsMessage='Không tìm thấy danh mục nào!'
                 />
-                <ul className='mt-4 max-h-[300px] overflow-auto rounded border bg-white text-sm text-textPrimaryColor shadow [&>:last-child]:border-none [&>li]:border-b'>
-                  {listChildCategory &&
-                    listChildCategory.map((item, index) => (
+                {listChildCategory.length > 0 && (
+                  <ul className='mt-4 max-h-[300px] overflow-auto rounded border bg-white text-sm text-textPrimaryColor shadow [&>:last-child]:border-none [&>li]:border-b'>
+                    {listChildCategory.map((item, index) => (
                       <li
                         className='flex items-center  justify-between rounded border-b px-4 py-3 hover:bg-red-50'
                         key={index}
@@ -611,7 +582,8 @@ const DetailCategory = () => {
                         </button>
                       </li>
                     ))}
-                </ul>
+                  </ul>
+                )}
               </div>
             </div>
           )}
@@ -1042,10 +1014,6 @@ const DetailCategory = () => {
                   value='posts'
                   {...register('contentType', {
                     required: true,
-                    // onChange: () => {
-                    //   setdataListPost([])
-                    //   setdataListProduct([])
-                    // },
                   })}
                   className="visible after:relative after:left-0 after:top-[-2px] after:inline-block after:h-4 after:w-4 after:cursor-pointer after:rounded-full  after:bg-[#d1d3d1] after:content-['']
                       checked:after:visible checked:after:relative checked:after:left-0 checked:after:top-[-2px] checked:after:inline-block checked:after:h-4 checked:after:w-4 checked:after:cursor-pointer checked:after:rounded-full checked:after:bg-green-500 checked:after:content-['']"
