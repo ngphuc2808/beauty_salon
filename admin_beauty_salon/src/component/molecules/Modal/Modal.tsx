@@ -1,3 +1,5 @@
+import Button from '@/component/atoms/Button'
+
 type Props = {
   title: string
   description: string
@@ -20,7 +22,7 @@ const Modal = ({
         <div className='relative z-20 max-h-full w-full max-w-[90%] sm:max-w-md'>
           <div className='relative rounded-md bg-white shadow'>
             <i
-              className='ri-close-line absolute right-4 top-2 cursor-pointer text-2xl hover:text-red-500'
+              className='ri-close-line absolute right-4 top-2 cursor-pointer text-2xl hover:text-secondColor'
               onClick={() => setModalDelete(false)}
             ></i>
             <div className='p-8 text-center'>
@@ -32,9 +34,8 @@ const Modal = ({
               </div>
               <hr />
               <div className='mt-5 flex items-center justify-center'>
-                <button
-                  type='button'
-                  className='mr-2 inline-flex max-h-[40px] min-w-[105px] items-center justify-center rounded-md bg-red-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-red-600'
+                <Button
+                  className='mr-2 inline-flex max-h-[40px] min-w-[105px] items-center justify-center rounded-md bg-primaryColor px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-secondColor'
                   onClick={handleDelete}
                 >
                   {isLoading ? (
@@ -42,14 +43,13 @@ const Modal = ({
                   ) : (
                     <span>Xác nhận</span>
                   )}
-                </button>
-                <button
-                  type='button'
-                  className='min-w-[105px] rounded-md border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-textPrimaryColor hover:bg-gray-100 hover:text-gray-900 focus:z-10'
+                </Button>
+                <Button
+                  className='min-w-[105px] rounded-md border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-textPrimaryColor hover:bg-gray-100 hover:text-textHeadingColor focus:z-10'
                   onClick={() => setModalDelete(false)}
                 >
                   Hủy
-                </button>
+                </Button>
               </div>
             </div>
           </div>

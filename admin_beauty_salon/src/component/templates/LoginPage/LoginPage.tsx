@@ -6,6 +6,7 @@ import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 import { usePostLogin } from '@/hooks/hooks'
+import Button from '@/component/atoms/Button'
 
 const LoginPage = () => {
   const router = useNavigate()
@@ -69,7 +70,9 @@ const LoginPage = () => {
                 <label
                   htmlFor='username'
                   className={`mb-2 block text-sm font-normal ${
-                    errors.username ? 'text-red-600' : 'text-textPrimaryColor'
+                    errors.username
+                      ? 'text-secondColor'
+                      : 'text-textPrimaryColor'
                   }`}
                 >
                   Tài khoản
@@ -85,12 +88,12 @@ const LoginPage = () => {
                   })}
                   className={`block w-full rounded-md border p-3 text-sm outline-none ${
                     errors.username
-                      ? 'border-red-500 bg-red-50 placeholder-red-400'
+                      ? 'border-primaryColor bg-red-50 placeholder-primaryColor'
                       : 'border-gray-300 bg-white'
                   }`}
                   placeholder='Nhập tài khoản'
                 />
-                <p className='mt-2 text-sm text-red-600'>
+                <p className='mt-2 text-sm text-secondColor'>
                   {errors.username?.message}
                 </p>
               </div>
@@ -98,7 +101,9 @@ const LoginPage = () => {
                 <label
                   htmlFor='password'
                   className={`mb-2 block text-sm font-normal ${
-                    errors.password ? 'text-red-600' : 'text-textPrimaryColor'
+                    errors.password
+                      ? 'text-secondColor'
+                      : 'text-textPrimaryColor'
                   }`}
                 >
                   Mật khẩu
@@ -115,18 +120,18 @@ const LoginPage = () => {
                   autoComplete='on'
                   className={`block w-full rounded-md border p-3 text-sm outline-none ${
                     errors.password
-                      ? 'border-red-500 bg-red-50 placeholder-red-400'
+                      ? 'border-primaryColor bg-red-50 placeholder-primaryColor'
                       : 'border-gray-300 bg-white'
                   }`}
                   placeholder='Nhập mật khẩu'
                 />
-                <p className='mt-2 text-sm text-red-600'>
+                <p className='mt-2 text-sm text-secondColor'>
                   {errors.password?.message}
                 </p>
               </div>
               <div className='mt-5 border-t border-gray-300 pt-5'>
-                <button
-                  className='flex max-h-[42px] w-full items-center justify-center rounded-md bg-red-500 px-4 py-3 text-white hover:bg-red-600'
+                <Button
+                  className='flex max-h-[42px] w-full items-center justify-center rounded-md bg-primaryColor px-4 py-3 text-white hover:bg-secondColor'
                   onClick={handleSubmit(handleLogin)}
                 >
                   {loginApi.isLoading ? (
@@ -134,7 +139,7 @@ const LoginPage = () => {
                   ) : (
                     <span>Đăng nhập</span>
                   )}
-                </button>
+                </Button>
               </div>
             </form>
           </div>

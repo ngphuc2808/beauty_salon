@@ -1,5 +1,5 @@
 import { ChangeEvent, Fragment, useEffect, useState } from 'react'
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useQueryClient } from 'react-query'
 import { useFieldArray, useForm } from 'react-hook-form'
 import he from 'he'
@@ -43,6 +43,8 @@ import {
   useGetProduct,
   usePutEditProduct,
 } from '@/hooks/hooks'
+import Button from '@/component/atoms/Button'
+import { SpinnerIcon } from '@/component/atoms/CustomIcon/CustomIcon'
 
 const imageMimeType = /image\/(png|jpg|jpeg)/i
 
@@ -358,13 +360,13 @@ const CreatePost = () => {
           : getProductApi && !getProductApi.isLoading) && (
           <>
             <div className='flex items-center gap-3'>
-              <Link
+              <Button
                 to={
                   isCreatePosts ? '/danh-sach-bai-viet' : '/danh-sach-san-pham'
                 }
               >
-                <i className='ri-arrow-left-line ml-5 flex h-10 w-10 cursor-pointer items-center justify-center rounded-md bg-red-400 text-xl text-white hover:bg-red-500 lg:text-2xl'></i>
-              </Link>
+                <i className='ri-arrow-left-line ml-5 flex h-10 w-10 cursor-pointer items-center justify-center rounded-md bg-primaryColor text-xl text-white hover:bg-secondColor lg:text-2xl'></i>
+              </Button>
               <h1 className='text-xl text-textHeadingColor'>
                 {isCreatePosts
                   ? !isUpdate
@@ -377,12 +379,12 @@ const CreatePost = () => {
             </div>
             {id && (
               <div className='mr-5'>
-                <Link
+                <Button
                   to={'#'}
-                  className='w-[48%] rounded-md bg-red-400 px-4 py-3 text-sm text-white hover:bg-red-500 lg:w-[200px]'
+                  className='w-[48%] rounded-md bg-primaryColor px-4 py-3 text-sm text-white hover:bg-secondColor lg:w-[200px]'
                 >
                   Truy cập trang
-                </Link>
+                </Button>
               </div>
             )}
           </>
@@ -419,7 +421,7 @@ const CreatePost = () => {
                   }
                   className={`block w-full rounded-md border p-3 text-sm outline-none ${
                     postForm.formState.errors.title
-                      ? 'border-red-500 bg-red-50 placeholder-red-400'
+                      ? 'border-primaryColor bg-red-50 placeholder-primaryColor'
                       : 'bg-white'
                   }`}
                   {...postForm.register('title', {
@@ -433,7 +435,7 @@ const CreatePost = () => {
                     },
                   })}
                 />
-                <p className='mt-2 text-sm text-red-600'>
+                <p className='mt-2 text-sm text-secondColor'>
                   {postForm.formState.errors.title?.message}
                 </p>
               </>
@@ -450,7 +452,7 @@ const CreatePost = () => {
                   }
                   className={`block w-full rounded-md border p-3 text-sm outline-none ${
                     productForm.formState.errors.name
-                      ? 'border-red-500 bg-red-50 placeholder-red-400'
+                      ? 'border-primaryColor bg-red-50 placeholder-primaryColor'
                       : 'bg-white'
                   }`}
                   {...productForm.register('name', {
@@ -464,7 +466,7 @@ const CreatePost = () => {
                     },
                   })}
                 />
-                <p className='mt-2 text-sm text-red-600'>
+                <p className='mt-2 text-sm text-secondColor'>
                   {productForm.formState.errors.name?.message}
                 </p>
               </>
@@ -660,7 +662,7 @@ const CreatePost = () => {
                           <h1 className='text-textPrimaryColor'>
                             Tên khách hàng
                           </h1>
-                          <button className='text-red-500'>Xóa</button>
+                          <Button className='text-primaryColor'>Xóa</Button>
                         </div>
                         <div className='mx-5 max-h-[100px] overflow-y-scroll rounded-md bg-white px-5 py-2'>
                           <p className='text-sm text-textPrimaryColor'>
@@ -669,8 +671,8 @@ const CreatePost = () => {
                         </div>
                         <div className='flex items-center justify-between px-5 py-2'>
                           <div className='flex items-center gap-4'>
-                            <button className='text-blue-500'>Trả lời</button>
-                            <i className='ri-heart-fill cursor-pointer text-xl text-red-400' />
+                            <Button className='text-blue-500'>Trả lời</Button>
+                            <i className='ri-heart-fill cursor-pointer text-xl text-primaryColor' />
                             <i className='ri-dislike-fill cursor-pointer text-xl text-textPrimaryColor' />
                           </div>
                           <span className='block'>
@@ -698,8 +700,8 @@ const CreatePost = () => {
               ? getPostApi && !getPostApi.isLoading
               : getProductApi && !getProductApi.isLoading) && (
               <div className='flex items-center justify-between'>
-                <button
-                  className='w-[48%] rounded-md bg-red-400 px-4 py-3 text-sm text-white hover:bg-red-500 lg:w-[200px]'
+                <Button
+                  className='w-[48%] rounded-md bg-primaryColor px-4 py-3 text-sm text-white hover:bg-secondColor lg:w-[200px]'
                   onClick={
                     isCreatePosts
                       ? postForm.handleSubmit(handleCreatePost)
@@ -707,13 +709,13 @@ const CreatePost = () => {
                   }
                 >
                   Lưu
-                </button>
-                <Link
+                </Button>
+                <Button
                   to={'/tao-danh-muc'}
-                  className='flex w-[48%] justify-center rounded-md bg-red-400 px-4 py-3 text-sm text-white hover:bg-red-500 lg:w-[200px]'
+                  className='flex w-[48%] justify-center rounded-md bg-primaryColor px-4 py-3 text-sm text-white hover:bg-secondColor lg:w-[200px]'
                 >
                   Thoát
-                </Link>
+                </Button>
               </div>
             )}
           </div>
@@ -737,7 +739,7 @@ const CreatePost = () => {
                   Thay thế ảnh
                 </label>
                 <span
-                  className='cursor-pointer text-red-500'
+                  className='cursor-pointer text-primaryColor'
                   onClick={() => setPreviewImg('')}
                 >
                   Xóa
@@ -752,22 +754,7 @@ const CreatePost = () => {
                 {(getPostApi && getPostApi.isLoading) ||
                 (getProductApi && getProductApi.isLoading) ? (
                   <div role='status'>
-                    <svg
-                      aria-hidden='true'
-                      className='mr-2 h-24 w-24 animate-spin fill-red-500 text-gray-200'
-                      viewBox='0 0 100 101'
-                      fill='none'
-                      xmlns='http://www.w3.org/2000/svg'
-                    >
-                      <path
-                        d='M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z'
-                        fill='currentColor'
-                      />
-                      <path
-                        d='M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z'
-                        fill='currentFill'
-                      />
-                    </svg>
+                    <SpinnerIcon />
                     <span className='sr-only'>Loading...</span>
                   </div>
                 ) : (
@@ -842,7 +829,7 @@ const CreatePost = () => {
                     <p
                       className={`${
                         postForm.formState.errors.status
-                          ? 'text-red-600'
+                          ? 'text-secondColor'
                           : 'text-textPrimaryColor'
                       }`}
                     >
@@ -870,7 +857,7 @@ const CreatePost = () => {
                     <p
                       className={`${
                         productForm.formState.errors.status
-                          ? 'text-red-600'
+                          ? 'text-secondColor'
                           : 'text-textPrimaryColor'
                       }`}
                     >
@@ -904,7 +891,7 @@ const CreatePost = () => {
                     <span
                       className={`${
                         postForm.formState.errors.status
-                          ? 'text-red-600'
+                          ? 'text-secondColor'
                           : 'text-textPrimaryColor'
                       }`}
                     >
@@ -932,7 +919,7 @@ const CreatePost = () => {
                     <span
                       className={`${
                         productForm.formState.errors.status
-                          ? 'text-red-600'
+                          ? 'text-secondColor'
                           : 'text-textPrimaryColor'
                       }`}
                     >
@@ -967,7 +954,7 @@ const CreatePost = () => {
                         : false
                     }
                     {...postForm.register('metaTitles')}
-                    className='peer block w-full appearance-none border-0 border-b border-gray-300 bg-transparent px-0 py-2.5 text-sm text-textPrimaryColor focus:border-red-500 focus:outline-none focus:ring-0'
+                    className='peer block w-full appearance-none border-0 border-b border-gray-300 bg-transparent px-0 py-2.5 text-sm text-textPrimaryColor focus:border-primaryColor focus:outline-none focus:ring-0'
                   />
                 ) : (
                   <input
@@ -980,12 +967,12 @@ const CreatePost = () => {
                         : false
                     }
                     {...productForm.register('metaTitles')}
-                    className='peer block w-full appearance-none border-0 border-b border-gray-300 bg-transparent px-0 py-2.5 text-sm text-textPrimaryColor focus:border-red-500 focus:outline-none focus:ring-0'
+                    className='peer block w-full appearance-none border-0 border-b border-gray-300 bg-transparent px-0 py-2.5 text-sm text-textPrimaryColor focus:border-primaryColor focus:outline-none focus:ring-0'
                   />
                 )}
                 <label
                   htmlFor='metaTitle'
-                  className='absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-textPrimaryColor duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:text-red-500'
+                  className='absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-textPrimaryColor duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:text-primaryColor'
                 >
                   Meta title
                 </label>
@@ -1002,7 +989,7 @@ const CreatePost = () => {
                         : false
                     }
                     {...postForm.register('metaKeyWords')}
-                    className='peer block w-full appearance-none border-0 border-b border-gray-300 bg-transparent px-0 py-2.5 text-sm text-textPrimaryColor focus:border-red-500 focus:outline-none focus:ring-0'
+                    className='peer block w-full appearance-none border-0 border-b border-gray-300 bg-transparent px-0 py-2.5 text-sm text-textPrimaryColor focus:border-primaryColor focus:outline-none focus:ring-0'
                   />
                 ) : (
                   <input
@@ -1015,12 +1002,12 @@ const CreatePost = () => {
                         : false
                     }
                     {...productForm.register('metaKeyWords')}
-                    className='peer block w-full appearance-none border-0 border-b border-gray-300 bg-transparent px-0 py-2.5 text-sm text-textPrimaryColor focus:border-red-500 focus:outline-none focus:ring-0'
+                    className='peer block w-full appearance-none border-0 border-b border-gray-300 bg-transparent px-0 py-2.5 text-sm text-textPrimaryColor focus:border-primaryColor focus:outline-none focus:ring-0'
                   />
                 )}
                 <label
                   htmlFor='metaKeyWords'
-                  className='absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-textPrimaryColor duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:text-red-500'
+                  className='absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-textPrimaryColor duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:text-primaryColor'
                 >
                   Meta keywords
                 </label>
@@ -1037,7 +1024,7 @@ const CreatePost = () => {
                         : false
                     }
                     {...postForm.register('metaDescriptions')}
-                    className='peer block w-full appearance-none border-0 border-b border-gray-300 bg-transparent px-0 py-2.5 text-sm text-textPrimaryColor focus:border-red-500 focus:outline-none focus:ring-0'
+                    className='peer block w-full appearance-none border-0 border-b border-gray-300 bg-transparent px-0 py-2.5 text-sm text-textPrimaryColor focus:border-primaryColor focus:outline-none focus:ring-0'
                   />
                 ) : (
                   <input
@@ -1050,12 +1037,12 @@ const CreatePost = () => {
                         : false
                     }
                     {...productForm.register('metaDescriptions')}
-                    className='peer block w-full appearance-none border-0 border-b border-gray-300 bg-transparent px-0 py-2.5 text-sm text-textPrimaryColor focus:border-red-500 focus:outline-none focus:ring-0'
+                    className='peer block w-full appearance-none border-0 border-b border-gray-300 bg-transparent px-0 py-2.5 text-sm text-textPrimaryColor focus:border-primaryColor focus:outline-none focus:ring-0'
                   />
                 )}
                 <label
                   htmlFor='metaDescription'
-                  className='absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-textPrimaryColor duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:text-red-500'
+                  className='absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-textPrimaryColor duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:text-primaryColor'
                 >
                   Meta description
                 </label>
@@ -1065,7 +1052,9 @@ const CreatePost = () => {
           {!isCreatePosts && (
             <div className='mt-5 rounded-lg bg-white p-5 shadow'>
               <div className='[&>*]:mb-4 [&>:first-child]:mb-3'>
-                <h1 className='text-lg text-textHeadingColor'>Link đặt hàng</h1>
+                <h1 className='text-lg text-textHeadingColor'>
+                  Button đặt hàng
+                </h1>
                 {fields.map((field, index) => (
                   <div key={field.id}>
                     <div className='mt-5 flex items-center gap-5'>
@@ -1074,11 +1063,11 @@ const CreatePost = () => {
                           type='text'
                           id='link'
                           {...productForm.register(`links.${index}.name`)}
-                          className='peer block w-full appearance-none border-0 border-b border-gray-300 bg-transparent px-0 py-2.5 text-sm text-textPrimaryColor focus:border-red-500 focus:outline-none focus:ring-0'
+                          className='peer block w-full appearance-none border-0 border-b border-gray-300 bg-transparent px-0 py-2.5 text-sm text-textPrimaryColor focus:border-primaryColor focus:outline-none focus:ring-0'
                         />
                         <label
                           htmlFor='links'
-                          className='absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-textPrimaryColor duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:text-red-500'
+                          className='absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-textPrimaryColor duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:text-primaryColor'
                         >
                           Tên
                         </label>
@@ -1088,27 +1077,27 @@ const CreatePost = () => {
                           type='text'
                           id='link'
                           {...productForm.register(`links.${index}.link`)}
-                          className='peer block w-full appearance-none border-0 border-b border-gray-300 bg-transparent px-0 py-2.5 text-sm text-textPrimaryColor focus:border-red-500 focus:outline-none focus:ring-0'
+                          className='peer block w-full appearance-none border-0 border-b border-gray-300 bg-transparent px-0 py-2.5 text-sm text-textPrimaryColor focus:border-primaryColor focus:outline-none focus:ring-0'
                         />
                         <label
                           htmlFor='links'
-                          className='absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-textPrimaryColor duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:text-red-500'
+                          className='absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-textPrimaryColor duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:text-primaryColor'
                         >
-                          Link
+                          Button
                         </label>
                       </div>
                       {index === 0 && (
-                        <button
+                        <Button
                           className=''
                           onClick={() => append({ name: '', link: '' })}
                         >
                           <i className='ri-add-line cursor-pointer p-1 text-xl hover:text-green-500'></i>
-                        </button>
+                        </Button>
                       )}
                       {index !== 0 && (
-                        <button className='' onClick={() => remove(index)}>
-                          <i className='ri-close-line cursor-pointer p-1 text-xl hover:text-red-500'></i>
-                        </button>
+                        <Button className='' onClick={() => remove(index)}>
+                          <i className='ri-close-line cursor-pointer p-1 text-xl hover:text-secondColor'></i>
+                        </Button>
                       )}
                     </div>
                   </div>

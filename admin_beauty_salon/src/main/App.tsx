@@ -8,35 +8,35 @@ const App: React.FC = () => {
   const elements = useRoutes([
     {
       path: '/danh-muc-cap-1',
-      element: <HomePage path='tableCategoryWithLevel' />,
+      element: <HomePage path='listCategoryWithLevel' />,
     },
     {
       path: '/danh-muc-cap-2',
-      element: <HomePage path='tableCategoryWithLevel' />,
+      element: <HomePage path='listCategoryWithLevel' />,
     },
     {
       path: '/danh-muc-cap-3',
-      element: <HomePage path='tableCategory' />,
+      element: <HomePage path='listCategory' />,
     },
     {
       path: '/danh-muc-cap-3/:id',
-      element: <HomePage path='tableCategory' />,
+      element: <HomePage path='listCategory' />,
     },
     {
       path: '/danh-sach-bai-viet',
-      element: <HomePage path='tableListPost' />,
+      element: <HomePage path='listPostAndProduct' />,
     },
     {
       path: '/danh-sach-san-pham',
-      element: <HomePage path='tableListPost' />,
+      element: <HomePage path='listPostAndProduct' />,
     },
     {
       path: '/danh-sach-lich-hen',
-      element: <HomePage path='tableSchedule' />,
+      element: <HomePage path='listSchedule' />,
     },
     {
       path: '/danh-sach-binh-luan',
-      element: <HomePage path='tableComments' />,
+      element: <HomePage path='listComment' />,
     },
     {
       path: '/xac-thuc-uy-quyen',

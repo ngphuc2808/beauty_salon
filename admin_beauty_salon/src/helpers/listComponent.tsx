@@ -1,18 +1,18 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react'
 
-import AddAccount from "@/component/organisms/AddAccount";
-import ListAccount from "@/component/organisms/ListAccount";
-import EditMyAccount from "@/component/organisms/EditMyAccount";
-import EditUserAccount from "@/component/organisms/EditUserAccount";
+import AddAccount from '@/component/organisms/AddAccount'
+import ListAccount from '@/component/organisms/ListAccount'
+import EditMyAccount from '@/component/organisms/EditMyAccount'
+import EditUserAccount from '@/component/organisms/EditUserAccount'
 
-import CreateCategory from "@/component/organisms/CreateCategory";
-import CreatePost from "@/component/organisms/CreatePost";
+import CreateCategory from '@/component/organisms/CreateCategory'
+import CreatePost from '@/component/organisms/CreatePost'
 
-import TableCategoryWithLevel from "@/component/organisms/TableCategoryWithLevel";
-import TableComments from "@/component/organisms/TableComments";
-import TableListPost from "@/component/organisms/TableListPost";
-import TableCategory from "@/component/organisms/TableCategory";
-import TableSchedule from "@/component/organisms/TableSchedule";
+import ListCategoryWithLevel from '@/component/organisms/ListCategoryWithLevel'
+import ListComment from '@/component/organisms/ListComment'
+import ListPostAndProduct from '@/component/organisms/ListPostAndProduct'
+import ListCategory from '@/component/organisms/ListCategory'
+import ListSchedule from '@/component/organisms/ListSchedule'
 
 export const listComponent: { [key: string]: ReactNode } = {
   //Auth
@@ -26,9 +26,9 @@ export const listComponent: { [key: string]: ReactNode } = {
   //Navigation
   createCategory: <CreateCategory />,
   createPost: <CreatePost />,
-  tableCategory: <TableCategory />,
-  tableCategoryWithLevel: <TableCategoryWithLevel />,
-  tableListPost: <TableListPost />,
-  tableSchedule: <TableSchedule />,
-  tableComments: <TableComments />,
-};
+  listCategory: <ListCategory />,
+  listCategoryWithLevel: <ListCategoryWithLevel />,
+  listPostAndProduct: <ListPostAndProduct />,
+  listSchedule: <ListSchedule />,
+  listComment: <ListComment />,
+}

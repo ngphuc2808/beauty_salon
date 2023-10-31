@@ -1,7 +1,7 @@
 import { ChangeEvent, Fragment, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import slugify from 'react-slugify'
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import Select from 'react-tailwindcss-select'
 import Search from '@/component/molecules/Search'
 import { toast } from 'react-toastify'
@@ -24,6 +24,7 @@ import CropImage from '@/component/molecules/CropImage'
 import { useQueryClient } from 'react-query'
 import images from '@/assets/images'
 import { SelectValue } from 'react-tailwindcss-select/dist/components/type'
+import Button from '@/component/atoms/Button'
 
 const imageMimeType = /image\/(png|jpg|jpeg)/i
 
@@ -460,9 +461,9 @@ const DetailCategory = () => {
             setTitle('')
           }}
         >
-          <button onClick={() => router(-1)}>
-            <i className='ri-arrow-left-line ml-5 flex h-10 w-10 cursor-pointer items-center justify-center rounded-md bg-red-400 text-xl text-white hover:bg-red-500 lg:text-2xl'></i>
-          </button>
+          <Button onClick={() => router(-1)}>
+            <i className='ri-arrow-left-line ml-5 flex h-10 w-10 cursor-pointer items-center justify-center rounded-md bg-primaryColor text-xl text-white hover:bg-secondColor lg:text-2xl'></i>
+          </Button>
           <h1 className='text-xl text-textHeadingColor'>Thêm danh mục</h1>
         </div>
       </div>
@@ -486,17 +487,17 @@ const DetailCategory = () => {
             })}
             className={`block w-full rounded-md border p-3 text-sm outline-none ${
               errors.name
-                ? 'border-red-500 bg-red-50 placeholder-red-400'
+                ? 'border-primaryColor bg-red-50 placeholder-primaryColor'
                 : 'bg-white'
             }`}
           />
           {errors.name?.type === 'required' && (
-            <p className='mt-2 text-sm text-red-600'>
+            <p className='mt-2 text-sm text-secondColor'>
               Vui lòng nhập tên bài viết!
             </p>
           )}
           {errors.name?.type === 'minLength' && (
-            <p className='mt-2 text-sm text-red-600'>
+            <p className='mt-2 text-sm text-secondColor'>
               Vui lòng nhập tối thiểu 10 ký tự!
             </p>
           )}
@@ -511,18 +512,18 @@ const DetailCategory = () => {
                 <h1 className='block font-normal text-textHeadingColor'>
                   Trang landing page cho danh mục
                 </h1>
-                <Link
+                <Button
                   to={
                     !id
                       ? '/tao-trang-landing-page'
                       : `/tao-trang-landing-page/${id}`
                   }
-                  className='mt-3 w-full rounded-md bg-red-400 px-4 py-3 text-sm text-white hover:bg-red-500 sm:mt-0 sm:w-auto'
+                  className='mt-3 w-full rounded-md bg-primaryColor px-4 py-3 text-sm text-white hover:bg-secondColor sm:mt-0 sm:w-auto'
                 >
                   {projectData.projectData
                     ? 'Cài đặt trang'
                     : 'Tạo trang landing page'}
-                </Link>
+                </Button>
               </div>
             </div>
           )}
@@ -545,7 +546,7 @@ const DetailCategory = () => {
                       `flex text-sm text-textPrimaryColor py-1 border border-gray-300 rounded shadow-sm focus:outline-none cursor-pointer ${
                         isDisabled
                           ? 'bg-gray-200'
-                          : 'bg-white hover:border-gray-400 focus:border-red-500 focus:ring focus:ring-red-500/20'
+                          : 'bg-white hover:border-gray-400 focus:border-primaryColor focus:ring focus:ring-primaryColor/20'
                       }`,
                   }}
                   primaryColor='red'
@@ -574,12 +575,12 @@ const DetailCategory = () => {
                           </figure>
                           <p className='text-textPrimaryColor'>{item.name}</p>
                         </div>
-                        <button
-                          className='text-red-500'
+                        <Button
+                          className='text-primaryColor'
                           onClick={() => handleDeleteChildCategory(item.id)}
                         >
                           Xóa
-                        </button>
+                        </Button>
                       </li>
                     ))}
                   </ul>
@@ -620,12 +621,12 @@ const DetailCategory = () => {
                             </figure>
                             <p className='text-textPrimaryColor'>{item.name}</p>
                           </div>
-                          <button
+                          <Button
                             className='text-green-500'
                             onClick={() => addUniqueItemProduct(item)}
                           >
                             Thêm
-                          </button>
+                          </Button>
                         </li>
                       ))}
                     </ul>
@@ -650,12 +651,12 @@ const DetailCategory = () => {
                               {item.title}
                             </p>
                           </div>
-                          <button
+                          <Button
                             className='text-green-500'
                             onClick={() => addUniqueItemPost(item)}
                           >
                             Thêm
-                          </button>
+                          </Button>
                         </li>
                       ))}
                     </ul>
@@ -685,12 +686,12 @@ const DetailCategory = () => {
                               {item.title}
                             </p>
                           </div>
-                          <button
-                            className='text-red-500'
+                          <Button
+                            className='text-primaryColor'
                             onClick={() => removeItemPost(item)}
                           >
                             Xóa
-                          </button>
+                          </Button>
                         </li>
                       ))}
                     </ul>
@@ -713,12 +714,12 @@ const DetailCategory = () => {
                             </figure>
                             <p className='text-textPrimaryColor'>{item.name}</p>
                           </div>
-                          <button
-                            className='text-red-500'
+                          <Button
+                            className='text-primaryColor'
                             onClick={() => removeItemProduct(item)}
                           >
                             Xóa
-                          </button>
+                          </Button>
                         </li>
                       ))}
                     </ul>
@@ -736,12 +737,12 @@ const DetailCategory = () => {
                   type='text'
                   id='urlKey'
                   {...register('urlKey')}
-                  className='peer block w-full appearance-none border-0 border-b border-gray-300 bg-transparent px-0 py-2.5 text-sm text-textPrimaryColor focus:border-red-500 focus:outline-none focus:ring-0'
+                  className='peer block w-full appearance-none border-0 border-b border-gray-300 bg-transparent px-0 py-2.5 text-sm text-textPrimaryColor focus:border-primaryColor focus:outline-none focus:ring-0'
                   placeholder=' '
                 />
                 <label
                   htmlFor='urlKey'
-                  className='absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-textPrimaryColor duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:text-red-500'
+                  className='absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-textPrimaryColor duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:text-primaryColor'
                 >
                   URL key
                 </label>
@@ -751,12 +752,12 @@ const DetailCategory = () => {
                   type='text'
                   id='metaTitle'
                   {...register('metaTitles')}
-                  className='peer block w-full appearance-none border-0 border-b border-gray-300 bg-transparent px-0 py-2.5 text-sm text-textPrimaryColor focus:border-red-500 focus:outline-none focus:ring-0'
+                  className='peer block w-full appearance-none border-0 border-b border-gray-300 bg-transparent px-0 py-2.5 text-sm text-textPrimaryColor focus:border-primaryColor focus:outline-none focus:ring-0'
                   placeholder=' '
                 />
                 <label
                   htmlFor='metaTitle'
-                  className='absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-textPrimaryColor duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:text-red-500'
+                  className='absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-textPrimaryColor duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:text-primaryColor'
                 >
                   Meta title
                 </label>
@@ -766,12 +767,12 @@ const DetailCategory = () => {
                   type='text'
                   id='metaKeyWords'
                   {...register('metaKeyWords')}
-                  className='peer block w-full appearance-none border-0 border-b border-gray-300 bg-transparent px-0 py-2.5 text-sm text-textPrimaryColor focus:border-red-500 focus:outline-none focus:ring-0'
+                  className='peer block w-full appearance-none border-0 border-b border-gray-300 bg-transparent px-0 py-2.5 text-sm text-textPrimaryColor focus:border-primaryColor focus:outline-none focus:ring-0'
                   placeholder=' '
                 />
                 <label
                   htmlFor='metaKeyWords'
-                  className='absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-textPrimaryColor duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:text-red-500'
+                  className='absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-textPrimaryColor duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:text-primaryColor'
                 >
                   Meta keywords
                 </label>
@@ -781,12 +782,12 @@ const DetailCategory = () => {
                   type='text'
                   id='metaDescription'
                   {...register('metaDescriptions')}
-                  className='peer block w-full appearance-none border-0 border-b border-gray-300 bg-transparent px-0 py-2.5 text-sm text-textPrimaryColor focus:border-red-500 focus:outline-none focus:ring-0'
+                  className='peer block w-full appearance-none border-0 border-b border-gray-300 bg-transparent px-0 py-2.5 text-sm text-textPrimaryColor focus:border-primaryColor focus:outline-none focus:ring-0'
                   placeholder=' '
                 />
                 <label
                   htmlFor='metaDescription'
-                  className='absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-textPrimaryColor duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:text-red-500'
+                  className='absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-textPrimaryColor duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:text-primaryColor'
                 >
                   Meta description
                 </label>
@@ -795,18 +796,18 @@ const DetailCategory = () => {
           </div>
           <div className='mt-5 rounded-lg bg-white p-5 shadow'>
             <div className='flex items-center justify-between'>
-              <button
-                className='w-[48%] rounded-md bg-red-400 px-4 py-3 text-sm text-white hover:bg-red-500 lg:w-[200px]'
+              <Button
+                className='w-[48%] rounded-md bg-primaryColor px-4 py-3 text-sm text-white hover:bg-secondColor lg:w-[200px]'
                 onClick={handleSubmit(handleCreateCategory)}
               >
                 Lưu
-              </button>
-              <Link
+              </Button>
+              <Button
                 to={'/danh-muc-cap-1'}
-                className='flex w-[48%] justify-center rounded-md bg-red-400 px-4 py-3 text-sm text-white hover:bg-red-500 lg:w-[200px]'
+                className='flex w-[48%] justify-center rounded-md bg-primaryColor px-4 py-3 text-sm text-white hover:bg-secondColor lg:w-[200px]'
               >
                 Thoát
-              </Link>
+              </Button>
             </div>
           </div>
         </div>
@@ -822,7 +823,7 @@ const DetailCategory = () => {
                   Ảnh thay thế
                 </label>
                 <span
-                  className='cursor-pointer text-red-500'
+                  className='cursor-pointer text-primaryColor'
                   onClick={() => setPreviewImg('')}
                 >
                   Xóa
@@ -888,7 +889,7 @@ const DetailCategory = () => {
                 />
                 <span
                   className={`${
-                    errors.status ? 'text-red-600' : 'text-textPrimaryColor'
+                    errors.status ? 'text-secondColor' : 'text-textPrimaryColor'
                   }`}
                 >
                   Bật hiển thị
@@ -910,7 +911,7 @@ const DetailCategory = () => {
                 />
                 <span
                   className={`${
-                    errors.status ? 'text-red-600' : 'text-textPrimaryColor'
+                    errors.status ? 'text-secondColor' : 'text-textPrimaryColor'
                   }`}
                 >
                   Tắt hiển thị
@@ -943,7 +944,7 @@ const DetailCategory = () => {
                 <span
                   className={`${
                     errors.contentType
-                      ? 'text-red-600'
+                      ? 'text-secondColor'
                       : 'text-textPrimaryColor'
                   }`}
                 >
@@ -969,7 +970,7 @@ const DetailCategory = () => {
                     <span
                       className={`${
                         errors.contentType
-                          ? 'text-red-600'
+                          ? 'text-secondColor'
                           : 'text-textPrimaryColor'
                       }`}
                     >
@@ -993,7 +994,7 @@ const DetailCategory = () => {
                     <span
                       className={`${
                         errors.contentType
-                          ? 'text-red-600'
+                          ? 'text-secondColor'
                           : 'text-textPrimaryColor'
                       }`}
                     >
@@ -1021,7 +1022,7 @@ const DetailCategory = () => {
                 <span
                   className={`${
                     errors.contentType
-                      ? 'text-red-600'
+                      ? 'text-secondColor'
                       : 'text-textPrimaryColor'
                   }`}
                 >
@@ -1049,7 +1050,7 @@ const DetailCategory = () => {
                 <span
                   className={`${
                     errors.contentType
-                      ? 'text-red-600'
+                      ? 'text-secondColor'
                       : 'text-textPrimaryColor'
                   }`}
                 >

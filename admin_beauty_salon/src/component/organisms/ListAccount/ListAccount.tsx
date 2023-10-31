@@ -1,9 +1,9 @@
 import { ChangeEvent, Fragment, useEffect, useState } from 'react'
 import { useQueryClient } from 'react-query'
-import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
+import images from '@/assets/images'
 import {
   handleGetInfo,
   useDebounce,
@@ -11,8 +11,8 @@ import {
   useGetListUser,
 } from '@/hooks/hooks'
 import Search from '@/component/molecules/Search'
-import images from '@/assets/images'
 import Modal from '@/component/molecules/Modal'
+import Button from '@/component/atoms/Button'
 
 const ListAccount = () => {
   const queryClient = useQueryClient()
@@ -121,12 +121,12 @@ const ListAccount = () => {
           handleClearChange={handleClearChange}
         />
         <div className='ml-5 mr-5 mt-4 flex w-full flex-col items-center gap-3 lg:ml-0 lg:mt-0 lg:w-auto lg:flex-row'>
-          <Link
+          <Button
             to={'/xac-thuc-uy-quyen'}
-            className='w-full rounded-md bg-red-500 px-3 py-2 text-white hover:bg-red-600 md:text-sm lg:w-auto lg:text-base'
+            className='w-full rounded-md bg-primaryColor px-3 py-2 text-white hover:bg-secondColor md:text-sm lg:w-auto lg:text-base'
           >
             Thêm tài khoản
-          </Link>
+          </Button>
         </div>
       </div>
       <div className='relative mb-5 overflow-hidden rounded-lg bg-white shadow-md'>
@@ -134,12 +134,12 @@ const ListAccount = () => {
           <p className='rounded-md text-sm md:my-3 md:py-2 lg:my-5 lg:px-4 lg:text-base'>
             {checked.length} lượt chọn
           </p>
-          <button
-            className='my-2 h-10 min-w-[70px] rounded-md border-2 border-solid px-1 py-1 text-sm text-gray-900 md:my-3'
+          <Button
+            className='my-2 h-10 min-w-[70px] rounded-md border-2 border-solid px-1 py-1 text-sm text-textHeadingColor md:my-3'
             onClick={handleOpenModal}
           >
             Xóa
-          </button>
+          </Button>
         </div>
         <div className='max-h-[625px] w-full overflow-x-auto overflow-y-auto'>
           <table className='mb-4 min-w-full max-w-full whitespace-nowrap text-left text-sm text-textPrimaryColor'>
@@ -161,32 +161,33 @@ const ListAccount = () => {
                       checked={
                         checkedAll.length ===
                           listUserApi.data?.results.length &&
-                        checked.length === listUserApi.data?.results.length
+                        checked.length === listUserApi.data?.results.length &&
+                        checked.length !== 0
                       }
                       onChange={handleCheckAll}
                     />
                   </div>
                 </th>
-                <th scope='col' className='px-6 py-3 text-red-600'>
+                <th scope='col' className='px-6 py-3 text-secondColor'>
                   Ảnh đại diện
                 </th>
 
-                <th scope='col' className='px-6 py-3 text-red-600'>
+                <th scope='col' className='px-6 py-3 text-secondColor'>
                   Họ và tên
                 </th>
-                <th scope='col' className='px-6 py-3 text-red-600'>
+                <th scope='col' className='px-6 py-3 text-secondColor'>
                   Vai trò
                 </th>
-                <th scope='col' className='px-6 py-3 text-red-600'>
+                <th scope='col' className='px-6 py-3 text-secondColor'>
                   Email
                 </th>
-                <th scope='col' className='px-6 py-3 text-red-600'>
+                <th scope='col' className='px-6 py-3 text-secondColor'>
                   Số điện thoại
                 </th>
-                <th scope='col' className='px-6 py-3 text-red-600'>
+                <th scope='col' className='px-6 py-3 text-secondColor'>
                   Trạng thái
                 </th>
-                <th scope='col' className='px-6 py-3 text-red-600'></th>
+                <th scope='col' className='px-6 py-3 text-secondColor'></th>
               </tr>
               {!listUserApi.isLoading &&
                 filteredData!.map((item, index: number) => (
@@ -217,7 +218,7 @@ const ListAccount = () => {
                     </th>
                     <th
                       scope='row'
-                      className='whitespace-nowrap px-6 py-4 font-medium text-gray-900'
+                      className='whitespace-nowrap px-6 py-4 font-medium text-textHeadingColor'
                     >
                       {item.fullName}
                     </th>
@@ -227,16 +228,16 @@ const ListAccount = () => {
                     <td className='px-6 py-4'>
                       <p
                         className={`font-medium ${
-                          item.status ? 'text-green-500' : 'text-red-500'
+                          item.status ? 'text-green-500' : 'text-primaryColor'
                         } `}
                       >
                         {item.status ? 'Bật' : 'Tắt'}
                       </p>
                     </td>
                     <td className='w-4 p-5'>
-                      <Link to={`/chinh-sua-tai-khoan/${item.slug}`}>
-                        <i className='ri-pencil-fill cursor-pointer rounded border border-red-500 p-3 text-red-500'></i>
-                      </Link>
+                      <Button to={`/chinh-sua-tai-khoan/${item.slug}`}>
+                        <i className='ri-pencil-fill cursor-pointer rounded border border-primaryColor p-3 text-primaryColor'></i>
+                      </Button>
                     </td>
                   </tr>
                 ))}

@@ -1,5 +1,6 @@
 import { Fragment } from 'react'
-import { Link } from 'react-router-dom'
+
+import Button from '@/component/atoms/Button'
 
 type Props = {
   checked: string[]
@@ -46,7 +47,7 @@ const Items = ({
             </th>
             <th
               scope='row'
-              className='whitespace-nowrap px-6 py-4 font-medium text-gray-900'
+              className='whitespace-nowrap px-6 py-4 font-medium text-textHeadingColor'
             >
               {item.title}
             </th>
@@ -60,16 +61,16 @@ const Items = ({
             <td className='px-6 py-4'>
               <span
                 className={`font-medium ${
-                  item.status ? 'text-green-500' : 'text-red-500'
+                  item.status ? 'text-green-500' : 'text-primaryColor'
                 } `}
               >
                 {item.status ? 'Bật' : 'Tắt'}
               </span>
             </td>
             <td className='w-4 p-5'>
-              <Link to={`/tao-trang-bai-viet/${item.postId}/${item.slug}`}>
-                <i className='ri-pencil-fill cursor-pointer rounded border border-red-500 p-3 text-red-500'></i>
-              </Link>
+              <Button to={`/tao-trang-bai-viet/${item.postId}/${item.slug}`}>
+                <i className='ri-pencil-fill cursor-pointer rounded border border-primaryColor p-3 text-primaryColor'></i>
+              </Button>
             </td>
           </tr>
         ))}
@@ -95,7 +96,7 @@ const Items = ({
             </th>
             <th
               scope='row'
-              className='whitespace-nowrap px-6 py-4 font-medium text-gray-900'
+              className='whitespace-nowrap px-6 py-4 font-medium text-textHeadingColor'
             >
               {item.name}
             </th>
@@ -109,16 +110,16 @@ const Items = ({
             <td className='px-6 py-4'>
               <span
                 className={`font-medium ${
-                  item.status ? 'text-green-500' : 'text-red-500'
+                  item.status ? 'text-green-500' : 'text-primaryColor'
                 } `}
               >
                 {item.status ? 'Bật' : 'Tắt'}
               </span>
             </td>
             <td className='w-4 p-5'>
-              <Link to={`/tao-trang-san-pham/${item.productId}/${item.slug}`}>
-                <i className='ri-pencil-fill cursor-pointer rounded border border-red-500 p-3 text-red-500'></i>
-              </Link>
+              <Button to={`/tao-trang-san-pham/${item.productId}/${item.slug}`}>
+                <i className='ri-pencil-fill cursor-pointer rounded border border-primaryColor p-3 text-primaryColor'></i>
+              </Button>
             </td>
           </tr>
         ))}

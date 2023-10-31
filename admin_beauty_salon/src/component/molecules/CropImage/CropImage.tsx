@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Cropper from 'react-easy-crop'
 
 import getCroppedImg from '@/helpers/listFunction'
+import Button from '@/component/atoms/Button'
 
 type Props = {
   image: string | ArrayBuffer | null
@@ -72,7 +73,7 @@ const CropImage = ({
           <div className='w-full font-bold'>
             <p>Zoom: {zoom * 10}%</p>
             <input
-              className='mx-0 my-5 h-2.5 w-full cursor-pointer appearance-none rounded-xl bg-[#d3d3d3] accent-red-400 outline-none'
+              className='mx-0 my-5 h-2.5 w-full cursor-pointer appearance-none rounded-xl bg-[#d3d3d3] accent-primaryColor outline-none'
               type='range'
               min={1}
               max={10}
@@ -84,7 +85,7 @@ const CropImage = ({
           <div className='w-full font-bold'>
             <p>Rotation: {rotation * 10}%</p>
             <input
-              className='mx-0 my-5 h-2.5 w-full cursor-pointer appearance-none rounded-xl bg-[#d3d3d3] accent-red-400 outline-none'
+              className='mx-0 my-5 h-2.5 w-full cursor-pointer appearance-none rounded-xl bg-[#d3d3d3] accent-primaryColor outline-none'
               type='range'
               min={0}
               max={360}
@@ -94,18 +95,18 @@ const CropImage = ({
             />
           </div>
           <div className='flex items-center justify-center'>
-            <button
-              className='mx-2 mt-6 w-[125px] rounded bg-red-400 px-0 py-1.5 tracking-[1px] text-white hover:bg-red-500'
+            <Button
+              className='mx-2 mt-6 w-[125px] rounded bg-primaryColor px-0 py-1.5 tracking-[1px] text-white hover:bg-secondColor'
               onClick={onCrop}
             >
               Cắt
-            </button>
-            <button
-              className='mx-2 mt-6 w-[125px] rounded bg-red-400 px-0 py-1.5 tracking-[1px] text-white hover:bg-red-500'
+            </Button>
+            <Button
+              className='mx-2 mt-6 w-[125px] rounded bg-primaryColor px-0 py-1.5 tracking-[1px] text-white hover:bg-secondColor'
               onClick={() => setModalCrop(false)}
             >
               Hủy
-            </button>
+            </Button>
           </div>
         </div>
       </div>

@@ -1,1 +1,1 @@
-export { default } from "./EditorLandingPage";
+export { default } from './EditorLandingPage'

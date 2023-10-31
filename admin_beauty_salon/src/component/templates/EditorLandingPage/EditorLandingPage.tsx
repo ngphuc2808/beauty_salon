@@ -1,3 +1,7 @@
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import he from 'he'
+
 import basicBlockPlugin from 'grapesjs-blocks-basic'
 import formPlugin from 'grapesjs-plugin-forms'
 import editorPlugin from 'grapesjs-plugin-ckeditor'
@@ -7,7 +11,6 @@ import customCodePlugin from 'grapesjs-custom-code'
 import navbarPlugin from 'grapesjs-navbar'
 import tooltipsPlugin from 'grapesjs-tooltip'
 import imagePlugin from 'grapesjs-tui-image-editor'
-
 import GjsEditor, {
   AssetsProvider,
   Canvas,
@@ -17,35 +20,26 @@ import grapesjs from 'grapesjs'
 import type { Editor } from 'grapesjs'
 import 'grapesjs/dist/css/grapes.min.css'
 
-import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import CustomModal from '@/component/molecules/CustomModal'
+import CustomAssetManager from '@/component/molecules/CustomAssetManager'
+import Topbar from '@/component/molecules/Topbar'
+import RightSidebar from '@/component/molecules/RightSidebar'
 
-import CustomModal from './components/CustomModal'
-import CustomAssetManager from './components/CustomAssetManager'
-import Topbar from './components/Topbar'
-import RightSidebar from './components/RightSidebar'
 import { useGetCategory } from '@/hooks/hooks'
-import he from 'he'
 import { useGlobalContext } from '@/contexts/globalContext'
 
 const LandingPageEditor = () => {
-  const { projectData } = useGlobalContext()
-
   const { id } = useParams()
 
   const isUpdate = Boolean(id)
 
+  const { projectData } = useGlobalContext()
+
   const getCategoryApi = useGetCategory(id!)
 
-  const [editor, setEditor] = useState<any>()
+  const [editor, setEditor] = useState<Editor>()
 
-  const arrayImage = [
-    'https://via.placeholder.com/350x250/78c5d6/fff',
-    'https://via.placeholder.com/350x250/459ba8/fff',
-    'https://via.placeholder.com/350x250/79c267/fff',
-    'https://via.placeholder.com/350x250/c5d647/fff',
-    'https://via.placeholder.com/350x250/f28c33/fff',
-  ]
+  const arrayImage = ['']
 
   useEffect(() => {
     if (editor && projectData.projectData) {
@@ -74,7 +68,7 @@ const LandingPageEditor = () => {
 
   return (
     <GjsEditor
-      className='gjs-custom-editor bg-white text-black'
+      className='gjs-custom-editor bg-white text-textPrimaryColor'
       grapesjs={grapesjs}
       options={{
         height: '100vh',
@@ -103,14 +97,12 @@ const LandingPageEditor = () => {
       ]}
       onEditor={onEditor}
     >
-      <div className={`flex h-full border-b border-red-400`}>
+      <div className='flex h-full border-b border-primaryColor'>
         <div className='gjs-column-m flex flex-grow flex-col'>
-          <Topbar className='min-h-[64px] border-b border-red-400 shadow-headerBox' />
-          <Canvas className='gjs-custom-editor-canvas flex-grow bg-slate-300' />
+          <Topbar className='min-h-[64px] border-b border-primaryColor shadow-headerBox' />
+          <Canvas className='gjs-custom-editor-canvas flex-grow bg-slate-200' />
         </div>
-        <RightSidebar
-          className={`gjs-column-r w-[300px] border-l border-red-400`}
-        />
+        <RightSidebar className='gjs-column-r w-[300px] border-l border-primaryColor' />
       </div>
       <ModalProvider>
         {({ open, title, content, close }) => (

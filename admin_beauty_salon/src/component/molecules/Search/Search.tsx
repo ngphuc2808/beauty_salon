@@ -31,7 +31,7 @@ const Search = ({
       />
       <div className='flex items-center'>
         <i
-          className={`ri-close-line cursor-pointer px-3 py-[5px] hover:text-red-500 ${
+          className={`ri-close-line cursor-pointer px-3 py-[5px] hover:text-secondColor ${
             searchTerm.length > 0 ? 'block' : 'hidden'
           }`}
           onClick={() => {
@@ -39,9 +39,8 @@ const Search = ({
             inputRef.current.focus()
           }}
         ></i>
-        <i className='ri-loader-3-line hidden animate-spin px-3 py-[5px]'></i>
         <span className='h-5 w-px bg-[#cecece]'></span>
-        <i className='ri-search-line cursor-pointer px-3 py-[5px] hover:text-red-500'></i>
+        <i className='ri-search-line cursor-pointer px-3 py-[5px] hover:text-secondColor'></i>
       </div>
     </div>
   )

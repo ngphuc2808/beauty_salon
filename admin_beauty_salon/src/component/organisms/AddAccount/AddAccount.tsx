@@ -1,5 +1,4 @@
 import { ChangeEvent, Fragment, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 
 import { toast } from 'react-toastify'
@@ -9,6 +8,7 @@ import { usePostCreateUser, usePostImage } from '@/hooks/hooks'
 import { useQueryClient } from 'react-query'
 
 import CropImage from '@/component/molecules/CropImage'
+import Button from '@/component/atoms/Button'
 
 const imageMimeType = /image\/(png|jpg|jpeg)/i
 
@@ -144,12 +144,12 @@ const AddAccount = () => {
           Thêm tài khoản
         </h1>
         <div className='ml-5 mr-5 mt-4 flex w-full flex-col items-center gap-3 lg:ml-0 lg:mt-0 lg:w-auto lg:flex-row'>
-          <Link
+          <Button
             to={'/danh-sach-nguoi-dung'}
-            className='w-full rounded-md bg-red-500 px-3 py-2 text-white hover:bg-red-600 md:text-sm lg:w-auto lg:text-base'
+            className='w-full rounded-md bg-primaryColor px-3 py-2 text-white hover:bg-secondColor md:text-sm lg:w-auto lg:text-base'
           >
             Danh sách tài khoản
-          </Link>
+          </Button>
         </div>
       </div>
       <div className='grid grid-cols-12 gap-x-3'>
@@ -174,12 +174,12 @@ const AddAccount = () => {
                   })}
                   className={`block w-full rounded-md border p-3 text-sm outline-none ${
                     errors.username
-                      ? 'border-red-500 bg-red-50 placeholder-red-400'
+                      ? 'border-primaryColor bg-red-50 placeholder-primaryColor'
                       : 'bg-white'
                   }`}
                   placeholder='Tài khoản'
                 />
-                <p className='mt-2 text-sm text-red-600'>
+                <p className='mt-2 text-sm text-secondColor'>
                   {errors.username?.message}
                 </p>
               </div>
@@ -208,12 +208,12 @@ const AddAccount = () => {
                   autoComplete='on'
                   className={`block w-full rounded-md border p-3 text-sm outline-none ${
                     errors.password
-                      ? 'border-red-500 bg-red-50 placeholder-red-400'
+                      ? 'border-primaryColor bg-red-50 placeholder-primaryColor'
                       : 'bg-white'
                   }`}
                   placeholder='Nhập mật khẩu'
                 />
-                <p className='mt-2 text-sm text-red-600'>
+                <p className='mt-2 text-sm text-secondColor'>
                   {errors.password?.message}
                 </p>
               </div>
@@ -235,12 +235,12 @@ const AddAccount = () => {
                   })}
                   className={`block w-full rounded-md border p-3 text-sm outline-none ${
                     errors.fullName
-                      ? 'border-red-500 bg-red-50 placeholder-red-400'
+                      ? 'border-primaryColor bg-red-50 placeholder-primaryColor'
                       : 'bg-white'
                   }`}
                   placeholder='Họ và tên'
                 />
-                <p className='mt-2 text-sm text-red-600'>
+                <p className='mt-2 text-sm text-secondColor'>
                   {errors.fullName?.message}
                 </p>
               </div>
@@ -266,12 +266,12 @@ const AddAccount = () => {
                   })}
                   className={`block w-full rounded-md border p-3 text-sm outline-none ${
                     errors.email
-                      ? 'border-red-500 bg-red-50 placeholder-red-400'
+                      ? 'border-primaryColor bg-red-50 placeholder-primaryColor'
                       : 'bg-white'
                   }`}
                   placeholder='Email'
                 />
-                <p className='mt-2 text-sm text-red-600'>
+                <p className='mt-2 text-sm text-secondColor'>
                   {errors.email?.message}
                 </p>
               </div>
@@ -298,12 +298,12 @@ const AddAccount = () => {
                   })}
                   className={`block w-full rounded-md border p-3 text-sm outline-none ${
                     errors.phone
-                      ? 'border-red-500 bg-red-50 placeholder-red-400'
+                      ? 'border-primaryColor bg-red-50 placeholder-primaryColor'
                       : 'bg-white'
                   }`}
                   placeholder='Số điện thoại'
                 />
-                <p className='mt-2 text-sm text-red-600'>
+                <p className='mt-2 text-sm text-secondColor'>
                   {errors.phone?.message}
                 </p>
               </div>
@@ -331,7 +331,9 @@ const AddAccount = () => {
                     />
                     <p
                       className={`${
-                        errors.status ? 'text-red-600' : 'text-textPrimaryColor'
+                        errors.status
+                          ? 'text-secondColor'
+                          : 'text-textPrimaryColor'
                       }`}
                     >
                       Bật
@@ -353,14 +355,16 @@ const AddAccount = () => {
                     />
                     <p
                       className={`${
-                        errors.status ? 'text-red-600' : 'text-textPrimaryColor'
+                        errors.status
+                          ? 'text-secondColor'
+                          : 'text-textPrimaryColor'
                       }`}
                     >
                       Tắt
                     </p>
                   </label>
                 </div>
-                <p className='mt-2 text-sm text-red-600'>
+                <p className='mt-2 text-sm text-secondColor'>
                   {errors.status?.message}
                 </p>
               </div>
@@ -388,7 +392,9 @@ const AddAccount = () => {
                     />
                     <span
                       className={`${
-                        errors.role ? 'text-red-600' : 'text-textPrimaryColor'
+                        errors.role
+                          ? 'text-secondColor'
+                          : 'text-textPrimaryColor'
                       }`}
                     >
                       Quản trị viên
@@ -410,14 +416,16 @@ const AddAccount = () => {
                     />
                     <span
                       className={`${
-                        errors.role ? 'text-red-600' : 'text-textPrimaryColor'
+                        errors.role
+                          ? 'text-secondColor'
+                          : 'text-textPrimaryColor'
                       }`}
                     >
                       Nhân viên
                     </span>
                   </label>
                 </div>
-                <p className='mt-2 text-sm text-red-600'>
+                <p className='mt-2 text-sm text-secondColor'>
                   {errors.role?.message}
                 </p>
               </div>
@@ -426,8 +434,8 @@ const AddAccount = () => {
           <div className='mt-5'>
             <div className='rounded-lg bg-white p-5 shadow'>
               <div className='flex items-center justify-between'>
-                <button
-                  className='flex max-h-[42px] w-[48%] items-center justify-center rounded-md bg-red-400 px-4 py-3 text-sm text-white hover:bg-red-500 lg:w-[200px]'
+                <Button
+                  className='flex max-h-[42px] w-[48%] items-center justify-center rounded-md bg-primaryColor px-4 py-3 text-sm text-white hover:bg-secondColor lg:w-[200px]'
                   onClick={handleSubmit(handleAddAccount)}
                 >
                   {createUserApi.isLoading ? (
@@ -435,13 +443,13 @@ const AddAccount = () => {
                   ) : (
                     <span>Lưu</span>
                   )}
-                </button>
-                <Link
+                </Button>
+                <Button
                   to={'/danh-muc-cap-1'}
-                  className='flex w-[48%] justify-center rounded-md bg-red-400 px-4 py-3 text-sm text-white hover:bg-red-500 lg:w-[200px]'
+                  className='flex w-[48%] justify-center rounded-md bg-primaryColor px-4 py-3 text-sm text-white hover:bg-secondColor lg:w-[200px]'
                 >
                   Thoát
-                </Link>
+                </Button>
               </div>
             </div>
           </div>
@@ -458,7 +466,7 @@ const AddAccount = () => {
                   Thay thế ảnh
                 </label>
                 <span
-                  className='cursor-pointer text-red-500'
+                  className='cursor-pointer text-primaryColor'
                   onClick={() => {
                     setPreviewImg('')
                     setValue('avatar', '')
