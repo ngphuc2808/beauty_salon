@@ -11,7 +11,7 @@ const EditorLandingPage = React.lazy(
 
 const Loading = () => {
   return (
-    <div className='flex h-full h-screen w-full items-center justify-center'>
+    <div className='flex h-screen w-full items-center justify-center'>
       <div className='flex items-center justify-center space-x-1 text-sm text-primaryColor'>
         <svg
           fill='none'
