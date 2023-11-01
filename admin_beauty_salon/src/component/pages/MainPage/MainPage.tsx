@@ -1,14 +1,13 @@
 import { useState, useEffect, ReactNode } from 'react'
 import { useIsFetching, useIsMutating } from 'react-query'
 import { useNavigate, useLocation } from 'react-router-dom'
-import 'remixicon/fonts/remixicon.css'
 
 import { useGetUserInfo, usePostLogout } from '@/hooks/hooks'
 import { dataNavigation } from '@/utils/data'
 
 import images from '@/assets/images'
-import Button from '../atoms/Button'
-import { SpinnerIcon } from '../atoms/CustomIcon/CustomIcon'
+import Button from '../../atoms/Button'
+import { SpinnerIcon } from '../../atoms/CustomIcon/CustomIcon'
 
 interface Props {
   children?: ReactNode

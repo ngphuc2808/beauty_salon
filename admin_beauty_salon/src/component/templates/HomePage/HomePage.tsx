@@ -1,4 +1,4 @@
-import MainLayout from '@/component/pages/MainPage'
+import MainPage from '@/component/pages/MainPage'
 import { listComponent } from '@/helpers/listComponent'
 
 type Props = {
@@ -6,7 +6,7 @@ type Props = {
 }
 
 const HomePage = ({ path }: Props) => {
-  return <MainLayout>{listComponent[path]}</MainLayout>
+  return <MainPage>{listComponent[path]}</MainPage>
 }
 
 export default HomePage

@@ -1,12 +1,18 @@
+import { ChangeEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { DevicesProvider, WithEditor } from '@grapesjs/react'
 import FormControl from '@mui/material/FormControl'
 import MenuItem from '@mui/material/MenuItem'
 import Select from '@mui/material/Select'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 import { useGlobalContext } from '@/contexts/globalContext'
 import Button from '@/component/atoms/Button'
 import TopbarButtons from '../TopbarButtons'
+import { usePostImages } from '@/hooks/hooks'
+
+const imageMimeType = /image\/(png|jpg|jpeg)/i
 
 type Props = {
   className?: string
@@ -18,6 +24,8 @@ const Topbar = ({ className, setArrayImage }: Props) => {
 
   const { setProjectData } = useGlobalContext()
 
+  const uploadImagesApi = usePostImages()
+
   const handleSaveContent = () => {
     setProjectData({
       projectData: JSON.stringify((window as any).editor.getProjectData()),
@@ -27,8 +35,38 @@ const Topbar = ({ className, setArrayImage }: Props) => {
     router(-1)
   }
 
-  const handleUploadImage = () => {
-    setArrayImage([])
+  const fileListToArray = (fileList: FileList) => {
+    const filesArray = []
+    for (const file of fileList) {
+      filesArray.push(file)
+    }
+    return filesArray
+  }
+
+  const handleUploadImage = async (e: ChangeEvent<HTMLInputElement>) => {
+    let input = e.currentTarget
+    if (input.files?.length) {
+      const files = fileListToArray(input.files)
+
+      const formData = new FormData()
+
+      for (let i = 0; i < files.length; i++) {
+        if (!files[i].type.match(imageMimeType)) {
+          toast.error('Vui lòng chọn đúng định dạng hình ảnh!')
+          return
+        } else {
+          formData.append('images', files[i])
+        }
+      }
+
+      try {
+        const images = await uploadImagesApi.mutateAsync(formData)
+        setArrayImage(images.data.results)
+        toast.success('Upload ảnh thành công!')
+      } catch (error) {
+        console.log(error)
+      }
+    }
   }
 
   return (
@@ -66,11 +104,17 @@ const Topbar = ({ className, setArrayImage }: Props) => {
           <label
             htmlFor='uploadFiles'
             className='flex max-h-[45.8px] min-w-[98px] cursor-pointer items-center gap-2 rounded-md border border-primaryColor px-4 py-3 text-sm text-primaryColor'
-            onClick={handleUploadImage}
           >
             <i className='ri-upload-line text-lg'></i>
             <p>Tải ảnh</p>
-            <input id='uploadFiles' type='file' multiple hidden />
+            <input
+              id='uploadFiles'
+              type='file'
+              onChange={handleUploadImage}
+              accept='image/*'
+              multiple
+              hidden
+            />
           </label>
           <Button
             className='max-h-[45.8px] min-w-[98px] rounded-md bg-primaryColor px-4 py-3 text-sm text-white hover:bg-secondColor'

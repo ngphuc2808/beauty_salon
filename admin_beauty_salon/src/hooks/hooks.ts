@@ -83,8 +83,8 @@ export const usePostImage = () => {
 
 export const usePostImages = () => {
   return useMutation({
-    mutationFn: (file: FormData[]) => {
-      return ImageApi.uploadImages(file)
+    mutationFn: (files: FormData) => {
+      return ImageApi.uploadImages(files)
     },
   })
 }
