@@ -188,7 +188,7 @@ export const useGetListPost = (
   return useQuery({
     queryKey: ['ListPost'],
     queryFn: () => handleGetListPost(),
-    staleTime: 60000,
+    staleTime: 10000,
     keepPreviousData: true,
     retry: 2,
     ...options,
@@ -202,7 +202,6 @@ export const useGetPost = (
   return useQuery({
     queryKey: ['EditPost', { slug: slug }],
     queryFn: () => handleGetPost(slug),
-    enabled: slug !== undefined,
     staleTime: 10000,
     keepPreviousData: true,
     retry: 2,
@@ -270,7 +269,6 @@ export const useGetProduct = (
   return useQuery({
     queryKey: ['EditProduct', { slug: slug }],
     queryFn: () => handleGetProduct(slug),
-    enabled: slug !== undefined,
     staleTime: 10000,
     keepPreviousData: true,
     retry: 2,
@@ -284,7 +282,7 @@ export const useGetListProduct = (
   return useQuery({
     queryKey: ['ListProduct'],
     queryFn: () => handleGetListProduct(),
-    staleTime: 60000,
+    staleTime: 10000,
     keepPreviousData: true,
     retry: 2,
     ...options,
@@ -338,20 +336,6 @@ export const useGetListCategory = (
   return useQuery({
     queryKey: ['ListCategory', { level: level }],
     queryFn: () => handleGetListCategory(level),
-    retry: 2,
-    ...options,
-  })
-}
-
-export const useGetListCategoryWithId = (
-  id: string,
-  level: string,
-  options?: UseQueryOptions<ResponseGetListCategoryType>,
-) => {
-  return useQuery({
-    queryKey: ['ListCategory', { level: level }, { id: id }],
-    queryFn: () => handleGetListCategory(level),
-    enabled: id !== undefined,
     staleTime: 10000,
     keepPreviousData: true,
     retry: 2,

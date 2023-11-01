@@ -32,14 +32,6 @@ const EditMyAccount = () => {
 
   const editUserApi = usePutEditUserInfo(isLogin.session)
 
-  const [cropImage, setCropImage] = useState<string | ArrayBuffer | null>(null)
-  const [modalCrop, setModalCrop] = useState<boolean>(false)
-  const [previewImg, setPreviewImg] = useState<string>(
-    getInfoApi.data?.results.avatar! || '',
-  )
-  const [file, setFile] = useState<File>()
-  const [fileImage, setFileImage] = useState<Blob>(new Blob())
-
   const {
     register,
     handleSubmit,
@@ -52,6 +44,14 @@ const EditMyAccount = () => {
       phone: getInfoApi.data?.results.phone,
     },
   })
+
+  const [cropImage, setCropImage] = useState<string | ArrayBuffer | null>(null)
+  const [modalCrop, setModalCrop] = useState<boolean>(false)
+  const [previewImg, setPreviewImg] = useState<string>(
+    getInfoApi.data?.results.avatar! || '',
+  )
+  const [file, setFile] = useState<File>()
+  const [fileImage, setFileImage] = useState<Blob>(new Blob())
 
   useEffect(() => {
     return () => {
@@ -118,15 +118,16 @@ const EditMyAccount = () => {
   }
 
   const handleUpdateInfo = async (value: EditAccountType) => {
-    const newValue = value
     if (fileImage.size !== 0) {
       const avatar = await uploadFile()
-      newValue.avatar = avatar?.data.results as string
+      value.avatar = avatar?.data.results as string
     } else {
-      newValue.avatar = getInfoApi.data?.results.avatar as string
+      value.avatar = previewImg
+        ? (getInfoApi.data?.results.avatar as string)
+        : ''
     }
 
-    editUserApi.mutate(newValue, {
+    editUserApi.mutate(value, {
       onSuccess(data) {
         toast.success('Cập nhật thông tin tài khoản thành công!')
         queryClient.setQueryData(
@@ -392,7 +393,7 @@ const EditMyAccount = () => {
                     ) : (
                       <>
                         <i className='ri-upload-cloud-2-line mb-1 text-4xl text-textPrimaryColor'></i>
-                        <p className='mb-2 text-sm text-textPrimaryColor'>
+                        <p className='mb-2 text-center text-sm text-textPrimaryColor'>
                           <span className='font-semibold'>
                             Bấm hoặc kéo thả để chọn ảnh của bạn
                           </span>
@@ -405,9 +406,9 @@ const EditMyAccount = () => {
                   </div>
                 )}
                 <input
-                  disabled={getInfoApi.isLoading ? true : false}
                   id='dropZone'
                   type='file'
+                  disabled={getInfoApi.isLoading ? true : false}
                   onChange={handleCrop}
                   accept='image/*'
                   hidden

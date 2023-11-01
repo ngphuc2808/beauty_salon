@@ -34,6 +34,9 @@ import { Indent, IndentBlock } from '@ckeditor/ckeditor5-indent'
 import { FileLoader, UploadAdapter } from '@ckeditor/ckeditor5-upload'
 
 import CropImage from '@/component/molecules/CropImage'
+import Button from '@/component/atoms/Button'
+import { SpinnerIcon } from '@/component/atoms/CustomIcon/CustomIcon'
+
 import {
   useGetPost,
   usePostImage,
@@ -43,19 +46,15 @@ import {
   useGetProduct,
   usePutEditProduct,
 } from '@/hooks/hooks'
-import Button from '@/component/atoms/Button'
-import { SpinnerIcon } from '@/component/atoms/CustomIcon/CustomIcon'
 
 const imageMimeType = /image\/(png|jpg|jpeg)/i
 
 const CreatePost = () => {
   const router = useNavigate()
 
-  const location = useLocation()
+  const { pathname } = useLocation()
 
-  const isCreatePosts = Boolean(
-    location.pathname.split('/')[1] === 'tao-trang-bai-viet',
-  )
+  const isCreatePosts = Boolean(pathname.split('/')[1] === 'tao-trang-bai-viet')
 
   const { id, slug } = useParams()
 
@@ -63,40 +62,38 @@ const CreatePost = () => {
 
   const queryClient = useQueryClient()
 
-  const getPostApi =
-    isCreatePosts &&
-    useGetPost(slug!, {
-      onSuccess(data) {
-        postForm.reset({
-          title: data.results.title,
-          content: {
-            html: data.results.content.html,
-          },
-          thumbnail: data.results.thumbnail,
-          status: data.results.status.toString(),
-        })
-        setPreviewContent(he.decode(data.results.content.html) || '')
-        setPreviewImg(data.results.thumbnail as string)
-      },
-    })
+  const getPostApi = useGetPost(slug!, {
+    onSuccess(data) {
+      postForm.reset({
+        title: data.results.title,
+        content: {
+          html: data.results.content.html,
+        },
+        thumbnail: data.results.thumbnail,
+        status: data.results.status.toString(),
+      })
+      setPreviewContent(he.decode(data.results.content.html) || '')
+      setPreviewImg(data.results.thumbnail as string)
+    },
+    enabled: slug !== undefined && isCreatePosts,
+  })
 
-  const getProductApi =
-    !isCreatePosts &&
-    useGetProduct(slug!, {
-      onSuccess(data) {
-        productForm.reset({
-          name: data.results.name,
-          content: {
-            html: data.results.content.html,
-          },
-          thumbnail: data.results.thumbnail,
-          status: data.results.status.toString(),
-          links: data.results.links,
-        })
-        setPreviewContent(he.decode(data.results.content.html) || '')
-        setPreviewImg(data.results.thumbnail as string)
-      },
-    })
+  const getProductApi = useGetProduct(slug!, {
+    onSuccess(data) {
+      productForm.reset({
+        name: data.results.name,
+        content: {
+          html: data.results.content.html,
+        },
+        thumbnail: data.results.thumbnail,
+        status: data.results.status.toString(),
+        links: data.results.links,
+      })
+      setPreviewContent(he.decode(data.results.content.html) || '')
+      setPreviewImg(data.results.thumbnail as string)
+    },
+    enabled: slug !== undefined && !isCreatePosts,
+  })
 
   const postImageApi = usePostImage()
 
@@ -108,66 +105,62 @@ const CreatePost = () => {
 
   const updateProductApi = usePutEditProduct(id!)
 
-  const [cropImage, setCropImage] = useState<string | ArrayBuffer | null>(null)
-  const [modalCrop, setModalCrop] = useState(false)
-  const [previewImg, setPreviewImg] = useState<string>(
-    (getPostApi && getPostApi.data?.results.thumbnail) ||
-      (getProductApi && getProductApi.data?.results.thumbnail) ||
-      '',
-  )
-  const [previewContent, setPreviewContent] = useState<string>('')
-  const [fileImage, setFileImage] = useState<Blob>(new Blob())
-  const [file, setFile] = useState<File>()
-
   const postForm = useForm<PostType>({
     defaultValues: {
       isLadingPage: false,
-      title: (getPostApi && getPostApi.data?.results.title) || '',
+      title: getPostApi.data?.results.title || '',
       content: {
-        projectData:
-          (getPostApi && getPostApi.data?.results.content.projectData) || '',
-        html: (getPostApi && getPostApi.data?.results.content.html) || '',
-        css: (getPostApi && getPostApi.data?.results.content.css) || '',
+        projectData: '',
+        html: getPostApi.data?.results.content.html || '',
+        css: '',
       },
-      thumbnail: (getPostApi && getPostApi.data?.results.thumbnail) || '',
-      status: (getPostApi && getPostApi.data?.results.status)?.toString() || '',
-      metaTitles: (getPostApi && getPostApi.data?.results.metaTitles) || '',
-      metaKeyWords: (getPostApi && getPostApi.data?.results.metaKeyWords) || '',
-      metaDescriptions:
-        (getPostApi && getPostApi.data?.results.metaDescriptions) || '',
+      thumbnail: getPostApi.data?.results.thumbnail || '',
+      status: getPostApi.data?.results.status?.toString() || '',
+      metaTitles: getPostApi.data?.results.metaTitles || '',
+      metaKeyWords: getPostApi.data?.results.metaKeyWords || '',
+      metaDescriptions: getPostApi.data?.results.metaDescriptions || '',
     },
   })
 
   const productForm = useForm<ProductType>({
     defaultValues: {
-      name: (getProductApi && getProductApi.data?.results.name) || '',
+      name: getProductApi.data?.results.name || '',
       content: {
         projectData: '',
-        html: (getProductApi && getProductApi.data?.results.content.html) || '',
+        html: getProductApi.data?.results.content.html || '',
         css: '',
       },
-      thumbnail: (getProductApi && getProductApi.data?.results.thumbnail) || '',
-      links: (getProductApi && getProductApi.data?.results.links) || [
+      thumbnail: getProductApi.data?.results.thumbnail || '',
+      links: getProductApi.data?.results.links || [
         {
           name: '',
           link: '',
         },
       ],
-      status:
-        (getProductApi && getProductApi.data?.results.status)?.toString() || '',
-      metaTitles:
-        (getProductApi && getProductApi.data?.results.metaTitles) || '',
-      metaKeyWords:
-        (getProductApi && getProductApi.data?.results.metaKeyWords) || '',
-      metaDescriptions:
-        (getProductApi && getProductApi.data?.results.metaDescriptions) || '',
+      status: getProductApi.data?.results.status?.toString() || '',
+      metaTitles: getProductApi.data?.results.metaTitles || '',
+      metaKeyWords: getProductApi.data?.results.metaKeyWords || '',
+      metaDescriptions: getProductApi.data?.results.metaDescriptions || '',
     },
   })
 
-  const { fields, append, remove } = useFieldArray({
-    name: 'links',
-    control: productForm.control,
-  })
+  const [cropImage, setCropImage] = useState<string | ArrayBuffer | null>(null)
+  const [modalCrop, setModalCrop] = useState(false)
+  const [previewImg, setPreviewImg] = useState<string>(
+    (isCreatePosts
+      ? getPostApi.data?.results.thumbnail
+      : getProductApi.data?.results.thumbnail) || '',
+  )
+  const [previewContent, setPreviewContent] = useState<string>(
+    isCreatePosts
+      ? getPostApi.data?.results! &&
+          he.decode(getPostApi.data.results.content.html!)
+      : (getProductApi.data?.results! &&
+          he.decode(getProductApi.data?.results.content.html!)) ||
+          '',
+  )
+  const [fileImage, setFileImage] = useState<Blob>(new Blob())
+  const [file, setFile] = useState<File>()
 
   useEffect(() => {
     return () => {
@@ -197,6 +190,11 @@ const CreatePost = () => {
       }
     }
   }, [file])
+
+  const { fields, append, remove } = useFieldArray({
+    name: 'links',
+    control: productForm.control,
+  })
 
   function uploadAdapter(loader: FileLoader): UploadAdapter {
     return {
@@ -264,19 +262,19 @@ const CreatePost = () => {
   }
 
   const handleCreatePost = async (value: PostType) => {
-    const newValue = value
     if (fileImage.size !== 0) {
       const thumbnail = await uploadFile()
-      newValue.thumbnail = thumbnail?.data.results as string
+      value.thumbnail = thumbnail?.data.results as string
     } else {
-      newValue.thumbnail =
-        (getPostApi && (getPostApi.data?.results.thumbnail as string)) || ''
+      value.thumbnail = previewImg
+        ? (getPostApi.data?.results.thumbnail as string)
+        : ''
     }
 
-    newValue.content.html = previewContent
+    value.content.html = previewContent
 
     if (!isUpdate) {
-      createPostApi.mutate(newValue, {
+      createPostApi.mutate(value, {
         onSuccess() {
           postForm.reset()
           setPreviewImg('')
@@ -290,7 +288,7 @@ const CreatePost = () => {
         },
       })
     } else {
-      updatePostApi.mutate(newValue, {
+      updatePostApi.mutate(value, {
         onSuccess() {
           toast.success('Cập nhật bài viết thành công!')
           queryClient.invalidateQueries({ queryKey: ['ListPost'] })
@@ -305,19 +303,17 @@ const CreatePost = () => {
   }
 
   const handleCreateProduct = async (value: ProductType) => {
-    const newValue = value
     if (fileImage.size !== 0) {
       const thumbnail = await uploadFile()
-      newValue.thumbnail = thumbnail?.data.results as string
+      value.thumbnail = thumbnail?.data.results as string
     } else {
-      newValue.thumbnail =
-        (getPostApi && (getPostApi.data?.results.thumbnail as string)) || ''
+      value.thumbnail = (getPostApi.data?.results.thumbnail as string) || ''
     }
 
-    newValue.content.html = previewContent
+    value.content.html = previewContent
 
     if (!isUpdate) {
-      createProductApi.mutate(newValue, {
+      createProductApi.mutate(value, {
         onSuccess() {
           productForm.reset()
           setPreviewImg('')
@@ -331,7 +327,7 @@ const CreatePost = () => {
         },
       })
     } else {
-      updateProductApi.mutate(newValue, {
+      updateProductApi.mutate(value, {
         onSuccess() {
           toast.success('Cập nhật sản phẩm thành công!')
           queryClient.invalidateQueries({ queryKey: ['ListProduct'] })
@@ -348,16 +344,13 @@ const CreatePost = () => {
   return (
     <Fragment>
       <div
-        className={`w-fullflex-wrap mb-5 flex min-h-[72px] items-center justify-between rounded-lg py-4 shadow lg:flex-nowrap ${
-          (getPostApi && getPostApi.isLoading) ||
-          (getProductApi && getProductApi.isLoading)
+        className={`mb-5 flex min-h-[72px] w-full flex-wrap items-center justify-between rounded-lg py-4 shadow lg:flex-nowrap ${
+          getPostApi.isLoading || getProductApi.isLoading
             ? 'animate-pulse bg-gray-300'
             : 'bg-white'
         }`}
       >
-        {(isCreatePosts
-          ? getPostApi && !getPostApi.isLoading
-          : getProductApi && !getProductApi.isLoading) && (
+        {(isCreatePosts ? !getPostApi.isLoading : !getProductApi.isLoading) && (
           <>
             <div className='flex items-center gap-3'>
               <Button
@@ -394,15 +387,13 @@ const CreatePost = () => {
         <div className='order-2 col-span-12 lg:order-none lg:col-span-8'>
           <div
             className={`mb-5 rounded-lg p-5 shadow ${
-              (getPostApi && getPostApi.isLoading) ||
-              (getProductApi && getProductApi.isLoading)
+              getPostApi.isLoading || getProductApi.isLoading
                 ? 'animate-pulse bg-gray-300'
                 : 'bg-white'
             }`}
           >
             <h1 className='mb-2 block font-normal text-textHeadingColor'>
-              {(getPostApi && getPostApi.error) ||
-              (getProductApi && getProductApi.error)
+              {getPostApi.error || getProductApi.error
                 ? 'Bài viết/Sản phẩm không tồn tại!'
                 : isCreatePosts
                 ? 'Tên bài viết'
@@ -414,10 +405,7 @@ const CreatePost = () => {
                   type='text'
                   placeholder='Nhập tên bài viết'
                   disabled={
-                    (getPostApi && getPostApi.isLoading) ||
-                    (getPostApi && getPostApi.isError)
-                      ? true
-                      : false
+                    getPostApi.isLoading || getPostApi.isError ? true : false
                   }
                   className={`block w-full rounded-md border p-3 text-sm outline-none ${
                     postForm.formState.errors.title
@@ -445,8 +433,7 @@ const CreatePost = () => {
                   type='text'
                   placeholder='Nhập tên sản phẩm'
                   disabled={
-                    (getProductApi && getProductApi.isLoading) ||
-                    (getProductApi && getProductApi.isError)
+                    getProductApi.isLoading || getProductApi.isError
                       ? true
                       : false
                   }
@@ -474,18 +461,17 @@ const CreatePost = () => {
           </div>
           <div
             className={`mb-5 w-full rounded-lg p-4 shadow ${
-              (getPostApi && getPostApi.isLoading) ||
-              (getProductApi && getProductApi.isLoading)
+              getPostApi.isLoading || getProductApi.isLoading
                 ? 'animate-pulse bg-gray-300'
                 : 'bg-white'
             }`}
           >
             <CKEditor
               disabled={
-                (getPostApi && getPostApi.isLoading) ||
-                (getPostApi && getPostApi.isError) ||
-                (getProductApi && getProductApi.isLoading) ||
-                (getProductApi && getProductApi.isError)
+                getPostApi.isLoading ||
+                getPostApi.isError ||
+                getProductApi.isLoading ||
+                getProductApi.isError
                   ? true
                   : false
               }
@@ -640,22 +626,21 @@ const CreatePost = () => {
           {isUpdate && (
             <div
               className={`mb-5 rounded-lg p-5 shadow ${
-                (getPostApi && getPostApi.isLoading) ||
-                (getProductApi && getProductApi.isLoading)
+                getPostApi.isLoading || getProductApi.isLoading
                   ? 'animate-pulse bg-gray-300'
                   : 'bg-white'
               }`}
             >
               {(isCreatePosts
-                ? getPostApi && !getPostApi.isLoading
-                : getProductApi && !getProductApi.isLoading) && (
+                ? !getPostApi.isLoading
+                : !getProductApi.isLoading) && (
                 <>
                   <h1 className='text-lg text-textHeadingColor'>
                     Bình luận của khách hàng
                   </h1>
                   {(isCreatePosts
-                    ? getPostApi && !getPostApi.error
-                    : getProductApi && !getProductApi.error) && (
+                    ? !getPostApi.error
+                    : !getProductApi.error) && (
                     <ul className='mt-5 '>
                       <li className='rounded-md  bg-red-200'>
                         <div className='flex items-center justify-between px-5 py-2'>
@@ -690,15 +675,14 @@ const CreatePost = () => {
           )}
           <div
             className={`rounded-lg p-5 shadow ${
-              (getPostApi && getPostApi.isLoading) ||
-              (getProductApi && getProductApi.isLoading)
+              getPostApi.isLoading || getProductApi.isLoading
                 ? 'animate-pulse bg-gray-300'
                 : 'bg-white'
             }`}
           >
             {(isCreatePosts
-              ? getPostApi && !getPostApi.isLoading
-              : getProductApi && !getProductApi.isLoading) && (
+              ? !getPostApi.isLoading
+              : !getProductApi.isLoading) && (
               <div className='flex items-center justify-between'>
                 <Button
                   className='w-[48%] rounded-md bg-primaryColor px-4 py-3 text-sm text-white hover:bg-secondColor lg:w-[200px]'
@@ -723,8 +707,7 @@ const CreatePost = () => {
         <div className='col-span-12 lg:col-span-4 [&>*]:mb-5'>
           <div
             className={`mt-0 rounded-lg p-5 shadow ${
-              (getPostApi && getPostApi.isLoading) ||
-              (getProductApi && getProductApi.isLoading)
+              getPostApi.isLoading || getProductApi.isLoading
                 ? 'animate-pulse bg-gray-300'
                 : 'bg-white'
             }`}
@@ -751,8 +734,7 @@ const CreatePost = () => {
                 htmlFor='dropZone'
                 className='flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100'
               >
-                {(getPostApi && getPostApi.isLoading) ||
-                (getProductApi && getProductApi.isLoading) ? (
+                {getPostApi.isLoading || getProductApi.isLoading ? (
                   <div role='status'>
                     <SpinnerIcon />
                     <span className='sr-only'>Loading...</span>
@@ -770,7 +752,7 @@ const CreatePost = () => {
                     ) : (
                       <>
                         <i className='ri-upload-cloud-2-line mb-1 text-4xl text-textPrimaryColor'></i>
-                        <p className='mb-2 text-sm text-textPrimaryColor'>
+                        <p className='mb-2 text-center text-sm text-textPrimaryColor'>
                           <span className='font-semibold'>
                             Bấm hoặc kéo thả để chọn ảnh của bạn
                           </span>
@@ -785,6 +767,9 @@ const CreatePost = () => {
                 <input
                   id='dropZone'
                   type='file'
+                  disabled={
+                    getPostApi.error || getPostApi.isLoading ? true : false
+                  }
                   onChange={handleCrop}
                   hidden
                   accept='image/*'
@@ -794,8 +779,7 @@ const CreatePost = () => {
           </div>
           <div
             className={`rounded-lg p-5 shadow ${
-              (getPostApi && getPostApi.isLoading) ||
-              (getProductApi && getProductApi.isLoading)
+              getPostApi.isLoading || getProductApi.isLoading
                 ? 'animate-pulse bg-gray-300'
                 : 'bg-white'
             } `}
@@ -814,10 +798,7 @@ const CreatePost = () => {
                       type='radio'
                       id='statusOn'
                       disabled={
-                        (getPostApi && getPostApi.error) ||
-                        (getPostApi && getPostApi.isLoading)
-                          ? true
-                          : false
+                        getPostApi.error || getPostApi.isLoading ? true : false
                       }
                       {...postForm.register('status', {
                         required: true,
@@ -842,8 +823,7 @@ const CreatePost = () => {
                       type='radio'
                       id='statusOn'
                       disabled={
-                        (getProductApi && getProductApi.error) ||
-                        (getProductApi && getProductApi.isLoading)
+                        getProductApi.error || getProductApi.isLoading
                           ? true
                           : false
                       }
@@ -876,10 +856,7 @@ const CreatePost = () => {
                       type='radio'
                       id='statusOff'
                       disabled={
-                        (getPostApi && getPostApi.error) ||
-                        (getPostApi && getPostApi.isLoading)
-                          ? true
-                          : false
+                        getPostApi.error || getPostApi.isLoading ? true : false
                       }
                       {...postForm.register('status', {
                         required: true,
@@ -904,8 +881,7 @@ const CreatePost = () => {
                       type='radio'
                       id='statusOff'
                       disabled={
-                        (getProductApi && getProductApi.error) ||
-                        (getProductApi && getProductApi.isLoading)
+                        getProductApi.error || getProductApi.isLoading
                           ? true
                           : false
                       }
@@ -932,8 +908,7 @@ const CreatePost = () => {
           </div>
           <div
             className={`mt-5 rounded-lg p-5 shadow ${
-              (getPostApi && getPostApi.isLoading) ||
-              (getProductApi && getProductApi.isLoading)
+              getPostApi.isLoading || getProductApi.isLoading
                 ? 'animate-pulse bg-gray-300'
                 : 'bg-white'
             }`}
@@ -948,10 +923,7 @@ const CreatePost = () => {
                     type='text'
                     id='metaTitle'
                     disabled={
-                      (getPostApi && getPostApi.isLoading) ||
-                      (getPostApi && getPostApi.isError)
-                        ? true
-                        : false
+                      getPostApi.isLoading || getPostApi.isError ? true : false
                     }
                     {...postForm.register('metaTitles')}
                     className='peer block w-full appearance-none border-0 border-b border-gray-300 bg-transparent px-0 py-2.5 text-sm text-textPrimaryColor focus:border-primaryColor focus:outline-none focus:ring-0'
@@ -961,8 +933,7 @@ const CreatePost = () => {
                     type='text'
                     id='metaTitle'
                     disabled={
-                      (getProductApi && getProductApi.isLoading) ||
-                      (getProductApi && getProductApi.isError)
+                      getProductApi.isLoading || getProductApi.isError
                         ? true
                         : false
                     }
@@ -983,10 +954,7 @@ const CreatePost = () => {
                     type='text'
                     id='metaKeyWords'
                     disabled={
-                      (getPostApi && getPostApi.isLoading) ||
-                      (getPostApi && getPostApi.isError)
-                        ? true
-                        : false
+                      getPostApi.isLoading || getPostApi.isError ? true : false
                     }
                     {...postForm.register('metaKeyWords')}
                     className='peer block w-full appearance-none border-0 border-b border-gray-300 bg-transparent px-0 py-2.5 text-sm text-textPrimaryColor focus:border-primaryColor focus:outline-none focus:ring-0'
@@ -996,8 +964,7 @@ const CreatePost = () => {
                     type='text'
                     id='metaKeyWords'
                     disabled={
-                      (getProductApi && getProductApi.isLoading) ||
-                      (getProductApi && getProductApi.isError)
+                      getProductApi.isLoading || getProductApi.isError
                         ? true
                         : false
                     }
@@ -1018,10 +985,7 @@ const CreatePost = () => {
                     type='text'
                     id='metaDescription'
                     disabled={
-                      (getPostApi && getPostApi.isLoading) ||
-                      (getPostApi && getPostApi.isError)
-                        ? true
-                        : false
+                      getPostApi.isLoading || getPostApi.isError ? true : false
                     }
                     {...postForm.register('metaDescriptions')}
                     className='peer block w-full appearance-none border-0 border-b border-gray-300 bg-transparent px-0 py-2.5 text-sm text-textPrimaryColor focus:border-primaryColor focus:outline-none focus:ring-0'
@@ -1031,8 +995,7 @@ const CreatePost = () => {
                     type='text'
                     id='metaDescription'
                     disabled={
-                      (getProductApi && getProductApi.isLoading) ||
-                      (getProductApi && getProductApi.isError)
+                      getProductApi.isLoading || getProductApi.isError
                         ? true
                         : false
                     }
@@ -1050,7 +1013,13 @@ const CreatePost = () => {
             </div>
           </div>
           {!isCreatePosts && (
-            <div className='mt-5 rounded-lg bg-white p-5 shadow'>
+            <div
+              className={`mt-5 rounded-lg p-5 shadow ${
+                getProductApi.isLoading
+                  ? 'animate-pulse bg-gray-300'
+                  : 'bg-white'
+              }`}
+            >
               <div className='[&>*]:mb-4 [&>:first-child]:mb-3'>
                 <h1 className='text-lg text-textHeadingColor'>
                   Button đặt hàng
@@ -1062,6 +1031,7 @@ const CreatePost = () => {
                         <input
                           type='text'
                           id='link'
+                          disabled={getProductApi.isLoading ? true : false}
                           {...productForm.register(`links.${index}.name`)}
                           className='peer block w-full appearance-none border-0 border-b border-gray-300 bg-transparent px-0 py-2.5 text-sm text-textPrimaryColor focus:border-primaryColor focus:outline-none focus:ring-0'
                         />
@@ -1090,6 +1060,7 @@ const CreatePost = () => {
                         <Button
                           className=''
                           onClick={() => append({ name: '', link: '' })}
+                          disable={getProductApi.isLoading ? true : false}
                         >
                           <i className='ri-add-line cursor-pointer p-1 text-xl hover:text-green-500'></i>
                         </Button>

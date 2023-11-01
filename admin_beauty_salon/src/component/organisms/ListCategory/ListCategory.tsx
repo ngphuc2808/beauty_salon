@@ -1,18 +1,42 @@
 import { ChangeEvent, Fragment, useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { useQueryClient } from 'react-query'
-import { useDeleteCategory, useGetListCategory } from '@/hooks/hooks'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
-import { dataContentType } from '@/utils/data'
+import {
+  handleGetCategory,
+  useDebounce,
+  useDeleteCategory,
+  useGetListCategory,
+} from '@/hooks/hooks'
+
 import Search from '@/component/molecules/Search'
 import Modal from '@/component/molecules/Modal'
 import Button from '@/component/atoms/Button'
 
+import { dataContentType } from '@/utils/data'
+
 const ListCategory = () => {
+  const { pathname } = useLocation()
+
+  const isListCategoryLevel3 = Boolean(
+    pathname.split('/')[1] === 'danh-muc-cap-3',
+  )
+
+  const isListCategoryLevel2 = Boolean(
+    pathname.split('/')[1] === 'danh-muc-cap-2',
+  )
+
+  const isListCategoryLevel1 = Boolean(
+    pathname.split('/')[1] === 'danh-muc-cap-1',
+  )
+
   const queryClient = useQueryClient()
 
-  const listCategoryApi = useGetListCategory('3')
+  const listCategoryApi = useGetListCategory(
+    pathname.substring(pathname.length - 1),
+  )
 
   const deleteCategoryApi = useDeleteCategory()
 
@@ -52,6 +76,16 @@ const ListCategory = () => {
     }
   }
 
+  const debouncedSearchTerm = useDebounce(searchTerm, 300)
+
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value)
+  }
+
+  const handleClearChange = () => {
+    setSearchTerm('')
+  }
+
   const handleOpenModal = () => {
     if (checked.length > 0) {
       setModalDelete(true)
@@ -73,19 +107,34 @@ const ListCategory = () => {
     })
   }
 
-  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value)
+  const handlePrefetchList = (id: string) => {
+    queryClient.prefetchQuery(['CateInfo', { id: id }], {
+      queryFn: () => handleGetCategory(id),
+      staleTime: 10000,
+    })
   }
 
-  const handleClearChange = () => {
-    setSearchTerm('')
-  }
+  const filteredData = listCategoryApi.data?.message.filter((item) =>
+    item.name
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .includes(
+        debouncedSearchTerm
+          .trim()
+          .toLowerCase()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, ''),
+      ),
+  )
 
   return (
     <Fragment>
       <div className='mb-5 flex w-full flex-wrap items-center justify-between rounded-lg bg-white px-5 py-4 shadow lg:flex-nowrap'>
         <h1 className='text-textHeadingColor md:text-base lg:text-xl'>
-          Danh mục cấp 3
+          {isListCategoryLevel1 && 'Danh mục cấp 1'}
+          {isListCategoryLevel2 && 'Danh mục cấp 2'}
+          {isListCategoryLevel3 && 'Danh mục cấp 3'}
         </h1>
         <Search
           title='danh mục cấp 1'
@@ -94,7 +143,15 @@ const ListCategory = () => {
           handleClearChange={handleClearChange}
         />
         <Button
-          to={'/tao-danh-muc-cap-3'}
+          to={
+            isListCategoryLevel1
+              ? '/tao-danh-muc-cap-1'
+              : isListCategoryLevel2
+              ? '/tao-danh-muc-cap-2'
+              : isListCategoryLevel3
+              ? '/tao-danh-muc-cap-3'
+              : ''
+          }
           className='rounded-md bg-primaryColor px-3 py-2 text-white hover:bg-secondColor md:text-sm lg:text-base'
         >
           Thêm danh mục
@@ -115,13 +172,20 @@ const ListCategory = () => {
         <div className='max-h-[626px] w-full overflow-x-auto overflow-y-auto'>
           <table className='mb-4 min-w-full max-w-full whitespace-nowrap text-left text-sm text-textPrimaryColor'>
             <tbody>
-              <tr className='border-b bg-white hover:bg-gray-50'>
+              <tr
+                className={`border-b ${
+                  listCategoryApi.isLoading
+                    ? 'animate-pulse bg-gray-300'
+                    : 'bg-white'
+                }`}
+              >
                 <th scope='col' className='p-5'>
                   <div className='flex items-center'>
                     <input
                       id='checkbox-all-search'
                       type='checkbox'
                       className='h-4 w-4 cursor-pointer'
+                      disabled={listCategoryApi.isLoading ? true : false}
                       checked={
                         checkedAll.length ===
                           listCategoryApi.data?.message.length &&
@@ -134,8 +198,17 @@ const ListCategory = () => {
                   </div>
                 </th>
                 <th scope='col' className='px-6 py-3 text-secondColor'>
-                  Tên danh mục cấp 3
+                  {isListCategoryLevel1 && 'Tên danh mục cấp 1'}
+                  {isListCategoryLevel2 && 'Tên danh mục cấp 2'}
+                  {isListCategoryLevel3 && 'Tên danh mục cấp 3'}
                 </th>
+
+                {(isListCategoryLevel1 || isListCategoryLevel2) && (
+                  <th scope='col' className='px-6 py-3 text-secondColor'>
+                    {isListCategoryLevel1 && 'Tên danh mục cấp 2'}
+                    {isListCategoryLevel2 && 'Tên danh mục cấp 3'}
+                  </th>
+                )}
                 <th scope='col' className='px-6 py-3 text-secondColor'>
                   Nội dung
                 </th>
@@ -144,51 +217,74 @@ const ListCategory = () => {
                 </th>
                 <th scope='col' className='px-6 py-3 text-secondColor'></th>
               </tr>
-
-              {listCategoryApi.data?.message.map((item, index) => (
-                <tr className='border-b bg-white hover:bg-gray-50' key={index}>
-                  <td className='w-4 p-5'>
-                    <div className='flex items-center'>
-                      <input
-                        type='checkbox'
-                        className='h-4 w-4 cursor-pointer'
-                        id={`checkbox-table-${item.id}`}
-                        checked={checked.includes(item.id)}
-                        onChange={() => handleCheck(item.id)}
-                      />
-                    </div>
-                  </td>
-                  <th
-                    scope='row'
-                    className='whitespace-nowrap px-6 py-4 font-medium text-textHeadingColor'
+              {!listCategoryApi.isLoading &&
+                filteredData!.map((item, index) => (
+                  <tr
+                    className='border-b bg-white hover:bg-gray-50'
+                    key={index}
+                    onMouseEnter={() => handlePrefetchList(item.id)}
                   >
-                    {item.name}
-                  </th>
-                  <td className='px-6 py-4'>
-                    {
-                      dataContentType.find(
-                        (value) => value.name === item.contentType,
-                      )?.content
-                    }
-                  </td>
-
-                  <td className='px-6 py-4'>
-                    <span
-                      className={`font-medium ${
-                        item.status ? 'text-green-500' : 'text-primaryColor'
-                      } `}
+                    <td className='w-4 p-5'>
+                      <div className='flex items-center'>
+                        <input
+                          type='checkbox'
+                          className='h-4 w-4 cursor-pointer'
+                          id={`checkbox-table-${item.id}`}
+                          checked={checked.includes(item.id)}
+                          onChange={() => handleCheck(item.id)}
+                        />
+                      </div>
+                    </td>
+                    <th
+                      scope='row'
+                      className='whitespace-nowrap px-6 py-4 font-medium text-textHeadingColor'
                     >
-                      {item.status ? 'Bật' : 'Tắt'}
-                    </span>
-                  </td>
+                      {item.name}
+                    </th>
+                    {(isListCategoryLevel1 || isListCategoryLevel2) && (
+                      <td
+                        scope='row'
+                        className='whitespace-nowrap px-6 py-4 font-medium text-textHeadingColor'
+                      >
+                        {item.name}
+                      </td>
+                    )}
+                    <td className='px-6 py-4'>
+                      {
+                        dataContentType.find(
+                          (value) => value.name === item.contentType,
+                        )?.content
+                      }
+                    </td>
+                    <td className='px-6 py-4'>
+                      <span
+                        className={`font-medium ${
+                          item.status ? 'text-green-500' : 'text-primaryColor'
+                        } `}
+                      >
+                        {item.status ? 'Bật' : 'Tắt'}
+                      </span>
+                    </td>
 
-                  <td className='w-4 p-5'>
-                    <Button to={`/tao-danh-muc-cap-3/${item.id}`}>
-                      <i className='ri-pencil-fill cursor-pointer rounded border border-primaryColor p-3 text-primaryColor'></i>
-                    </Button>
-                  </td>
-                </tr>
-              ))}
+                    <td className='w-4 p-5'>
+                      {isListCategoryLevel1 && (
+                        <Button to={`/tao-danh-muc-cap-1/${item.id}`}>
+                          <i className='ri-pencil-fill cursor-pointer rounded border border-primaryColor p-3 text-primaryColor'></i>
+                        </Button>
+                      )}
+                      {isListCategoryLevel2 && (
+                        <Button to={`/tao-danh-muc-cap-2/${item.id}`}>
+                          <i className='ri-pencil-fill cursor-pointer rounded border border-primaryColor p-3 text-primaryColor'></i>
+                        </Button>
+                      )}
+                      {isListCategoryLevel3 && (
+                        <Button to={`/tao-danh-muc-cap-3/${item.id}`}>
+                          <i className='ri-pencil-fill cursor-pointer rounded border border-primaryColor p-3 text-primaryColor'></i>
+                        </Button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>

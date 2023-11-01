@@ -1,4 +1,5 @@
 import Button from '@/component/atoms/Button'
+import { SpinnerIcon } from '@/component/atoms/CustomIcon'
 
 type Props = {
   title: string

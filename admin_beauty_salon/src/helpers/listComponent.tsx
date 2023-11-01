@@ -8,7 +8,6 @@ import EditUserAccount from '@/component/organisms/EditUserAccount'
 import CreateCategory from '@/component/organisms/CreateCategory'
 import CreatePost from '@/component/organisms/CreatePost'
 
-import ListCategoryWithLevel from '@/component/organisms/ListCategoryWithLevel'
 import ListComment from '@/component/organisms/ListComment'
 import ListPostAndProduct from '@/component/organisms/ListPostAndProduct'
 import ListCategory from '@/component/organisms/ListCategory'
@@ -27,7 +26,6 @@ export const listComponent: { [key: string]: ReactNode } = {
   createCategory: <CreateCategory />,
   createPost: <CreatePost />,
   listCategory: <ListCategory />,
-  listCategoryWithLevel: <ListCategoryWithLevel />,
   listPostAndProduct: <ListPostAndProduct />,
   listSchedule: <ListSchedule />,
   listComment: <ListComment />,

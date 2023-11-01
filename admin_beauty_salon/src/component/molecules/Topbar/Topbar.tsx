@@ -8,7 +8,12 @@ import { useGlobalContext } from '@/contexts/globalContext'
 import Button from '@/component/atoms/Button'
 import TopbarButtons from '../TopbarButtons'
 
-const Topbar = ({ className }: React.HTMLAttributes<HTMLDivElement>) => {
+type Props = {
+  className?: string
+  setArrayImage: (data: string[]) => void
+}
+
+const Topbar = ({ className, setArrayImage }: Props) => {
   const router = useNavigate()
 
   const { setProjectData } = useGlobalContext()
@@ -20,6 +25,10 @@ const Topbar = ({ className }: React.HTMLAttributes<HTMLDivElement>) => {
       css: (window as any).editor.getCss(),
     })
     router(-1)
+  }
+
+  const handleUploadImage = () => {
+    setArrayImage([])
   }
 
   return (
@@ -54,15 +63,24 @@ const Topbar = ({ className }: React.HTMLAttributes<HTMLDivElement>) => {
           <TopbarButtons className='ml-auto px-2' />
         </WithEditor>
         <div className='flex gap-2'>
+          <label
+            htmlFor='uploadFiles'
+            className='flex max-h-[45.8px] min-w-[98px] cursor-pointer items-center gap-2 rounded-md border border-primaryColor px-4 py-3 text-sm text-primaryColor'
+            onClick={handleUploadImage}
+          >
+            <i className='ri-upload-line text-lg'></i>
+            <p>Tải ảnh</p>
+            <input id='uploadFiles' type='file' multiple hidden />
+          </label>
           <Button
-            className='min-w-[88px] rounded-md bg-primaryColor px-4 py-3 text-sm text-white hover:bg-secondColor'
+            className='max-h-[45.8px] min-w-[98px] rounded-md bg-primaryColor px-4 py-3 text-sm text-white hover:bg-secondColor'
             onClick={handleSaveContent}
           >
             Lưu trang
           </Button>
           <Button
             onClick={() => router(-1)}
-            className='min-w-[88px] rounded-md bg-primaryColor px-4 py-3 text-sm text-white hover:bg-secondColor'
+            className='max-h-[45.8px] min-w-[98px] rounded-md bg-primaryColor px-4 py-3 text-sm text-white hover:bg-secondColor'
           >
             Hủy
           </Button>

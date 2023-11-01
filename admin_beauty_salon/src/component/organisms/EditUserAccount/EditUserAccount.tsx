@@ -11,9 +11,9 @@ import {
   usePutEditUserInfo,
 } from '@/hooks/hooks'
 
+import { SpinnerIcon } from '@/component/atoms/CustomIcon/CustomIcon'
 import CropImage from '@/component/molecules/CropImage'
 import Button from '@/component/atoms/Button'
-import { SpinnerIcon } from '@/component/atoms/CustomIcon/CustomIcon'
 
 const imageMimeType = /image\/(png|jpg|jpeg)/i
 
@@ -39,14 +39,6 @@ const EditUserAccount = () => {
 
   const editUserApi = usePutEditUserInfo(id! as string)
 
-  const [cropImage, setCropImage] = useState<string | ArrayBuffer | null>(null)
-  const [modalCrop, setModalCrop] = useState<boolean>(false)
-  const [previewImg, setPreviewImg] = useState<string>(
-    getInfoApi.data?.results.avatar! || '',
-  )
-  const [file, setFile] = useState<File>()
-  const [fileImage, setFileImage] = useState<Blob>(new Blob())
-
   const {
     register,
     handleSubmit,
@@ -61,6 +53,20 @@ const EditUserAccount = () => {
       status: getInfoApi.data?.results.status.toString(),
     },
   })
+
+  const [cropImage, setCropImage] = useState<string | ArrayBuffer | null>(null)
+  const [modalCrop, setModalCrop] = useState<boolean>(false)
+  const [previewImg, setPreviewImg] = useState<string>(
+    getInfoApi.data?.results.avatar! || '',
+  )
+  const [file, setFile] = useState<File>()
+  const [fileImage, setFileImage] = useState<Blob>(new Blob())
+
+  useEffect(() => {
+    return () => {
+      URL.revokeObjectURL(previewImg)
+    }
+  }, [previewImg])
 
   useEffect(() => {
     let reader: FileReader,
@@ -121,14 +127,15 @@ const EditUserAccount = () => {
   }
 
   const handleUpdateInfo = async (value: EditAccountType) => {
-    const newValue = value
     if (fileImage.size !== 0) {
       const avatar = await uploadFile()
-      newValue.avatar = avatar?.data.results as string
+      value.avatar = avatar?.data.results as string
     } else {
-      newValue.avatar = getInfoApi.data?.results.avatar as string
+      value.avatar = previewImg
+        ? (getInfoApi.data?.results.avatar as string)
+        : ''
     }
-    editUserApi.mutate(newValue, {
+    editUserApi.mutate(value, {
       onSuccess(data) {
         toast.success('Cập nhật thông tin tài khoản thành công!')
         queryClient.setQueryData(['EditUserInfo', { slug: id }], data.data)
@@ -206,10 +213,6 @@ const EditUserAccount = () => {
                   type='password'
                   id='password'
                   {...register('password', {
-                    required: {
-                      value: true,
-                      message: 'Vui lòng nhập mật khẩu!',
-                    },
                     pattern: {
                       value:
                         /^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9!@#\$%\^\&*\)\(+=._-]{8,}$/,
@@ -499,7 +502,7 @@ const EditUserAccount = () => {
                     ) : (
                       <>
                         <i className='ri-upload-cloud-2-line mb-1 text-4xl text-textPrimaryColor'></i>
-                        <p className='mb-2 text-sm text-textPrimaryColor'>
+                        <p className='mb-2 text-center text-sm text-textPrimaryColor'>
                           <span className='font-semibold'>
                             Bấm hoặc kéo thả để chọn ảnh của bạn
                           </span>

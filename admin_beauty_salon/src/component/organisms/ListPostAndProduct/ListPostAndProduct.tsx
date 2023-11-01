@@ -3,6 +3,7 @@ import {
   Fragment,
   InvalidEvent,
   KeyboardEvent,
+  useEffect,
   useState,
 } from 'react'
 import { useQueryClient } from 'react-query'
@@ -11,6 +12,11 @@ import ReactPaginate from 'react-paginate'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
+import Search from '@/component/molecules/Search'
+import ItemsPaginate from '@/component/molecules/ItemsPaginate'
+import Modal from '@/component/molecules/Modal'
+import Button from '@/component/atoms/Button'
+
 import {
   useDebounce,
   useDeletePost,
@@ -18,26 +24,30 @@ import {
   useGetListPost,
   useGetListProduct,
 } from '@/hooks/hooks'
-import Search from '@/component/molecules/Search'
-import ItemsPaginate from '@/component/molecules/ItemsPaginate'
-import Modal from '@/component/molecules/Modal'
-import Button from '@/component/atoms/Button'
 
 const ListPostAndProduct = () => {
   const isTableListPosts = Boolean(useMatch('/danh-sach-bai-viet'))
 
   const queryClient = useQueryClient()
 
-  const listPostApi = useGetListPost()
+  const listPostApi = useGetListPost({
+    enabled: isTableListPosts,
+  })
 
-  const listProductApi = useGetListProduct()
+  const listProductApi = useGetListProduct({
+    enabled: !isTableListPosts,
+  })
 
   const deletePostApi = useDeletePost()
 
   const deleteProductApi = useDeleteProduct()
 
-  const [checked, setChecked] = useState<string[]>([])
-  const [checkedAll, setCheckedAll] = useState<string[]>([])
+  const [checkedPost, setCheckedPost] = useState<string[]>([])
+  const [checkedAllPost, setCheckedAllPost] = useState<string[]>([])
+
+  const [checkedProduct, setCheckedProduct] = useState<string[]>([])
+  const [checkedAllProduct, setCheckedAllProduct] = useState<string[]>([])
+
   const [itemOffset, setItemOffset] = useState<number>(0)
   const [itemsPerPage, setItemsPerPage] = useState<number>(4)
   const [itemsNumber, setItemsNumber] = useState<number>(0)
@@ -73,36 +83,70 @@ const ListPostAndProduct = () => {
     setItemsNumber(Number(event.target.value))
   }
 
-  const handleCheck = (id: string) => {
-    const isChecked = checked.includes(id)
-    if (isChecked)
-      setChecked((checked) => checked.filter((check) => check !== id))
+  useEffect(() => {
+    if (checkedPost.length === listPostApi.data?.results.length) {
+      setCheckedAllPost(checkedPost)
+    }
+  }, [checkedPost.length])
+
+  useEffect(() => {
+    if (checkedProduct.length === listProductApi.data?.results.length) {
+      setCheckedAllProduct(checkedProduct)
+    }
+  }, [checkedProduct.length])
+
+  const handleCheckPost = (id: string) => {
+    const isCheckedPost = checkedPost.includes(id)
+    if (isCheckedPost)
+      setCheckedPost((checked) => checked.filter((check) => check !== id))
     else {
-      setChecked((prev) => [...prev, id])
+      setCheckedPost((prev) => [...prev, id])
     }
   }
 
-  const handleCheckAll = () => {
-    const newArr: string[] = isTableListPosts
-      ? (listPostApi.data?.results.map((item) => item.postId) as string[])
-      : (listProductApi.data?.results.map((item) => item.productId) as string[])
+  const handleCheckProduct = (id: string) => {
+    const isCheckedProduct = checkedProduct.includes(id)
+    if (isCheckedProduct)
+      setCheckedProduct((checked) => checked.filter((check) => check !== id))
+    else {
+      setCheckedProduct((prev) => [...prev, id])
+    }
+  }
 
+  const handleCheckAllPost = () => {
+    const newArr = listPostApi.data?.results.map(
+      (item) => item.postId,
+    ) as string[]
     if (
-      (checkedAll.length && checked.length) ===
-      (isTableListPosts
-        ? listPostApi.data?.results.length
-        : listProductApi.data?.results.length)
+      (checkedAllPost.length && checkedPost.length) ===
+      listPostApi.data?.results.length
     ) {
-      setCheckedAll([])
-      setChecked([])
+      setCheckedAllPost([])
+      setCheckedPost([])
     } else {
-      setCheckedAll(newArr)
-      setChecked(newArr)
+      setCheckedAllPost(newArr)
+      setCheckedPost(newArr)
+    }
+  }
+
+  const handleCheckAllProduct = () => {
+    const newArr = listProductApi.data?.results.map(
+      (item) => item.productId,
+    ) as string[]
+    if (
+      (checkedAllProduct.length && checkedProduct.length) ===
+      listProductApi.data?.results.length
+    ) {
+      setCheckedAllProduct([])
+      setCheckedProduct([])
+    } else {
+      setCheckedAllProduct(newArr)
+      setCheckedProduct(newArr)
     }
   }
 
   const handleOpenModal = () => {
-    if (checked.length > 0) {
+    if (isTableListPosts ? checkedPost.length > 0 : checkedProduct.length > 0) {
       setModalDelete(true)
       return
     }
@@ -110,10 +154,10 @@ const ListPostAndProduct = () => {
 
   const handleDelete = () => {
     isTableListPosts
-      ? deletePostApi.mutate(checked.toString(), {
+      ? deletePostApi.mutate(checkedPost.toString(), {
           onSuccess() {
             setModalDelete(false)
-            setChecked([])
+            setCheckedPost([])
             queryClient.invalidateQueries({ queryKey: ['ListPost'] })
             toast.success('Xóa bài viết thành công!')
           },
@@ -121,10 +165,10 @@ const ListPostAndProduct = () => {
             toast.error('Xóa thất bại, vui lòng kiểm tra lại!')
           },
         })
-      : deleteProductApi.mutate(checked.toString(), {
+      : deleteProductApi.mutate(checkedProduct.toString(), {
           onSuccess() {
             setModalDelete(false)
-            setChecked([])
+            setCheckedProduct([])
             queryClient.invalidateQueries({ queryKey: ['ListProduct'] })
             toast.success('Xóa sản phẩm thành công!')
           },
@@ -209,7 +253,9 @@ const ListPostAndProduct = () => {
       <div className='relative mb-5 overflow-hidden rounded-lg bg-white shadow-md'>
         <div className='mx-3 mb-3 flex items-center justify-center gap-4 border-b border-gray-200 sm:mx-5 sm:mb-5 lg:justify-normal'>
           <span className='rounded-md text-sm md:my-3 md:py-2 lg:my-5 lg:px-4 lg:text-base'>
-            0 lượt chọn
+            {isTableListPosts
+              ? `${checkedPost.length} lượt chọn`
+              : `${checkedProduct.length} lượt chọn`}
           </span>
           <Button
             className='my-2 h-10 min-w-[70px] rounded-md border-2 border-solid px-1 py-1 text-sm text-textHeadingColor md:my-3'
@@ -241,17 +287,23 @@ const ListPostAndProduct = () => {
                           : false
                       }
                       checked={
-                        checkedAll.length ===
-                          (isTableListPosts
-                            ? listPostApi.data?.results.length
-                            : listProductApi.data?.results.length) &&
-                        checked.length ===
-                          (isTableListPosts
-                            ? listPostApi.data?.results.length
-                            : listProductApi.data?.results.length) &&
-                        checked.length !== 0
+                        isTableListPosts
+                          ? checkedAllPost.length ===
+                              listPostApi.data?.results.length &&
+                            checkedPost.length ===
+                              listPostApi.data?.results.length &&
+                            checkedPost.length !== 0
+                          : checkedAllProduct.length ===
+                              listProductApi.data?.results.length &&
+                            checkedProduct.length ===
+                              listProductApi.data?.results.length &&
+                            checkedProduct.length !== 0
                       }
-                      onChange={handleCheckAll}
+                      onChange={
+                        isTableListPosts
+                          ? handleCheckAllPost
+                          : handleCheckAllProduct
+                      }
                     />
                   </div>
                 </th>
@@ -272,15 +324,15 @@ const ListPostAndProduct = () => {
               {isTableListPosts ? (
                 <ItemsPaginate
                   currentItemsPost={filteredDataPost}
-                  checked={checked}
-                  handleCheck={handleCheck}
+                  checked={checkedPost}
+                  handleCheck={handleCheckPost}
                   isLoading={listPostApi.isLoading}
                 />
               ) : (
                 <ItemsPaginate
                   currentItemsProduct={filteredDataProduct}
-                  checked={checked}
-                  handleCheck={handleCheck}
+                  checked={checkedProduct}
+                  handleCheck={handleCheckProduct}
                   isLoading={listProductApi.isLoading}
                 />
               )}

@@ -1,6 +1,8 @@
 import { Fragment } from 'react'
 
 import Button from '@/component/atoms/Button'
+import { useQueryClient } from 'react-query'
+import { handleGetPost, handleGetProduct } from '@/hooks/hooks'
 
 type Props = {
   checked: string[]
@@ -23,12 +25,35 @@ const Items = ({
   currentItemsPost,
   currentItemsProduct,
 }: Props) => {
+  const queryClient = useQueryClient()
+
+  const handlePrefetchList = (slug: string) => {
+    if (currentItemsProduct) {
+      queryClient.prefetchQuery(['EditProduct', { slug: slug }], {
+        queryFn: () => handleGetProduct(slug),
+        staleTime: 10000,
+      })
+      return
+    }
+    if (currentItemsPost) {
+      queryClient.prefetchQuery(['EditPost', { slug: slug }], {
+        queryFn: () => handleGetPost(slug),
+        staleTime: 10000,
+      })
+      return
+    }
+  }
+
   return (
     <Fragment>
       {!isLoading &&
         currentItemsPost &&
-        currentItemsPost?.map((item, index) => (
-          <tr className='border-b bg-white hover:bg-gray-50' key={index}>
+        currentItemsPost.map((item, index) => (
+          <tr
+            className='border-b bg-white hover:bg-gray-50'
+            key={index}
+            onMouseEnter={() => handlePrefetchList(item.slug)}
+          >
             <td className='w-4 p-5'>
               <div className='flex items-center'>
                 <input
@@ -76,8 +101,12 @@ const Items = ({
         ))}
       {!isLoading &&
         currentItemsProduct &&
-        currentItemsProduct?.map((item, index) => (
-          <tr className='border-b bg-white hover:bg-gray-50' key={index}>
+        currentItemsProduct.map((item, index) => (
+          <tr
+            className='border-b bg-white hover:bg-gray-50'
+            key={index}
+            onMouseEnter={() => handlePrefetchList(item.slug)}
+          >
             <td className='w-4 p-5'>
               <div className='flex items-center'>
                 <input

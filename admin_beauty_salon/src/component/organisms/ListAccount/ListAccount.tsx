@@ -10,6 +10,7 @@ import {
   useDeleteAccount,
   useGetListUser,
 } from '@/hooks/hooks'
+
 import Search from '@/component/molecules/Search'
 import Modal from '@/component/molecules/Modal'
 import Button from '@/component/atoms/Button'
@@ -31,23 +32,6 @@ const ListAccount = () => {
       setCheckedAll(checked)
     }
   }, [checked.length])
-
-  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value)
-  }
-
-  const handleClearChange = () => {
-    setSearchTerm('')
-  }
-
-  const debouncedSearchTerm = useDebounce(searchTerm, 300)
-
-  const handlePrefetchList = (slug: string) => {
-    queryClient.prefetchQuery(['EditUserInfo', { slug: slug }], {
-      queryFn: () => handleGetInfo(slug),
-      staleTime: 10000,
-    })
-  }
 
   const handleCheck = (slug: string) => {
     const isChecked = checked.includes(slug)
@@ -73,6 +57,16 @@ const ListAccount = () => {
     }
   }
 
+  const debouncedSearchTerm = useDebounce(searchTerm, 300)
+
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value)
+  }
+
+  const handleClearChange = () => {
+    setSearchTerm('')
+  }
+
   const handleOpenModal = () => {
     if (checked.length > 0) {
       setModalDelete(true)
@@ -94,6 +88,13 @@ const ListAccount = () => {
     })
   }
 
+  const handlePrefetchList = (slug: string) => {
+    queryClient.prefetchQuery(['EditUserInfo', { slug: slug }], {
+      queryFn: () => handleGetInfo(slug),
+      staleTime: 10000,
+    })
+  }
+
   const filteredData = listUserApi.data?.results.filter((item) =>
     item.fullName
       .toLowerCase()
@@ -110,8 +111,8 @@ const ListAccount = () => {
 
   return (
     <Fragment>
-      <div className='mb-5 flex w-full flex-wrap items-center justify-between rounded-lg bg-white py-4 shadow lg:flex-nowrap'>
-        <h1 className='ml-5 text-textHeadingColor md:text-base lg:text-xl'>
+      <div className='mb-5 flex w-full flex-wrap items-center justify-between rounded-lg bg-white px-5 py-4 shadow lg:flex-nowrap'>
+        <h1 className='text-textHeadingColor md:text-base lg:text-xl'>
           Danh sách tài khoản
         </h1>
         <Search
@@ -120,14 +121,12 @@ const ListAccount = () => {
           handleSearchChange={handleSearchChange}
           handleClearChange={handleClearChange}
         />
-        <div className='ml-5 mr-5 mt-4 flex w-full flex-col items-center gap-3 lg:ml-0 lg:mt-0 lg:w-auto lg:flex-row'>
-          <Button
-            to={'/xac-thuc-uy-quyen'}
-            className='w-full rounded-md bg-primaryColor px-3 py-2 text-white hover:bg-secondColor md:text-sm lg:w-auto lg:text-base'
-          >
-            Thêm tài khoản
-          </Button>
-        </div>
+        <Button
+          to={'/xac-thuc-uy-quyen'}
+          className='rounded-md bg-primaryColor px-3 py-2 text-white hover:bg-secondColor md:text-sm lg:text-base'
+        >
+          Thêm tài khoản
+        </Button>
       </div>
       <div className='relative mb-5 overflow-hidden rounded-lg bg-white shadow-md'>
         <div className='mx-3 mb-3 flex items-center justify-center gap-4 border-b border-gray-200 sm:mx-5 sm:mb-5 lg:justify-normal'>

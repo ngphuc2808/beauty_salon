@@ -8,18 +8,14 @@ const App: React.FC = () => {
   const elements = useRoutes([
     {
       path: '/danh-muc-cap-1',
-      element: <HomePage path='listCategoryWithLevel' />,
-    },
-    {
-      path: '/danh-muc-cap-2',
-      element: <HomePage path='listCategoryWithLevel' />,
-    },
-    {
-      path: '/danh-muc-cap-3',
       element: <HomePage path='listCategory' />,
     },
     {
-      path: '/danh-muc-cap-3/:id',
+      path: '/danh-muc-cap-2',
+      element: <HomePage path='listCategory' />,
+    },
+    {
+      path: '/danh-muc-cap-3',
       element: <HomePage path='listCategory' />,
     },
     {

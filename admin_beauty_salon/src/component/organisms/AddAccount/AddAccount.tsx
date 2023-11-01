@@ -1,11 +1,10 @@
 import { ChangeEvent, Fragment, useEffect, useState } from 'react'
+import { useQueryClient } from 'react-query'
 import { useForm } from 'react-hook-form'
-
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 import { usePostCreateUser, usePostImage } from '@/hooks/hooks'
-import { useQueryClient } from 'react-query'
 
 import CropImage from '@/component/molecules/CropImage'
 import Button from '@/component/atoms/Button'
@@ -99,15 +98,14 @@ const AddAccount = () => {
   }
 
   const handleAddAccount = async (value: AddAccountType) => {
-    const newValue = value
     if (fileImage.size !== 0) {
       const avatar = await uploadFile()
-      newValue.avatar = avatar?.data.results as string
+      value.avatar = avatar?.data.results as string
     } else {
-      newValue.avatar = ''
+      value.avatar = ''
     }
 
-    createUserApi.mutate(newValue, {
+    createUserApi.mutate(value, {
       onSuccess() {
         setPreviewImg('')
         reset()
@@ -493,7 +491,7 @@ const AddAccount = () => {
                   ) : (
                     <>
                       <i className='ri-upload-cloud-2-line mb-1 text-4xl text-textPrimaryColor'></i>
-                      <p className='mb-2 text-sm text-textPrimaryColor'>
+                      <p className='mb-2 text-center text-sm text-textPrimaryColor'>
                         <span className='font-semibold'>
                           Bấm hoặc kéo thả để chọn ảnh của bạn
                         </span>
@@ -518,6 +516,7 @@ const AddAccount = () => {
       </div>
       {modalCrop && (
         <CropImage
+          user
           image={cropImage}
           setModalCrop={setModalCrop}
           setFileImage={setFileImage}

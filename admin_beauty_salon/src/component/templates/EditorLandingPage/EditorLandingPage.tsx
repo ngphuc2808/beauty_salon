@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import he from 'he'
 
@@ -35,11 +35,17 @@ const LandingPageEditor = () => {
 
   const { projectData } = useGlobalContext()
 
-  const getCategoryApi = useGetCategory(id!)
+  const getCategoryApi = useGetCategory(id!, {
+    enabled: isUpdate,
+  })
 
   const [editor, setEditor] = useState<Editor>()
 
-  const arrayImage = ['']
+  const [arrayImage, setArrayImage] = useState<string[]>([])
+
+  useEffect(() => {
+    if (editor && arrayImage) editor.AssetManager.add(arrayImage)
+  }, [arrayImage])
 
   useEffect(() => {
     if (editor && projectData.projectData) {
@@ -67,61 +73,77 @@ const LandingPageEditor = () => {
   }
 
   return (
-    <GjsEditor
-      className='gjs-custom-editor bg-white text-textPrimaryColor'
-      grapesjs={grapesjs}
-      options={{
-        height: '100vh',
-        storageManager: false,
-        undoManager: { trackSelection: false },
-        selectorManager: { componentFirst: true },
-        projectData: {
-          assets: arrayImage,
-          pages: [
-            {
-              name: 'Create Landing Page',
-            },
-          ],
-        },
-      }}
-      plugins={[
-        basicBlockPlugin,
-        formPlugin,
-        editorPlugin,
-        flexBoxPlugin,
-        timerPlugin,
-        customCodePlugin,
-        navbarPlugin,
-        tooltipsPlugin,
-        imagePlugin,
-      ]}
-      onEditor={onEditor}
-    >
-      <div className='flex h-full border-b border-primaryColor'>
-        <div className='gjs-column-m flex flex-grow flex-col'>
-          <Topbar className='min-h-[64px] border-b border-primaryColor shadow-headerBox' />
-          <Canvas className='gjs-custom-editor-canvas flex-grow bg-slate-200' />
+    <Fragment>
+      <GjsEditor
+        className='gjs-custom-editor hidden bg-white text-textPrimaryColor lg:block'
+        grapesjs={grapesjs}
+        options={{
+          height: '100vh',
+          storageManager: false,
+          undoManager: { trackSelection: false },
+          selectorManager: { componentFirst: true },
+          projectData: {
+            pages: [
+              {
+                name: 'Create Landing Page',
+              },
+            ],
+          },
+        }}
+        plugins={[
+          basicBlockPlugin,
+          formPlugin,
+          editorPlugin,
+          flexBoxPlugin,
+          timerPlugin,
+          customCodePlugin,
+          navbarPlugin,
+          tooltipsPlugin,
+          imagePlugin,
+        ]}
+        onEditor={onEditor}
+      >
+        <div className='flex h-full border-b border-primaryColor'>
+          <div className='gjs-column-m flex flex-grow flex-col'>
+            <Topbar
+              className='min-h-[64px] border-b border-primaryColor shadow-headerBox'
+              setArrayImage={setArrayImage}
+            />
+            <Canvas className='gjs-custom-editor-canvas flex-grow bg-slate-200' />
+          </div>
+          <RightSidebar className='gjs-column-r w-[300px] border-l border-primaryColor' />
         </div>
-        <RightSidebar className='gjs-column-r w-[300px] border-l border-primaryColor' />
+        <ModalProvider>
+          {({ open, title, content, close }) => (
+            <CustomModal
+              open={open}
+              title={title}
+              children={content}
+              close={close}
+            />
+          )}
+        </ModalProvider>
+        <AssetsProvider>
+          {({ assets, select, close, Container }) => (
+            <Container>
+              <CustomAssetManager
+                assets={assets}
+                select={select}
+                close={close}
+              />
+            </Container>
+          )}
+        </AssetsProvider>
+      </GjsEditor>
+      <div className='flex h-screen w-screen items-center justify-center lg:hidden'>
+        <h1 className='flex max-w-[90%] flex-col items-center gap-5 text-3xl uppercase text-primaryColor'>
+          <figure className='block w-[200px]'>
+            <img src='../../logoText.png' />
+          </figure>
+          Vui lòng sử dụng chức năng này trên máy tính!
+        </h1>
       </div>
-      <ModalProvider>
-        {({ open, title, content, close }) => (
-          <CustomModal
-            open={open}
-            title={title}
-            children={content}
-            close={close}
-          />
-        )}
-      </ModalProvider>
-      <AssetsProvider>
-        {({ assets, select, close, Container }) => (
-          <Container>
-            <CustomAssetManager assets={assets} select={select} close={close} />
-          </Container>
-        )}
-      </AssetsProvider>
-    </GjsEditor>
+    </Fragment>
   )
 }
 

@@ -7,22 +7,26 @@ type Props = {
   to?: string
   className?: string
   onClick?: () => void
+  disable?: boolean
 }
 
-const Button = ({ title, children, to, className = '', onClick }: Props) => {
+const Button = ({
+  title,
+  children,
+  to,
+  className = '',
+  onClick,
+  disable,
+}: Props) => {
   return (
     <Fragment>
       {to ? (
-        <Link
-          to={`${to}`}
-          className={`font-medium ${className}`}
-          onClick={onClick}
-        >
+        <Link to={`${to}`} className={`${className}`} onClick={onClick}>
           {title}
           {children}
         </Link>
       ) : (
-        <button className={`font-medium ${className}`} onClick={onClick}>
+        <button className={`${className}`} onClick={onClick} disabled={disable}>
           {title}
           {children}
         </button>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, ReactNode } from 'react'
 import { useIsFetching, useIsMutating } from 'react-query'
 import { useNavigate, useLocation } from 'react-router-dom'
 import 'remixicon/fonts/remixicon.css'
@@ -11,7 +11,7 @@ import Button from '../atoms/Button'
 import { SpinnerIcon } from '../atoms/CustomIcon/CustomIcon'
 
 interface Props {
-  children?: React.ReactNode
+  children?: ReactNode
 }
 
 const MainPage = ({ children }: Props) => {
@@ -100,7 +100,10 @@ const MainPage = ({ children }: Props) => {
                     Sửa thông tin
                   </Button>
                 </li>
-                <li onClick={handleLogout} className='cursor-pointer px-3 py-2'>
+                <li
+                  onClick={handleLogout}
+                  className='block h-full w-full cursor-pointer px-3 py-2'
+                >
                   Đăng xuất
                 </li>
               </ul>
