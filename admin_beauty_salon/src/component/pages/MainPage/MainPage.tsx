@@ -22,13 +22,6 @@ const MainPage = ({ children }: Props) => {
 
   const isLogin = JSON.parse(localStorage.getItem('userLogin')!)
 
-  useEffect(() => {
-    if (!isLogin) {
-      router('/dang-nhap')
-      return
-    }
-  }, [])
-
   const getUserInfoApi = useGetUserInfo(isLogin?.session)
 
   const [navMobile, setNavMobile] = useState<boolean>(true)

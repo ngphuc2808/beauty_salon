@@ -2,7 +2,7 @@ import React, { Suspense, useEffect, useState } from 'react'
 import { useLocation, useNavigate, useRoutes } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 
-const NotFoundPage = React.lazy(() => import('@/component/pages/404Page'))
+const NotFoundPage = React.lazy(() => import('@/component/pages/NotFoundPage'))
 const HomePage = React.lazy(() => import('@/component/templates/HomePage'))
 const LoginPage = React.lazy(() => import('@/component/templates/LoginPage'))
 const EditorLandingPage = React.lazy(
@@ -33,17 +33,24 @@ const Loading = () => {
 }
 
 const App: React.FC = () => {
-  const { pathname } = useLocation()
-
   const [suspended, setSuspended] = useState<boolean>(false)
   useEffect(() => {
     setTimeout(() => setSuspended((s) => (s ? s : !s)), 500)
   }, [])
 
+  const { pathname } = useLocation()
+
   const router = useNavigate()
 
+  const isLogin = JSON.parse(localStorage.getItem('userLogin')!)
+
   useEffect(() => {
-    if (pathname === '/') router('/danh-muc-cap-1')
+    if (!isLogin) {
+      router('/dang-nhap')
+    } else if (pathname === '/') {
+      router('/danh-muc-cap-1')
+      return
+    }
   }, [])
 
   const elements = useRoutes([
