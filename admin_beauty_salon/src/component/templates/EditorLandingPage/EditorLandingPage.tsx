@@ -136,7 +136,7 @@ const LandingPageEditor = () => {
         </AssetsProvider>
       </GjsEditor>
       <div className='flex h-screen w-screen items-center justify-center lg:hidden'>
-        <h1 className='flex max-w-[90%] flex-col items-center gap-5 text-3xl uppercase text-primaryColor'>
+        <h1 className='flex max-w-[90%] flex-col items-center gap-5 text-center text-3xl uppercase text-primaryColor'>
           <figure className='block w-[200px]'>
             <img src='../../logoText.png' />
           </figure>

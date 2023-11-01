@@ -21,7 +21,7 @@ const Button = ({
   return (
     <Fragment>
       {to ? (
-        <Link to={`${to}`} className={`${className}`} onClick={onClick}>
+        <Link to={`${to}`} className={`block ${className}`} onClick={onClick}>
           {title}
           {children}
         </Link>

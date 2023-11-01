@@ -533,7 +533,7 @@ const DetailCategory = () => {
         <div className='order-2 col-span-12 lg:order-none lg:col-span-8'>
           {(watch('contentType') === 'landing' ||
             watch('contentType') === 'landing_menu2') && (
-            <div className='mt-0 rounded-lg bg-white p-5 shadow lg:mt-5'>
+            <div className='rounded-lg bg-white p-5 shadow'>
               <div className='items-center justify-between sm:flex'>
                 <h1 className='block font-normal text-textHeadingColor'>
                   Trang landing page cho danh mục
@@ -558,7 +558,7 @@ const DetailCategory = () => {
             watch('contentType') === 'landing_menu2') && (
             <div
               className={`rounded-lg bg-white p-5 shadow ${
-                watch('contentType') === 'menu2' ? 'mt-0 lg:mt-5' : 'mt-5'
+                watch('contentType') === 'menu2' ? 'mt-0' : 'mt-5'
               }`}
             >
               <div className='[&>:nth-child(2)]:h-[46px]'>
@@ -617,7 +617,7 @@ const DetailCategory = () => {
           )}
           {(watch('contentType') === 'posts' ||
             watch('contentType') === 'products') && (
-            <div className='mt-5 rounded-lg bg-white p-5 shadow'>
+            <div className='rounded-lg bg-white p-5 shadow'>
               <div className='[&>*]:mb-4 [&>:first-child]:mb-3'>
                 <h1 className='block font-normal text-textHeadingColor'>
                   {watch('contentType') === 'products'
@@ -757,7 +757,9 @@ const DetailCategory = () => {
             </div>
           )}
           <div
-            className={`mb-5 rounded-lg p-5 shadow ${
+            className={`${
+              !contentType ? 'mt-0' : 'mt-5'
+            } mb-5  rounded-lg p-5 shadow ${
               getCategoryApi.isLoading
                 ? 'animate-pulse bg-gray-300'
                 : 'bg-white'
