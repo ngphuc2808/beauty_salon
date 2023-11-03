@@ -11,7 +11,7 @@ type IconButtonType = {
 const TopbarButtons = ({ className }: React.HTMLAttributes<HTMLDivElement>) => {
   const editor = useEditor()
   const [, setUpdateCounter] = useState(0)
-  const { UndoManager, Commands } = editor
+  const { Commands } = editor
   const listIconButtons: IconButtonType[] = [
     {
       id: 'core:component-outline',
@@ -21,20 +21,6 @@ const TopbarButtons = ({ className }: React.HTMLAttributes<HTMLDivElement>) => {
       id: 'core:fullscreen',
       icon: '<i class="ri-fullscreen-line"></i>',
       options: { target: '#root' },
-    },
-    {
-      id: 'core:open-code',
-      icon: '<i class="ri-code-line"></i>',
-    },
-    {
-      id: 'core:undo',
-      icon: '<i class="ri-arrow-go-back-line"></i>',
-      disabled: () => !UndoManager.hasUndo(),
-    },
-    {
-      id: 'core:redo',
-      icon: '<i class="ri-arrow-go-forward-line"></i>',
-      disabled: () => !UndoManager.hasRedo(),
     },
   ]
 
@@ -48,6 +34,9 @@ const TopbarButtons = ({ className }: React.HTMLAttributes<HTMLDivElement>) => {
     editor.on(commandEvent, onCommand)
     editor.on(updateEvent, updateCounter)
 
+    editor.Keymaps.add('ns:my-keymap', '⌘+z, ctrl+z', () => {})
+    editor.Keymaps.remove('ns:my-keymap')
+
     return () => {
       editor.off(commandEvent, onCommand)
       editor.off(updateEvent, updateCounter)
@@ -59,8 +48,8 @@ const TopbarButtons = ({ className }: React.HTMLAttributes<HTMLDivElement>) => {
       {listIconButtons.map(({ id, icon, disabled, options = {} }) => (
         <button
           key={id}
-          className={`border-primaryColor w-full rounded border px-2 py-1 ${
-            Commands.isActive(id) && 'text-sky-300'
+          className={`w-full rounded border border-primaryColor px-2 py-1 ${
+            Commands.isActive(id) && 'text-primaryColor'
           } ${disabled?.() && 'opacity-50'}`}
           onClick={() =>
             Commands.isActive(id)

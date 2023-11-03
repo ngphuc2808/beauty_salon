@@ -2,7 +2,7 @@ import { useState, ReactNode } from 'react'
 import { useIsFetching, useIsMutating } from 'react-query'
 import { useNavigate, useLocation } from 'react-router-dom'
 
-import { useGetUserInfo, usePostLogout } from '@/hooks/hooks'
+import { useGetAllCategory, useGetUserInfo, usePostLogout } from '@/hooks/hooks'
 import { dataNavigation } from '@/utils/data'
 
 import images from '@/assets/images'
@@ -24,9 +24,13 @@ const MainPage = ({ children }: Props) => {
 
   const getUserInfoApi = useGetUserInfo(isLogin?.session)
 
-  const [navMobile, setNavMobile] = useState<boolean>(true)
+  const getAllCategoryApi = useGetAllCategory(isLogin?.session)
+
+  console.log(getAllCategoryApi)
 
   const logoutApi = usePostLogout()
+
+  const [navMobile, setNavMobile] = useState<boolean>(true)
 
   const handleLogout = async () => {
     logoutApi.mutate()

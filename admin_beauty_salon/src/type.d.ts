@@ -195,6 +195,17 @@ type ResponseGetCategoryType = {
   message: iCategory
 }
 
+type ResponseGetAllCategoryType = {
+  success: boolean
+  message: {
+    father_id: string
+    id: string
+    level: number
+    name: string
+    slug: string
+  }[]
+}
+
 type ResponseGetListCategoryType = {
   success: boolean
   message: iCategory[]

@@ -51,6 +51,11 @@ export const handleGetCategory = async (id: string) => {
   return data
 }
 
+export const handleGetAllCategory = async () => {
+  const { data } = await CategoryApi.getAllCategory()
+  return data
+}
+
 export const handleGetListCategory = async (level: string) => {
   const { data } = await CategoryApi.listCategory(level)
   return data
@@ -322,6 +327,22 @@ export const useGetCategory = (
     queryKey: ['CateInfo', { id: id }],
     queryFn: () => handleGetCategory(id),
     enabled: id !== undefined,
+    staleTime: 10000,
+    keepPreviousData: true,
+    retry: 2,
+    ...options,
+  })
+}
+
+export const useGetAllCategory = (
+  id: string,
+  options?: UseQueryOptions<ResponseGetAllCategoryType>,
+) => {
+  return useQuery({
+    queryKey: ['AllCategory'],
+    queryFn: () => handleGetAllCategory(),
+    enabled: id !== undefined,
+
     staleTime: 10000,
     keepPreviousData: true,
     retry: 2,

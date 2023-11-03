@@ -1,6 +1,8 @@
-const API_BASE = `/admin`
+// const BASE_URL = import.meta.env.VITE_BASE_URL
 
-const API_IMAGE = `/upload`
+const API_BASE = `admin`
+
+const API_IMAGE = `upload`
 
 export const API_URL = {
   // Auth
@@ -37,5 +39,6 @@ export const API_URL = {
   createCategory: `${API_BASE}/category/create`,
   updateCategory: `${API_BASE}/category/update`,
   listCategory: `${API_BASE}/category/get-by-level`,
+  getAllCategory: `${API_BASE}/category/get-all`,
   deleteCategory: `${API_BASE}/category/delete`,
 }

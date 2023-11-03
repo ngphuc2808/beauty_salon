@@ -52,6 +52,8 @@ const DetailCategory = () => {
   const {
     title,
     setTitle,
+    status,
+    setStatus,
     contentType,
     setContentType,
     projectData,
@@ -150,7 +152,7 @@ const DetailCategory = () => {
       metaDescriptions: getCategoryApi.data?.message.metaDescriptions || '',
       contentType:
         contentType || getCategoryApi.data?.message.contentType || '',
-      status: getCategoryApi.data?.message.status.toString() || '',
+      status: status || getCategoryApi.data?.message.status.toString() || '',
       listChildren: getCategoryApi.data?.message.listChildren || [],
       listPosts: getCategoryApi.data?.message.listPosts || [],
       listProducts: getCategoryApi.data?.message.listProducts || [],
@@ -408,9 +410,8 @@ const DetailCategory = () => {
         onSuccess() {
           reset()
           setContentType('')
+          setStatus('')
           setTitle('')
-          setValue('name', '')
-          setValue('contentType', '')
           setValue('urlKey', '')
           setPreviewImg('')
           setProjectData({ projectData: '', html: '', css: '' })
@@ -475,6 +476,8 @@ const DetailCategory = () => {
             onClick={() => {
               setContentType('')
               setTitle('')
+              setStatus('')
+              setProjectData({ projectData: '', html: '', css: '' })
             }}
           >
             <Button onClick={() => router(-1)}>
@@ -758,7 +761,7 @@ const DetailCategory = () => {
           )}
           <div
             className={`${
-              !contentType ? 'mt-0' : 'mt-5'
+              !(contentType || watch('contentType')) ? 'mt-0' : 'mt-5'
             } mb-5  rounded-lg p-5 shadow ${
               getCategoryApi.isLoading
                 ? 'animate-pulse bg-gray-300'
@@ -979,6 +982,7 @@ const DetailCategory = () => {
                     required: true,
                   })}
                   value='true'
+                  onClick={() => setStatus('true')}
                   className="visible after:relative after:left-0 after:top-[-2px] after:inline-block after:h-4 after:w-4 after:cursor-pointer after:rounded-full  after:bg-[#d1d3d1] after:content-['']
                       checked:after:visible checked:after:relative checked:after:left-0 checked:after:top-[-2px] checked:after:inline-block checked:after:h-4 checked:after:w-4 checked:after:cursor-pointer checked:after:rounded-full checked:after:bg-green-500 checked:after:content-['']"
                 />
@@ -1006,6 +1010,7 @@ const DetailCategory = () => {
                     required: true,
                   })}
                   value='false'
+                  onClick={() => setStatus('false')}
                   className="visible after:relative after:left-0 after:top-[-2px] after:inline-block after:h-4 after:w-4 after:cursor-pointer after:rounded-full  after:bg-[#d1d3d1] after:content-['']
                       checked:after:visible checked:after:relative checked:after:left-0 checked:after:top-[-2px] checked:after:inline-block checked:after:h-4 checked:after:w-4 checked:after:cursor-pointer checked:after:rounded-full checked:after:bg-green-500 checked:after:content-['']"
                 />

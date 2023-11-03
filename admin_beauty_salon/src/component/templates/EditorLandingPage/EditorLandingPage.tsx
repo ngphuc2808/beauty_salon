@@ -43,6 +43,8 @@ const LandingPageEditor = () => {
 
   const [arrayImage, setArrayImage] = useState<string[]>([])
 
+  console.log(arrayImage)
+
   useEffect(() => {
     if (editor && arrayImage) editor.AssetManager.add(arrayImage)
   }, [arrayImage])

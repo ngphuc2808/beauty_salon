@@ -7,6 +7,8 @@ type Props = {
 export type GlobalContent = {
   title: string
   setTitle: (title: string) => void
+  status: string
+  setStatus: (status: string) => void
   contentType: string
   setContentType: (contentType: string) => void
   projectData: iContentInLandingPage
@@ -16,6 +18,8 @@ export type GlobalContent = {
 export const GlobalContext = createContext<GlobalContent>({
   title: '',
   setTitle: () => {},
+  status: '',
+  setStatus: () => {},
   contentType: '',
   setContentType: () => {},
   projectData: {
@@ -35,6 +39,7 @@ export const GlobalProvider = ({ children }: Props) => {
     css: '',
   })
   const [title, setTitle] = useState<string>('')
+  const [status, setStatus] = useState<string>('')
   const [contentType, setContentType] = useState<string>('')
 
   return (
@@ -42,6 +47,8 @@ export const GlobalProvider = ({ children }: Props) => {
       value={{
         title,
         setTitle,
+        status,
+        setStatus,
         contentType,
         setContentType,
         projectData,

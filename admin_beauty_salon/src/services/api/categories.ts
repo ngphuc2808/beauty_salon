@@ -9,6 +9,9 @@ export const CategoryApi = {
   getCategory: (id: string) =>
     http.get<ResponseGetCategoryType>(`${API_URL.getCategory}/${id}`),
 
+  getAllCategory: () =>
+    http.get<ResponseGetAllCategoryType>(`${API_URL.getAllCategory}`),
+
   listCategory: (level: string) =>
     http.get<ResponseGetListCategoryType>(`${API_URL.listCategory}/${level}`),
 
