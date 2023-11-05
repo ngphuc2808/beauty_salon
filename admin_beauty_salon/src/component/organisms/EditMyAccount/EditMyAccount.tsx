@@ -28,7 +28,7 @@ const EditMyAccount = () => {
     },
   })
 
-  const postImageApi = usePostImage()
+  const postImageApi = usePostImage(`EditUser-${isLogin?.session}`)
 
   const editUserApi = usePutEditUserInfo(isLogin.session)
 

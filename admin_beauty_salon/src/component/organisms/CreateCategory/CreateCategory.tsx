@@ -64,7 +64,11 @@ const DetailCategory = () => {
 
   const queryClient = useQueryClient()
 
-  const postImageApi = usePostImage()
+  const postImageApi = usePostImage(
+    `CreateCategory-level-${pathname
+      .split('/')[1]
+      .substring(pathname.split('/')[1].length - 1)}`,
+  )
 
   const postCategoryApi = usePostCategory()
 
@@ -385,27 +389,53 @@ const DetailCategory = () => {
         : ''
     }
 
-    value.landingPage.projectData = projectData.projectData
-    value.landingPage.html = projectData.html
-    value.landingPage.css = projectData.css
+    if (watch('contentType') === 'landing') {
+      value.landingPage.projectData = projectData.projectData
+      value.landingPage.html = projectData.html
+      value.landingPage.css = projectData.css
+    } else {
+      value.landingPage = {}
+    }
 
-    if (dataChildCategory && Array.isArray(dataChildCategory)) {
+    if (
+      watch('contentType') === 'landing_menu2' &&
+      dataChildCategory &&
+      Array.isArray(dataChildCategory)
+    ) {
+      value.landingPage.projectData = projectData.projectData
+      value.landingPage.html = projectData.html
+      value.landingPage.css = projectData.css
       value.listChildren = dataChildCategory.map((item) => item.value)
+    } else {
+      value.landingPage = {}
+      value.listChildren = []
+    }
+
+    if (
+      watch('contentType') === 'menu2' &&
+      dataChildCategory &&
+      Array.isArray(dataChildCategory)
+    ) {
+      value.listChildren = dataChildCategory.map((item) => item.value)
+    } else {
+      value.listChildren = []
+    }
+
+    if (watch('contentType') === 'products' && dataListProduct.length > 0) {
+      const dataIdProduct = dataListProduct.map((item) => item.productId)
+      value.listProducts = dataIdProduct
+    } else {
+      value.listProducts = []
+    }
+
+    if (watch('contentType') === 'posts' && dataListPost.length > 0) {
+      const dataIdPost = dataListPost.map((item) => item.postId)
+      value.listPosts = dataIdPost
+    } else {
+      value.listPosts = []
     }
 
     if (!isUpdate) {
-      if (dataListProduct.length > 0) {
-        const dataIdProduct = dataListProduct.map((item) => item.productId)
-        value.listProducts = dataIdProduct
-      } else {
-        value.listProducts = []
-      }
-      if (dataListPost.length > 0) {
-        const dataIdPost = dataListPost.map((item) => item.postId)
-        value.listPosts = dataIdPost
-      } else {
-        value.listPosts = []
-      }
       postCategoryApi.mutate(value, {
         onSuccess() {
           reset()
@@ -419,6 +449,7 @@ const DetailCategory = () => {
           queryClient.invalidateQueries({
             queryKey: ['ListCategory', { level: watch('level') }],
           })
+          queryClient.invalidateQueries({ queryKey: ['AllCategory'] })
         },
         onError(error) {
           const err = error as ResponseErrorType
@@ -426,26 +457,18 @@ const DetailCategory = () => {
         },
       })
     } else {
-      if (dataListProduct.length > 0) {
-        const dataIdProduct = dataListProduct.map((item) => item.productId)
-        value.listProducts = dataIdProduct
-      } else {
-        value.listProducts = []
-      }
-      if (dataListPost.length > 0) {
-        const dataIdPost = dataListPost.map((item) => item.postId)
-        value.listPosts = dataIdPost
-      } else {
-        value.listPosts = []
-      }
       updateCategoryApi.mutate(value, {
         onSuccess() {
+          setContentType('')
+          setStatus('')
+          setTitle('')
+          setProjectData({ projectData: '', html: '', css: '' })
           toast.success('Cập nhật bài viết thành công!')
           queryClient.invalidateQueries({ queryKey: ['CateInfo', { id: id }] })
           queryClient.invalidateQueries({
             queryKey: ['ListCategory', { level: watch('level') }],
           })
-          router(-1)
+          queryClient.invalidateQueries({ queryKey: ['AllCategory'] })
         },
         onError(error) {
           const err = error as ResponseErrorType

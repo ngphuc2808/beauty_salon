@@ -4,7 +4,7 @@ import Button from '@/component/atoms/Button'
 import { useQueryClient } from 'react-query'
 import { handleGetPost, handleGetProduct } from '@/hooks/hooks'
 
-type Props = {
+interface Props {
   checked: string[]
   handleCheck: (check: string) => void
   isLoading: boolean
@@ -31,14 +31,14 @@ const Items = ({
     if (currentItemsProduct) {
       queryClient.prefetchQuery(['EditProduct', { slug: slug }], {
         queryFn: () => handleGetProduct(slug),
-        staleTime: 10000,
+        staleTime: 500,
       })
       return
     }
     if (currentItemsPost) {
       queryClient.prefetchQuery(['EditPost', { slug: slug }], {
         queryFn: () => handleGetPost(slug),
-        staleTime: 10000,
+        staleTime: 500,
       })
       return
     }

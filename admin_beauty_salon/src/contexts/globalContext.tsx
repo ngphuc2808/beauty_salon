@@ -1,6 +1,6 @@
 import { ReactNode, createContext, useContext, useState } from 'react'
 
-type Props = {
+interface Props {
   children: ReactNode
 }
 

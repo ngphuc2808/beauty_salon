@@ -1,17 +1,35 @@
-import { AssetsResultProps, useEditor } from '@grapesjs/react'
+import { useEditor } from '@grapesjs/react'
 import type { Asset } from 'grapesjs'
 
 import Button from '@/component/atoms/Button'
 
-type CustomAssetManagerProps = Pick<
-  AssetsResultProps,
-  'assets' | 'close' | 'select'
->
+type CustomAssetManagerProps = {
+  assets: Asset[]
+  close: () => void
+  select: (asset: Asset, complete?: boolean | undefined) => void
+  listImageDeleted: string[]
+  setListImageDeleted: (listImageDeleted: string[]) => void
+}
 
-const CustomAssetManager = ({ assets, select }: CustomAssetManagerProps) => {
+const CustomAssetManager = ({
+  assets,
+  select,
+  listImageDeleted,
+  setListImageDeleted,
+}: CustomAssetManagerProps) => {
   const editor = useEditor()
 
   const remove = (asset: Asset) => {
+    const newArray = [...listImageDeleted]
+
+    const assetArrayLength = asset.id.toString().split('/').length - 1
+
+    const assetValue = asset.id.toString().split('/')[assetArrayLength]
+
+    newArray.push(assetValue)
+
+    setListImageDeleted(newArray)
+
     editor.Assets.remove(asset)
   }
 
@@ -20,7 +38,7 @@ const CustomAssetManager = ({ assets, select }: CustomAssetManagerProps) => {
       {assets.map((asset) => (
         <div
           key={asset.getSrc()}
-          className='group relative overflow-hidden rounded'
+          className='group relative flex items-center justify-center overflow-hidden rounded rounded-md bg-primaryColor/10'
         >
           <img className='display-block' src={asset.getSrc()} />
           <div className='absolute left-0 top-0 flex h-full w-full flex-col items-center justify-end bg-zinc-700/75 p-5 opacity-0 transition-opacity group-hover:opacity-100'>

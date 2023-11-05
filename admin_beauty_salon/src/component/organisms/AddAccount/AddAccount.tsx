@@ -14,7 +14,7 @@ const imageMimeType = /image\/(png|jpg|jpeg)/i
 const AddAccount = () => {
   const queryClient = useQueryClient()
 
-  const postImageApi = usePostImage()
+  const postImageApi = usePostImage('AddUser')
 
   const createUserApi = usePostCreateUser()
 

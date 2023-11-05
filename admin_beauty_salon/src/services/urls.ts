@@ -1,8 +1,8 @@
-// const BASE_URL = import.meta.env.VITE_BASE_URL
+const BASE_URL = import.meta.env.VITE_BASE_URL
 
-const API_BASE = `admin`
+const API_BASE = `${BASE_URL}admin`
 
-const API_IMAGE = `upload`
+const API_IMAGE = `${BASE_URL}upload`
 
 export const API_URL = {
   // Auth
@@ -17,6 +17,8 @@ export const API_URL = {
   //Image
   uploadImage: `${API_IMAGE}/image`,
   uploadImages: `${API_IMAGE}/images`,
+  getAllImages: `${API_IMAGE}/get-images`,
+  deleteImages: `${API_IMAGE}/delete-images`,
 
   //Post
   getPost: `${API_BASE}/post`,

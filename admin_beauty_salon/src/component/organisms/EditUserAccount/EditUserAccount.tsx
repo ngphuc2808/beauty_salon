@@ -35,7 +35,7 @@ const EditUserAccount = () => {
     },
   })
 
-  const postImageApi = usePostImage()
+  const postImageApi = usePostImage(`EditUser-${id}`)
 
   const editUserApi = usePutEditUserInfo(id! as string)
 

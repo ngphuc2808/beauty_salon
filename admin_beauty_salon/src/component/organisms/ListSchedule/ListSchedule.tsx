@@ -38,11 +38,9 @@ const ListSchedule = () => {
                     />
                   </div>
                 </th>
-
                 <th scope='col' className='px-6 py-3 text-secondColor'>
                   Ngày đặt
                 </th>
-
                 <th scope='col' className='px-6 py-3 text-secondColor'>
                   Thời gian
                 </th>
@@ -58,24 +56,6 @@ const ListSchedule = () => {
                 <th scope='col' className='px-6 py-3 text-secondColor'>
                   Địa điểm
                 </th>
-              </tr>
-              <tr className='cursor-pointer border-b bg-white hover:bg-gray-50'>
-                <td className='w-4 p-5'>
-                  <div className='flex items-center'>
-                    <input
-                      id='checkbox-table-search-1'
-                      type='checkbox'
-                      className='h-4 w-4 cursor-pointer'
-                    />
-                  </div>
-                </td>
-
-                <td className='px-6 py-4'>10/10/2010</td>
-                <td className='px-6 py-4'>8:00</td>
-                <td className='px-6 py-4'>Nguyễn Hoàng Phúc</td>
-                <td className='px-6 py-4'>0901234567</td>
-                <td className='px-6 py-4'>Trắng da</td>
-                <td className='px-6 py-4'>HCM</td>
               </tr>
             </tbody>
           </table>

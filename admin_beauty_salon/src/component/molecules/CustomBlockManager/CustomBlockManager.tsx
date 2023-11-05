@@ -20,7 +20,7 @@ const CustomBlockManager = ({
               <div
                 key={block.getId()}
                 draggable
-                className='border-primaryColor flex cursor-pointer flex-col items-center rounded border px-5 py-2 transition-colors'
+                className='flex cursor-pointer flex-col items-center rounded border border-primaryColor px-5 py-2 transition-colors'
                 onDragStart={(ev) => dragStart(block, ev.nativeEvent)}
                 onDragEnd={() => dragStop(false)}
               >

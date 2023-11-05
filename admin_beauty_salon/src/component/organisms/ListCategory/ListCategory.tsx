@@ -99,7 +99,9 @@ const ListCategory = () => {
         setModalDelete(false)
         setChecked([])
         queryClient.invalidateQueries({ queryKey: ['ListCategory'] })
-        toast.success('Xóa người dùng thành công!')
+        queryClient.invalidateQueries({ queryKey: ['AllCategory'] })
+
+        toast.success('Xóa danh mục thành công!')
       },
       onError() {
         toast.error('Xóa thất bại, vui lòng kiểm tra lại!')
@@ -110,7 +112,7 @@ const ListCategory = () => {
   const handlePrefetchList = (id: string) => {
     queryClient.prefetchQuery(['CateInfo', { id: id }], {
       queryFn: () => handleGetCategory(id),
-      staleTime: 10000,
+      staleTime: 500,
     })
   }
 
@@ -254,7 +256,8 @@ const ListCategory = () => {
                         dataContentType.find(
                           (value) => value.name === item.contentType,
                         )?.content
-                      }
+                      }{' '}
+                      {isListCategoryLevel3 ? '' : item.level + 1}
                     </td>
                     <td className='px-6 py-4'>
                       <span

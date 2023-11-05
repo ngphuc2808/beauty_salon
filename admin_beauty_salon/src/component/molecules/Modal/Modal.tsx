@@ -1,6 +1,6 @@
 import Button from '@/component/atoms/Button'
 
-type Props = {
+interface Props {
   title: string
   description: string
   setModalDelete: (value: boolean) => void

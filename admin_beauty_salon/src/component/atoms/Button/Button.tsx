@@ -1,7 +1,7 @@
 import { Fragment, ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 
-type Props = {
+interface Props {
   children?: ReactNode
   title?: string
   to?: string

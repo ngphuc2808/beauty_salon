@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { DevicesProvider, WithEditor } from '@grapesjs/react'
 import FormControl from '@mui/material/FormControl'
@@ -10,21 +10,24 @@ import 'react-toastify/dist/ReactToastify.css'
 import { useGlobalContext } from '@/contexts/globalContext'
 import Button from '@/component/atoms/Button'
 import TopbarButtons from '../TopbarButtons'
-import { usePostImages } from '@/hooks/hooks'
+import { useDeleteImages, usePostImages } from '@/hooks/hooks'
 
 const imageMimeType = /image\/(png|jpg|jpeg)/i
 
-type Props = {
+interface Props {
   className?: string
   setArrayImage: (data: string[]) => void
+  listImageDeleted: string[]
 }
 
-const Topbar = ({ className, setArrayImage }: Props) => {
+const Topbar = ({ className, setArrayImage, listImageDeleted }: Props) => {
   const router = useNavigate()
 
   const { setProjectData } = useGlobalContext()
 
-  const uploadImagesApi = usePostImages()
+  const uploadImagesApi = usePostImages('ImagesLandingPage')
+
+  const deleteImagesApi = useDeleteImages('ImagesLandingPage')
 
   const handleSaveContent = () => {
     setProjectData({
@@ -32,6 +35,10 @@ const Topbar = ({ className, setArrayImage }: Props) => {
       html: (window as any).editor.getHtml(),
       css: (window as any).editor.getCss(),
     })
+
+    if (listImageDeleted.length > 0)
+      deleteImagesApi.mutate(listImageDeleted.toString())
+
     router(-1)
   }
 

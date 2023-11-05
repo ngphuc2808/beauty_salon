@@ -4,7 +4,7 @@ import Cropper from 'react-easy-crop'
 import getCroppedImg from '@/helpers/listFunction'
 import Button from '@/component/atoms/Button'
 
-type Props = {
+interface Props {
   image: string | ArrayBuffer | null
   setModalCrop: (modalCrop: boolean) => void
   setFileImage: (fileImage: Blob) => void

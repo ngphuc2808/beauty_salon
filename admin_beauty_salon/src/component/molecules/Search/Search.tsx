@@ -2,7 +2,6 @@ import { useRef, ChangeEvent } from 'react'
 
 interface Props {
   title: string
-  isAuth?: boolean
   searchTerm: string
   handleSearchChange: (e: ChangeEvent<HTMLInputElement>) => void
   handleClearChange: () => void

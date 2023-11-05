@@ -95,7 +95,7 @@ const CreatePost = () => {
     enabled: slug !== undefined && !isCreatePosts,
   })
 
-  const postImageApi = usePostImage()
+  const postImageApi = usePostImage('CreatePost')
 
   const createPostApi = usePostCreatePost()
 

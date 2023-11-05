@@ -25,7 +25,7 @@ import CustomAssetManager from '@/component/molecules/CustomAssetManager'
 import Topbar from '@/component/molecules/Topbar'
 import RightSidebar from '@/component/molecules/RightSidebar'
 
-import { useGetCategory } from '@/hooks/hooks'
+import { useGetAllImages, useGetCategory } from '@/hooks/hooks'
 import { useGlobalContext } from '@/contexts/globalContext'
 
 const LandingPageEditor = () => {
@@ -39,11 +39,19 @@ const LandingPageEditor = () => {
     enabled: isUpdate,
   })
 
+  const getAllImagesApi = useGetAllImages('ImagesLandingPage', {
+    onSuccess(data) {
+      setArrayImage(data.message.urls)
+    },
+  })
+
   const [editor, setEditor] = useState<Editor>()
 
-  const [arrayImage, setArrayImage] = useState<string[]>([])
+  const [arrayImage, setArrayImage] = useState<string[]>(
+    getAllImagesApi.data?.message.urls || [],
+  )
 
-  console.log(arrayImage)
+  const [listImageDeleted, setListImageDeleted] = useState<string[]>([])
 
   useEffect(() => {
     if (editor && arrayImage) editor.AssetManager.add(arrayImage)
@@ -110,6 +118,7 @@ const LandingPageEditor = () => {
             <Topbar
               className='min-h-[64px] border-b border-primaryColor shadow-headerBox'
               setArrayImage={setArrayImage}
+              listImageDeleted={listImageDeleted}
             />
             <Canvas className='gjs-custom-editor-canvas flex-grow bg-slate-200' />
           </div>
@@ -129,6 +138,8 @@ const LandingPageEditor = () => {
           {({ assets, select, close, Container }) => (
             <Container>
               <CustomAssetManager
+                setListImageDeleted={setListImageDeleted}
+                listImageDeleted={listImageDeleted}
                 assets={assets}
                 select={select}
                 close={close}

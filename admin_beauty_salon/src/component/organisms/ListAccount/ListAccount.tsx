@@ -7,7 +7,7 @@ import images from '@/assets/images'
 import {
   handleGetInfo,
   useDebounce,
-  useDeleteAccount,
+  useDeleteUser,
   useGetListUser,
 } from '@/hooks/hooks'
 
@@ -20,7 +20,7 @@ const ListAccount = () => {
 
   const listUserApi = useGetListUser()
 
-  const deleteAccountApi = useDeleteAccount()
+  const deleteAccountApi = useDeleteUser()
 
   const [checked, setChecked] = useState<string[]>([])
   const [checkedAll, setCheckedAll] = useState<string[]>([])
@@ -91,7 +91,7 @@ const ListAccount = () => {
   const handlePrefetchList = (slug: string) => {
     queryClient.prefetchQuery(['EditUserInfo', { slug: slug }], {
       queryFn: () => handleGetInfo(slug),
-      staleTime: 10000,
+      staleTime: 500,
     })
   }
 

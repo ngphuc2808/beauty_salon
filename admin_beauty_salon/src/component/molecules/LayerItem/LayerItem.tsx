@@ -95,7 +95,7 @@ const LayerItem = ({
         ref={layerRef}
       >
         <div
-          className={`border-primaryColor flex cursor-pointer items-center gap-1 border-b p-1 pr-2 ${
+          className={`flex cursor-pointer items-center gap-1 border-b border-primaryColor p-1 pr-2 ${
             level === 0 && 'border-t'
           } ${isHovered && 'bg-secondColor'} ${selected && 'bg-primaryColor'}`}
         >

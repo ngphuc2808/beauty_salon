@@ -39,16 +39,6 @@ type ResponseLogoutType = {
   success: boolean
 }
 
-type ResponseUploadImageType = {
-  results: string
-  success: boolean
-}
-
-type ResponseUploadImagesType = {
-  results: string[]
-  success: boolean
-}
-
 type ResponseGetUserInfoType = {
   results: Omit<iUserInfo, 'password'>
   success: boolean
@@ -67,6 +57,30 @@ type ResponseCreateAndEditUserType = {
 type ResponseDeleteType = {
   success: boolean
   results: boolean
+}
+
+//Images
+type ResponseUploadImageType = {
+  results: string
+  success: boolean
+}
+
+type ResponseUploadImagesType = {
+  results: string[]
+  success: boolean
+}
+
+type ResponseGetAllImagesType = {
+  message: {
+    names: string[]
+    urls: string[]
+  }
+  success: boolean
+}
+
+type ResponseDeleteImagesType = {
+  message: string[]
+  success: boolean
 }
 
 //Landing Page Type
@@ -185,6 +199,14 @@ type PostCategoryType = Omit<
   'id' | 'slug' | 'createdAt' | 'updatedAt'
 >
 
+type TreeNodeCategory = {
+  name: string
+  level: number
+  slug: string
+  id: string
+  child?: TreeNodeCategory[]
+}
+
 type ResponsePostCategoryType = {
   success: boolean
   results: iCategory
@@ -197,13 +219,7 @@ type ResponseGetCategoryType = {
 
 type ResponseGetAllCategoryType = {
   success: boolean
-  message: {
-    father_id: string
-    id: string
-    level: number
-    name: string
-    slug: string
-  }[]
+  message: TreeNodeCategory[]
 }
 
 type ResponseGetListCategoryType = {

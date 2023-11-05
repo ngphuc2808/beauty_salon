@@ -79,7 +79,7 @@ const TraitPropertyField = ({ trait, ...rest }: StylePropertyFieldProps) => {
               startAdornment: (
                 <InputAdornment position='start'>
                   <div
-                    className='border-primaryColor h-[15px] w-[15px] rounded border'
+                    className='h-[15px] w-[15px] rounded border border-primaryColor'
                     style={{ backgroundColor: valueWithDef }}
                   >
                     <input

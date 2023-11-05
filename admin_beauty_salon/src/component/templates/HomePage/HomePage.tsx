@@ -1,7 +1,7 @@
 import MainPage from '@/component/pages/MainPage'
 import { listComponent } from '@/helpers/listComponent'
 
-type Props = {
+interface Props {
   path: string
 }
 

@@ -1,6 +1,6 @@
-import http from "../http";
+import http from '../http'
 
-import { API_URL } from "../urls";
+import { API_URL } from '../urls'
 
 export const AuthApi = {
   login: (user: LoginType) => http.post<ResponseLoginType>(API_URL.login, user),
@@ -21,6 +21,6 @@ export const AuthApi = {
   updateAccount: (slug: string, data: EditAccountType) =>
     http.put<ResponseCreateAndEditUserType>(
       `${API_URL.updateInfo}/${slug}/update`,
-      data
+      data,
     ),
-};
+}

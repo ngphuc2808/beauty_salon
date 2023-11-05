@@ -6,6 +6,7 @@ import { useGetAllCategory, useGetUserInfo, usePostLogout } from '@/hooks/hooks'
 import { dataNavigation } from '@/utils/data'
 
 import images from '@/assets/images'
+import QuickLink from '@/component/molecules/QuickLink'
 import Button from '../../atoms/Button'
 import { SpinnerIcon } from '../../atoms/CustomIcon/CustomIcon'
 
@@ -26,8 +27,6 @@ const MainPage = ({ children }: Props) => {
 
   const getAllCategoryApi = useGetAllCategory(isLogin?.session)
 
-  console.log(getAllCategoryApi)
-
   const logoutApi = usePostLogout()
 
   const [navMobile, setNavMobile] = useState<boolean>(true)
@@ -42,7 +41,7 @@ const MainPage = ({ children }: Props) => {
     <section>
       <header className='fixed inset-0 z-50 flex h-16 w-full items-center justify-between bg-white px-[10px] py-2 shadow-headerBox'>
         <div className='flex items-center gap-1'>
-          <Button to={'/danh-muc-cap-1'} className='h-full w-[90px]'>
+          <Button to={'/'} className='h-full w-[90px]'>
             <figure>
               <img src='../../logoText.png' />
             </figure>
@@ -153,30 +152,13 @@ const MainPage = ({ children }: Props) => {
                   Liên kết nhanh
                 </span>
               </div>
-              <ul className='relative max-h-[800px] overflow-auto pl-4 text-sm text-textPrimaryColor'>
-                <li className="relative after:absolute after:left-[1px] after:top-5 after:h-full after:border-l after:border-dashed after:border-gray-500 after:content-['']">
-                  <p className='my-2 cursor-pointer hover:text-secondColor'>
-                    Danh sách sản phẩm
-                  </p>
-                  <ul className='ml-6'>
-                    <li className="relative after:absolute after:left-[1px] after:top-5 after:h-full after:border-l after:border-dashed after:border-gray-500 after:content-['']">
-                      <p className='my-2 cursor-pointer hover:text-secondColor'>
-                        Danh sách sản phẩm 1
-                      </p>
-                      <ul className='ml-8'>
-                        <li className='cursor-pointer p-1 hover:text-secondColor'>
-                          Danh sách sản phẩm 2
-                        </li>
-                        <li className='cursor-pointer p-1 hover:text-secondColor'>
-                          Danh sách sản phẩm 2
-                        </li>
-                        <li className='cursor-pointer p-1 hover:text-secondColor'>
-                          Danh sách sản phẩm 2
-                        </li>
-                      </ul>
-                    </li>
-                  </ul>
-                </li>
+              <ul className='relative max-h-[800px] overflow-auto pl-4 text-sm text-textPrimaryColor [&>:first-child]:mt-0 [&>li]:mt-5'>
+                {getAllCategoryApi.data?.message.map((node) => (
+                  <QuickLink
+                    key={`${node.level} - ${node.id} - ${Math.random() * 100}`}
+                    node={node}
+                  />
+                ))}
               </ul>
             </li>
           </ul>
@@ -240,28 +222,13 @@ const MainPage = ({ children }: Props) => {
                   Liên kết nhanh
                 </span>
               </div>
-              <ul className='relative max-h-[800px] overflow-auto pl-4 text-lg text-textPrimaryColor'>
-                <li className="relative after:absolute after:left-[1px] after:top-5 after:h-full after:border-l after:border-dashed after:border-gray-500 after:content-['']">
-                  <p className='my-2'>Danh sách sản phẩm</p>
-                  <ul className='ml-6'>
-                    <li className="relative my-2 after:absolute after:left-[1px] after:top-5 after:h-full after:border-l after:border-dashed after:border-gray-500 after:content-['']">
-                      <p className='my-2'>Danh sách sản phẩm 1</p>
-                      <ul className='ml-8'>
-                        <li className='p-1'>Danh sách sản phẩm 2</li>
-                        <li className='p-1'>Danh sách sản phẩm 2</li>
-                        <li className='p-1'>Danh sách sản phẩm 2</li>
-                      </ul>
-                    </li>
-                    <li className="relative my-2 after:absolute after:left-[1px] after:top-5 after:h-full after:border-l after:border-dashed after:border-gray-500 after:content-['']">
-                      <p className='my-2'>Danh sách sản phẩm 1</p>
-                      <ul className='ml-8'>
-                        <li className='p-1'>Danh sách sản phẩm 2</li>
-                        <li className='p-1'>Danh sách sản phẩm 2</li>
-                        <li className='p-1'>Danh sách sản phẩm 2</li>
-                      </ul>
-                    </li>
-                  </ul>
-                </li>
+              <ul className='relative max-h-[800px] overflow-auto pl-4 text-lg text-textPrimaryColor [&>:first-child]:mt-0 [&>li]:mt-5'>
+                {getAllCategoryApi.data?.message.map((node) => (
+                  <QuickLink
+                    key={`${node.level} - ${node.id} - ${Math.random() * 100}`}
+                    node={node}
+                  />
+                ))}
               </ul>
             </li>
           </ul>
