@@ -43,4 +43,5 @@ export const API_URL = {
   listCategory: `${API_BASE}/category/get-by-level`,
   getAllCategory: `${API_BASE}/category/get-all`,
   deleteCategory: `${API_BASE}/category/delete`,
+  removeChildCategory: `${API_BASE}/category/remove-children`,
 }
