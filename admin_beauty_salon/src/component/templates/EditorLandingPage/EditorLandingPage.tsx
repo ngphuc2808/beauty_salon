@@ -19,6 +19,8 @@ import GjsEditor, {
 import grapesjs from 'grapesjs'
 import type { Editor } from 'grapesjs'
 import 'grapesjs/dist/css/grapes.min.css'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 import CustomModal from '@/component/molecules/CustomModal'
 import CustomAssetManager from '@/component/molecules/CustomAssetManager'
@@ -43,12 +45,17 @@ const LandingPageEditor = () => {
     onSuccess(data) {
       setArrayImage(data.message.urls)
     },
+    onError() {
+      toast.warning(
+        'Hiện chưa có folder chứa ảnh, vui lòng up ảnh (hoặc không) để cập nhật!',
+      )
+    },
   })
 
   const [editor, setEditor] = useState<Editor>()
 
   const [arrayImage, setArrayImage] = useState<string[]>(
-    getAllImagesApi.data?.message.urls || [],
+    (getAllImagesApi && getAllImagesApi.data?.message.urls) || [],
   )
 
   const [listImageDeleted, setListImageDeleted] = useState<string[]>([])

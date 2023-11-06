@@ -52,7 +52,7 @@ export const useGetAllImages = (
   return useQuery({
     queryKey: ['ImagesLandingPage', { folderName: folderName }],
     queryFn: () => handleGetAllImages(folderName),
-    staleTime: 1500,
+    staleTime: 1000,
     keepPreviousData: true,
     retry: 2,
     ...options,
@@ -102,7 +102,7 @@ export const useGetUserInfo = (
     queryKey: ['UserInfo', { slug: slug }],
     queryFn: () => handleGetInfo(slug),
     enabled: slug !== undefined,
-    staleTime: 1500,
+    staleTime: 1000,
     keepPreviousData: true,
     retry: 2,
     ...options,
@@ -117,7 +117,7 @@ export const useGetEditUserInfo = (
     queryKey: ['EditUserInfo', { slug: slug }],
     queryFn: () => handleGetInfo(slug),
     enabled: slug !== undefined,
-    staleTime: 1500,
+    staleTime: 1000,
     keepPreviousData: true,
     retry: 2,
     ...options,
@@ -192,7 +192,7 @@ export const useGetPost = (
   return useQuery({
     queryKey: ['EditPost', { slug: slug }],
     queryFn: () => handleGetPost(slug),
-    staleTime: 1500,
+    staleTime: 1000,
     keepPreviousData: true,
     retry: 2,
     ...options,
@@ -205,7 +205,7 @@ export const useGetListPost = (
   return useQuery({
     queryKey: ['ListPost'],
     queryFn: () => handleGetListPost(),
-    staleTime: 1500,
+    staleTime: 1000,
     keepPreviousData: true,
     retry: 2,
     ...options,
@@ -219,7 +219,7 @@ export const useGetSearchPost = (
   return useQuery({
     queryKey: ['SearchListPost', title],
     queryFn: () => handleSearchPost(title),
-    staleTime: 1500,
+    staleTime: 1000,
     keepPreviousData: true,
     retry: 2,
     ...options,
@@ -273,7 +273,7 @@ export const useGetSearchProduct = (
   return useQuery({
     queryKey: ['SearchListProduct', name],
     queryFn: () => handleSearchProduct(name),
-    staleTime: 1500,
+    staleTime: 1000,
     keepPreviousData: true,
     retry: 2,
     ...options,
@@ -287,7 +287,7 @@ export const useGetProduct = (
   return useQuery({
     queryKey: ['EditProduct', { slug: slug }],
     queryFn: () => handleGetProduct(slug),
-    staleTime: 1500,
+    staleTime: 1000,
     keepPreviousData: true,
     retry: 2,
     ...options,
@@ -300,7 +300,7 @@ export const useGetListProduct = (
   return useQuery({
     queryKey: ['ListProduct'],
     queryFn: () => handleGetListProduct(),
-    staleTime: 1500,
+    staleTime: 1000,
     keepPreviousData: true,
     retry: 2,
     ...options,
@@ -355,7 +355,7 @@ export const useGetCategory = (
     queryKey: ['CateInfo', { id: id }],
     queryFn: () => handleGetCategory(id),
     enabled: id !== undefined,
-    staleTime: 1500,
+    staleTime: 1000,
     keepPreviousData: true,
     retry: 2,
     ...options,
@@ -371,7 +371,7 @@ export const useGetAllCategory = (
     queryFn: () => handleGetAllCategory(),
     enabled: id !== undefined,
 
-    staleTime: 1500,
+    staleTime: 1000,
     keepPreviousData: true,
     retry: 2,
     ...options,
@@ -385,7 +385,7 @@ export const useGetListCategory = (
   return useQuery({
     queryKey: ['ListCategory', { level: level }],
     queryFn: () => handleGetListCategory(level),
-    staleTime: 1500,
+    staleTime: 1000,
     keepPreviousData: true,
     retry: 2,
     ...options,

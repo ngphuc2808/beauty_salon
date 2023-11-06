@@ -38,7 +38,7 @@ const CustomAssetManager = ({
       {assets.map((asset) => (
         <div
           key={asset.getSrc()}
-          className='group relative flex items-center justify-center overflow-hidden rounded rounded-md bg-primaryColor/10'
+          className='group relative flex items-center justify-center overflow-hidden rounded-md bg-primaryColor/10'
         >
           <img className='display-block' src={asset.getSrc()} />
           <div className='absolute left-0 top-0 flex h-full w-full flex-col items-center justify-end bg-zinc-700/75 p-5 opacity-0 transition-opacity group-hover:opacity-100'>

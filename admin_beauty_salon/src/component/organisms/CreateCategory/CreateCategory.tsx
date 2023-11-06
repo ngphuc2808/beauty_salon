@@ -45,10 +45,6 @@ const DetailCategory = () => {
     pathname.split('/')[1] === 'tao-danh-muc-cap-2',
   )
 
-  const isCategoryLevel1 = Boolean(
-    pathname.split('/')[1] === 'tao-danh-muc-cap-1',
-  )
-
   const {
     title,
     setTitle,
@@ -63,8 +59,6 @@ const DetailCategory = () => {
   const isUpdate = Boolean(id)
 
   const queryClient = useQueryClient()
-
-  // const dataFromQuery =  as ResponseGetListCategoryType
 
   const postImageApi = usePostImage(
     `CreateCategory-level-${pathname
@@ -96,6 +90,13 @@ const DetailCategory = () => {
         listProducts: data.message.listProducts,
       })
       setPreviewImg(data.message.thumbnail as string)
+      if (listChildCategoryApi.status === 'success') {
+        setListChildCategory(
+          listChildCategoryApi.data.message.filter((item) =>
+            watch('listChildren').includes(item.id),
+          ),
+        )
+      }
     },
   })
 
@@ -135,93 +136,160 @@ const DetailCategory = () => {
     },
   })
 
-  const listChildCategoryLevel1Api = useGetListCategory('2', {
-    onSuccess(data) {
-      setOptions(
-        data.message.map((item) => ({
-          value: item.id,
-          label: item.name,
-        })),
-      )
-      setListChildCategory(
-        data.message.filter((item) => watch('listChildren').includes(item.id)),
-      )
-    },
-    enabled:
-      isCategoryLevel1 &&
-      (watch('contentType') === 'menu2' ||
-        watch('contentType') === 'landing_menu2'),
+  //List ChildCategory Api
+  useEffect(() => {
+    setDataChildCategory(null)
+    setSearchTerm('')
+    setContentType('')
+  }, [router])
 
-    initialData: () => {
-      return queryClient.getQueryData([
-        'ListCategory',
-        {
-          level: (
-            Number(
-              pathname
-                .split('/')[1]
-                .substring(pathname.split('/')[1].length - 1),
-            ) + 1
-          ).toString(),
-        },
-      ])
+  const listChildCategoryApi = useGetListCategory(
+    !isCategoryLevel3 ? (watch('level') + 1).toString() : '',
+    {
+      onSuccess(data) {
+        setOptions(
+          data.message.map((item) => ({
+            value: item.id,
+            label: item.name,
+          })),
+        )
+        setListChildCategory(
+          data.message.filter((item) =>
+            watch('listChildren').includes(item.id),
+          ),
+        )
+      },
+      enabled:
+        !isCategoryLevel3 &&
+        (watch('contentType') === 'menu2' ||
+          watch('contentType') === 'landing_menu2'),
     },
-  })
+  )
 
-  const listChildCategoryLevel2Api = useGetListCategory('3', {
-    onSuccess(data) {
-      setOptions(
-        data.message.map((item) => ({
-          value: item.id,
-          label: item.name,
-        })),
-      )
-      setListChildCategory(
-        data.message.filter((item) => watch('listChildren').includes(item.id)),
-      )
-    },
-    enabled:
-      isCategoryLevel2 &&
-      (watch('contentType') === 'menu2' ||
-        watch('contentType') === 'landing_menu2'),
+  const [listChildCategory, setListChildCategory] = useState<iCategory[]>(
+    listChildCategoryApi.data?.message.filter((item) =>
+      watch('listChildren').includes(item.id),
+    ) || [],
+  )
 
-    initialData: () => {
-      return queryClient.getQueryData([
-        'ListCategory',
-        {
-          level: (
-            Number(
-              pathname
-                .split('/')[1]
-                .substring(pathname.split('/')[1].length - 1),
-            ) + 1
-          ).toString(),
-        },
-      ])
-    },
-  })
+  const [dataChildCategory, setDataChildCategory] = useState<SelectValue>(null)
 
+  const [options, setOptions] = useState<{ value: string; label: string }[]>(
+    listChildCategoryApi.data?.message.map((item) => ({
+      value: item.id,
+      label: item.name,
+    })) || [],
+  )
+
+  const handleChangeChildCategory = (value: SelectValue) => {
+    setDataChildCategory(value)
+  }
+
+  const handleDeleteChildCategory = (item: string) => {
+    setListChildCategory(listChildCategory.filter((value) => value.id !== item))
+    setValue(
+      'listChildren',
+      watch('listChildren').filter((value) => value !== item),
+    )
+  }
+
+  //Post Api
   const listPostApi = useGetListPost({
     onSuccess(data) {
       const filteredPostArray = data.results.filter(
         (item) => getCategoryApi.data?.message.listPosts.includes(item.postId),
       )
-      setdataListPost(filteredPostArray)
+      setDataListPost(filteredPostArray)
     },
     enabled: watch('contentType') === 'posts',
   })
 
+  const [dataListPost, setDataListPost] = useState<
+    Pick<
+      iPost,
+      'title' | 'postId' | 'slug' | 'status' | 'thumbnail' | 'createdAt'
+    >[]
+  >(
+    listPostApi.data?.results.filter(
+      (item) => getCategoryApi.data?.message.listPosts.includes(item.postId),
+    ) || [],
+  )
+
+  const addUniqueItemPost = (
+    value: Pick<
+      iPost,
+      'title' | 'postId' | 'slug' | 'status' | 'thumbnail' | 'createdAt'
+    >,
+  ) => {
+    const isIdExists = dataListPost.some((item) => item.postId === value.postId)
+    if (!isIdExists) {
+      setDataListPost([...dataListPost, value])
+    }
+  }
+
+  const removeItemPost = (
+    value: Pick<
+      iPost,
+      'title' | 'postId' | 'slug' | 'status' | 'thumbnail' | 'createdAt'
+    >,
+  ) => {
+    const updatedData = dataListPost.filter(
+      (item: any) => item.postId !== value.postId,
+    )
+    setDataListPost(updatedData)
+  }
+
+  //Product Api
   const listProductApi = useGetListProduct({
     onSuccess(data) {
       const filteredProductArray = data.results.filter(
         (item) =>
           getCategoryApi.data?.message.listProducts.includes(item.productId),
       )
-      setdataListProduct(filteredProductArray)
+      setDataListProduct(filteredProductArray)
     },
     enabled: watch('contentType') === 'products',
   })
 
+  const [dataListProduct, setDataListProduct] = useState<
+    Pick<
+      iProduct,
+      'name' | 'productId' | 'slug' | 'status' | 'thumbnail' | 'createdAt'
+    >[]
+  >(
+    listProductApi.data?.results.filter(
+      (item) =>
+        getCategoryApi.data?.message.listProducts.includes(item.productId),
+    ) || [],
+  )
+
+  const addUniqueItemProduct = (
+    value: Pick<
+      iProduct,
+      'name' | 'productId' | 'slug' | 'status' | 'thumbnail' | 'createdAt'
+    >,
+  ) => {
+    const isIdExists = dataListProduct.some(
+      (item) => item.productId === value.productId,
+    )
+    if (!isIdExists) {
+      setDataListProduct([...dataListProduct, value])
+    }
+  }
+
+  const removeItemProduct = (
+    value: Pick<
+      iProduct,
+      'name' | 'productId' | 'slug' | 'status' | 'thumbnail' | 'createdAt'
+    >,
+  ) => {
+    const updatedData = dataListProduct.filter(
+      (item) => item.productId !== value.productId,
+    )
+    setDataListProduct(updatedData)
+  }
+
+  //Search Api
   const [searchTerm, setSearchTerm] = useState<string>('')
 
   const debouncedSearchTerm = useDebounce(searchTerm, 300)
@@ -234,60 +302,15 @@ const DetailCategory = () => {
     enabled: watch('contentType') === 'posts',
   })
 
-  const [options, setOptions] = useState<{ value: string; label: string }[]>(
-    (isCategoryLevel1
-      ? listChildCategoryLevel1Api.data?.message.map((item) => ({
-          value: item.id,
-          label: item.name,
-        }))
-      : isCategoryLevel2 &&
-        listChildCategoryLevel2Api.data?.message.map((item) => ({
-          value: item.id,
-          label: item.name,
-        }))) || [],
-  )
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value)
+  }
 
-  const [listChildCategory, setListChildCategory] = useState<iCategory[]>(
-    (isCategoryLevel1
-      ? listChildCategoryLevel1Api.data?.message.filter((item) =>
-          watch('listChildren').includes(item.id),
-        )
-      : isCategoryLevel2 &&
-        listChildCategoryLevel2Api.data?.message.filter((item) =>
-          watch('listChildren').includes(item.id),
-        )) || [],
-  )
+  const handleClearChange = () => {
+    setSearchTerm('')
+  }
 
-  const [dataChildCategory, setDataChildCategory] = useState<SelectValue>(null)
-
-  const existDataChild = listChildCategory.map((item) => ({
-    value: item.id,
-    label: item.name,
-  }))
-
-  const [dataListProduct, setdataListProduct] = useState<
-    Pick<
-      iProduct,
-      'name' | 'productId' | 'slug' | 'status' | 'thumbnail' | 'createdAt'
-    >[]
-  >(
-    listProductApi.data?.results.filter(
-      (item) =>
-        getCategoryApi.data?.message.listProducts.includes(item.productId),
-    ) || [],
-  )
-
-  const [dataListPost, setdataListPost] = useState<
-    Pick<
-      iPost,
-      'title' | 'postId' | 'slug' | 'status' | 'thumbnail' | 'createdAt'
-    >[]
-  >(
-    listPostApi.data?.results.filter(
-      (item) => getCategoryApi.data?.message.listPosts.includes(item.postId),
-    ) || [],
-  )
-
+  //Other
   const [cropImage, setCropImage] = useState<string | ArrayBuffer | null>(null)
   const [modalCrop, setModalCrop] = useState(false)
   const [previewImg, setPreviewImg] = useState<string>(
@@ -324,68 +347,6 @@ const DetailCategory = () => {
       }
     }
   }, [file])
-
-  const handleChange = (value: SelectValue) => {
-    setDataChildCategory(value)
-  }
-
-  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value)
-  }
-
-  const handleClearChange = () => {
-    setSearchTerm('')
-  }
-
-  const addUniqueItemProduct = (
-    value: Pick<
-      iProduct,
-      'name' | 'productId' | 'slug' | 'status' | 'thumbnail' | 'createdAt'
-    >,
-  ) => {
-    const isIdExists = dataListProduct.some(
-      (item) => item.productId === value.productId,
-    )
-    if (!isIdExists) {
-      setdataListProduct([...dataListProduct, value])
-    }
-  }
-
-  const removeItemProduct = (
-    value: Pick<
-      iProduct,
-      'name' | 'productId' | 'slug' | 'status' | 'thumbnail' | 'createdAt'
-    >,
-  ) => {
-    const updatedData = dataListProduct.filter(
-      (item) => item.productId !== value.productId,
-    )
-    setdataListProduct(updatedData)
-  }
-
-  const addUniqueItemPost = (
-    value: Pick<
-      iPost,
-      'title' | 'postId' | 'slug' | 'status' | 'thumbnail' | 'createdAt'
-    >,
-  ) => {
-    const isIdExists = dataListPost.some((item) => item.postId === value.postId)
-    if (!isIdExists) {
-      setdataListPost([...dataListPost, value])
-    }
-  }
-
-  const removeItemPost = (
-    value: Pick<
-      iPost,
-      'title' | 'postId' | 'slug' | 'status' | 'thumbnail' | 'createdAt'
-    >,
-  ) => {
-    const updatedData = dataListPost.filter(
-      (item: any) => item.postId !== value.postId,
-    )
-    setdataListPost(updatedData)
-  }
 
   const handleCrop = (e: ChangeEvent<HTMLInputElement>) => {
     let input = e.currentTarget
@@ -432,7 +393,10 @@ const DetailCategory = () => {
         : ''
     }
 
-    if (watch('contentType') === 'landing') {
+    if (
+      watch('contentType') === 'landing' ||
+      watch('contentType') === 'landing_menu2'
+    ) {
       value.landingPage.projectData = projectData.projectData
       value.landingPage.html = projectData.html
       value.landingPage.css = projectData.css
@@ -440,22 +404,16 @@ const DetailCategory = () => {
       value.landingPage = {}
     }
 
-    if (watch('contentType') === 'landing_menu2') {
-      value.landingPage.projectData = projectData.projectData
-      value.landingPage.html = projectData.html
-      value.landingPage.css = projectData.css
-      if (dataChildCategory && Array.isArray(dataChildCategory))
-        value.listChildren = dataChildCategory.map((item) => item.value)
-      else value.listChildren = existDataChild.map((item) => item.value)
-    } else {
-      value.landingPage = {}
-      value.listChildren = []
-    }
-
-    if (watch('contentType') === 'menu2') {
-      if (dataChildCategory && Array.isArray(dataChildCategory))
-        value.listChildren = dataChildCategory.map((item) => item.value)
-      else value.listChildren = existDataChild.map((item) => item.value)
+    if (
+      watch('contentType') === 'menu2' ||
+      watch('contentType') === 'landing_menu2'
+    ) {
+      if (dataChildCategory && Array.isArray(dataChildCategory)) {
+        value.listChildren = [
+          ...value.listChildren,
+          ...dataChildCategory.map((item) => item.value),
+        ]
+      } else value.listChildren = watch('listChildren')
     } else {
       value.listChildren = []
     }
@@ -490,10 +448,6 @@ const DetailCategory = () => {
           })
           queryClient.invalidateQueries({ queryKey: ['AllCategory'] })
         },
-        onError(error) {
-          const err = error as ResponseErrorType
-          console.log(err)
-        },
       })
     } else {
       updateCategoryApi.mutate(value, {
@@ -509,20 +463,8 @@ const DetailCategory = () => {
           })
           queryClient.invalidateQueries({ queryKey: ['AllCategory'] })
         },
-        onError(error) {
-          const err = error as ResponseErrorType
-          console.log(err)
-        },
       })
     }
-  }
-
-  const handleDeleteChildCategory = (item: string) => {
-    setListChildCategory(listChildCategory.filter((value) => value.id !== item))
-    setValue(
-      'listChildren',
-      watch('listChildren').filter((value) => value !== item),
-    )
   }
 
   return (
@@ -562,7 +504,7 @@ const DetailCategory = () => {
         <h1 className='text-xl font-medium text-textHeadingColor'>Tổng quan</h1>
         <div className='mt-4'>
           <h1 className='mb-2 block font-normal text-textHeadingColor'>
-            Tên danh mục
+            {getCategoryApi.isError ? 'Danh mục không tồn tại' : 'Tên danh mục'}
           </h1>
           <input
             type='text'
@@ -632,7 +574,7 @@ const DetailCategory = () => {
               <div className='[&>:nth-child(2)]:h-[46px]'>
                 <div className='mb-3 items-center justify-between sm:flex'>
                   <h1 className='block font-normal text-textHeadingColor'>
-                    {isCategoryLevel2 ? 'Danh mục cấp 3' : 'Danh mục cấp 2'}
+                    Thêm danh mục con
                   </h1>
                 </div>
                 <Select
@@ -647,7 +589,7 @@ const DetailCategory = () => {
                   primaryColor='red'
                   placeholder='Chọn tên danh mục'
                   value={dataChildCategory}
-                  onChange={handleChange}
+                  onChange={handleChangeChildCategory}
                   options={options}
                   isMultiple
                   isClearable
