@@ -42,7 +42,7 @@ const MainPage = ({ children }: Props) => {
       <header className='fixed inset-0 z-50 flex h-16 w-full items-center justify-between bg-white px-[10px] py-2 shadow-headerBox'>
         <div className='flex items-center gap-1'>
           <Button to={'/danh-muc-cap-1'} className='h-full w-[90px]'>
-            <figure className='w-12'>
+            <figure>
               <img src='../../logoText.png' />
             </figure>
           </Button>

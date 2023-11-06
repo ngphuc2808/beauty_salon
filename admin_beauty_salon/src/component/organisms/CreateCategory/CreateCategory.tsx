@@ -64,6 +64,8 @@ const DetailCategory = () => {
 
   const queryClient = useQueryClient()
 
+  // const dataFromQuery =  as ResponseGetListCategoryType
+
   const postImageApi = usePostImage(
     `CreateCategory-level-${pathname
       .split('/')[1]
@@ -149,6 +151,21 @@ const DetailCategory = () => {
       isCategoryLevel1 &&
       (watch('contentType') === 'menu2' ||
         watch('contentType') === 'landing_menu2'),
+
+    initialData: () => {
+      return queryClient.getQueryData([
+        'ListCategory',
+        {
+          level: (
+            Number(
+              pathname
+                .split('/')[1]
+                .substring(pathname.split('/')[1].length - 1),
+            ) + 1
+          ).toString(),
+        },
+      ])
+    },
   })
 
   const listChildCategoryLevel2Api = useGetListCategory('3', {
@@ -167,6 +184,21 @@ const DetailCategory = () => {
       isCategoryLevel2 &&
       (watch('contentType') === 'menu2' ||
         watch('contentType') === 'landing_menu2'),
+
+    initialData: () => {
+      return queryClient.getQueryData([
+        'ListCategory',
+        {
+          level: (
+            Number(
+              pathname
+                .split('/')[1]
+                .substring(pathname.split('/')[1].length - 1),
+            ) + 1
+          ).toString(),
+        },
+      ])
+    },
   })
 
   const listPostApi = useGetListPost({
