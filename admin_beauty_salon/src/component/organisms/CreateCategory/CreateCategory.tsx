@@ -77,54 +77,24 @@ const DetailCategory = () => {
   const getCategoryApi = useGetCategory(id!, {
     onSuccess(data) {
       reset({
-        name: data.message.name,
+        name: title || data.message.name,
         level: data.message.level,
         thumbnail: data.message.thumbnail,
         landingPage: {
           projectData: data.message.landingPage.projectData,
         },
-        urlKey: data.message.urlKey,
+        urlKey: title ? `/${slugify(title)}` : '' || data.message.urlKey,
         metaTitles: data.message.metaTitles,
         metaKeyWords: data.message.metaKeyWords,
         metaDescriptions: data.message.metaDescriptions,
-        contentType: data.message.contentType,
-        status: data.message.status.toString(),
+        contentType: contentType || data.message.contentType,
+        status: status || data.message.status.toString(),
         listChildren: data.message.listChildren,
         listPosts: data.message.listPosts,
         listProducts: data.message.listProducts,
       })
       setPreviewImg(data.message.thumbnail as string)
     },
-  })
-
-  const listChildCategoryLevel1Api = useGetListCategory('2', {
-    onSuccess(data) {
-      setOptions(
-        data.message.map((item) => ({
-          value: item.id,
-          label: item.name,
-        })),
-      )
-      setListChildCategory(
-        data.message.filter((item) => watch('listChildren').includes(item.id)),
-      )
-    },
-    enabled: isCategoryLevel1,
-  })
-
-  const listChildCategoryLevel2Api = useGetListCategory('3', {
-    onSuccess(data) {
-      setOptions(
-        data.message.map((item) => ({
-          value: item.id,
-          label: item.name,
-        })),
-      )
-      setListChildCategory(
-        data.message.filter((item) => watch('listChildren').includes(item.id)),
-      )
-    },
-    enabled: isCategoryLevel2,
   })
 
   const {
@@ -161,6 +131,42 @@ const DetailCategory = () => {
       listPosts: getCategoryApi.data?.message.listPosts || [],
       listProducts: getCategoryApi.data?.message.listProducts || [],
     },
+  })
+
+  const listChildCategoryLevel1Api = useGetListCategory('2', {
+    onSuccess(data) {
+      setOptions(
+        data.message.map((item) => ({
+          value: item.id,
+          label: item.name,
+        })),
+      )
+      setListChildCategory(
+        data.message.filter((item) => watch('listChildren').includes(item.id)),
+      )
+    },
+    enabled:
+      isCategoryLevel1 &&
+      (watch('contentType') === 'menu2' ||
+        watch('contentType') === 'landing_menu2'),
+  })
+
+  const listChildCategoryLevel2Api = useGetListCategory('3', {
+    onSuccess(data) {
+      setOptions(
+        data.message.map((item) => ({
+          value: item.id,
+          label: item.name,
+        })),
+      )
+      setListChildCategory(
+        data.message.filter((item) => watch('listChildren').includes(item.id)),
+      )
+    },
+    enabled:
+      isCategoryLevel2 &&
+      (watch('contentType') === 'menu2' ||
+        watch('contentType') === 'landing_menu2'),
   })
 
   const listPostApi = useGetListPost({
@@ -209,8 +215,6 @@ const DetailCategory = () => {
         }))) || [],
   )
 
-  const [dataChildCategory, setDataChildCategory] = useState<SelectValue>(null)
-
   const [listChildCategory, setListChildCategory] = useState<iCategory[]>(
     (isCategoryLevel1
       ? listChildCategoryLevel1Api.data?.message.filter((item) =>
@@ -221,6 +225,13 @@ const DetailCategory = () => {
           watch('listChildren').includes(item.id),
         )) || [],
   )
+
+  const [dataChildCategory, setDataChildCategory] = useState<SelectValue>(null)
+
+  const existDataChild = listChildCategory.map((item) => ({
+    value: item.id,
+    label: item.name,
+  }))
 
   const [dataListProduct, setdataListProduct] = useState<
     Pick<
@@ -397,26 +408,22 @@ const DetailCategory = () => {
       value.landingPage = {}
     }
 
-    if (
-      watch('contentType') === 'landing_menu2' &&
-      dataChildCategory &&
-      Array.isArray(dataChildCategory)
-    ) {
+    if (watch('contentType') === 'landing_menu2') {
       value.landingPage.projectData = projectData.projectData
       value.landingPage.html = projectData.html
       value.landingPage.css = projectData.css
-      value.listChildren = dataChildCategory.map((item) => item.value)
+      if (dataChildCategory && Array.isArray(dataChildCategory))
+        value.listChildren = dataChildCategory.map((item) => item.value)
+      else value.listChildren = existDataChild.map((item) => item.value)
     } else {
       value.landingPage = {}
       value.listChildren = []
     }
 
-    if (
-      watch('contentType') === 'menu2' &&
-      dataChildCategory &&
-      Array.isArray(dataChildCategory)
-    ) {
-      value.listChildren = dataChildCategory.map((item) => item.value)
+    if (watch('contentType') === 'menu2') {
+      if (dataChildCategory && Array.isArray(dataChildCategory))
+        value.listChildren = dataChildCategory.map((item) => item.value)
+      else value.listChildren = existDataChild.map((item) => item.value)
     } else {
       value.listChildren = []
     }
@@ -504,7 +511,10 @@ const DetailCategory = () => {
             }}
           >
             <Button onClick={() => router(-1)}>
-              <i className='ri-arrow-left-line ml-5 flex h-10 w-10 cursor-pointer items-center justify-center rounded-md bg-primaryColor text-xl text-white hover:bg-secondColor lg:text-2xl'></i>
+              <i
+                className='ri-arrow-left-line ml-5 flex h-10 w-10 cursor-pointer items-center justify-center rounded-md bg-primaryColor text-xl text-white hover:bg-secondColor lg:text-2xl'
+                onClick={() => setDataChildCategory(null)}
+              ></i>
             </Button>
             <h1 className='text-xl text-textHeadingColor'>
               {!isUpdate ? 'Thêm danh mục' : 'Sửa danh mục'}
@@ -539,7 +549,7 @@ const DetailCategory = () => {
             })}
             className={`block w-full rounded-md border p-3 text-sm outline-none ${
               errors.name
-                ? 'border-primaryColor bg-red-50 placeholder-primaryColor'
+                ? 'border-primaryColor bg-primaryColor/20 placeholder-primaryColor'
                 : 'bg-white'
             }`}
           />
@@ -615,7 +625,7 @@ const DetailCategory = () => {
                   <ul className='mt-4 max-h-[300px] overflow-auto rounded border bg-white text-sm text-textPrimaryColor shadow [&>:last-child]:border-none [&>li]:border-b'>
                     {listChildCategory.map((item, index) => (
                       <li
-                        className='flex items-center  justify-between rounded border-b px-4 py-3 hover:bg-red-50'
+                        className='flex items-center  justify-between rounded border-b px-4 py-3 hover:bg-primaryColor/20'
                         key={index}
                       >
                         <div className='flex items-center gap-4'>
@@ -663,7 +673,7 @@ const DetailCategory = () => {
                     <ul className='max-h-[250px] overflow-y-scroll rounded border bg-white text-sm shadow'>
                       {searchProductApi.data?.results.map((item, index) => (
                         <li
-                          className='flex items-center  justify-between rounded border-b px-4 py-3 hover:bg-red-50'
+                          className='flex items-center  justify-between rounded border-b px-4 py-3 hover:bg-primaryColor/20'
                           key={index}
                         >
                           <div className='flex items-center gap-4'>
@@ -691,7 +701,7 @@ const DetailCategory = () => {
                     <ul className='max-h-[250px] overflow-y-scroll rounded border bg-white text-sm shadow'>
                       {searchPostApi.data?.results.map((item, index) => (
                         <li
-                          className='flex items-center  justify-between rounded border-b px-4 py-3 hover:bg-red-50'
+                          className='flex items-center  justify-between rounded border-b px-4 py-3 hover:bg-primaryColor/20'
                           key={index}
                         >
                           <div className='flex items-center gap-4'>
@@ -726,7 +736,7 @@ const DetailCategory = () => {
                     <ul className='max-h-[250px] overflow-y-scroll rounded border bg-white text-sm shadow'>
                       {dataListPost.map((item, index) => (
                         <li
-                          className='flex items-center  justify-between rounded px-4 py-3 hover:bg-red-50'
+                          className='flex items-center  justify-between rounded px-4 py-3 hover:bg-primaryColor/20'
                           key={index}
                         >
                           <div className='flex items-center gap-4'>
@@ -756,7 +766,7 @@ const DetailCategory = () => {
                     <ul className='max-h-[250px] overflow-y-scroll rounded border bg-white text-sm shadow'>
                       {dataListProduct.map((item, index) => (
                         <li
-                          className='flex items-center  justify-between rounded px-4 py-3 hover:bg-red-50'
+                          className='flex items-center  justify-between rounded px-4 py-3 hover:bg-primaryColor/20'
                           key={index}
                         >
                           <div className='flex items-center gap-4'>

@@ -248,7 +248,7 @@ const ListCategory = () => {
                         scope='row'
                         className='whitespace-nowrap px-6 py-4 font-medium text-textHeadingColor'
                       >
-                        {item.name}
+                        {/* {item} */}
                       </td>
                     )}
                     <td className='px-6 py-4'>

@@ -41,8 +41,8 @@ const MainPage = ({ children }: Props) => {
     <section>
       <header className='fixed inset-0 z-50 flex h-16 w-full items-center justify-between bg-white px-[10px] py-2 shadow-headerBox'>
         <div className='flex items-center gap-1'>
-          <Button to={'/'} className='h-full w-[90px]'>
-            <figure>
+          <Button to={'/danh-muc-cap-1'} className='h-full w-[90px]'>
+            <figure className='w-12'>
               <img src='../../logoText.png' />
             </figure>
           </Button>
@@ -57,7 +57,7 @@ const MainPage = ({ children }: Props) => {
             <p>{getUserInfoApi.data?.results.fullName}</p>
           </div>
           <div className='group relative'>
-            <figure className='h-[35px] w-[35px] rounded-full bg-red-100 hover:cursor-pointer'>
+            <figure className='h-[35px] w-[35px] rounded-full bg-primaryColor/20 hover:cursor-pointer'>
               <img
                 crossOrigin='anonymous'
                 src={getUserInfoApi.data?.results.avatar || images.avatar}
@@ -76,7 +76,7 @@ const MainPage = ({ children }: Props) => {
                   />
                 </figure>
               </div>
-              <ul className='text-sm text-textPrimaryColor [&>:hover]:bg-red-50 [&>:hover]:text-secondColor'>
+              <ul className='text-sm text-textPrimaryColor [&>:hover]:bg-primaryColor/20 [&>:hover]:text-secondColor'>
                 {getUserInfoApi.data?.results.role === 'admin' && (
                   <li>
                     <Button
@@ -126,9 +126,9 @@ const MainPage = ({ children }: Props) => {
                         <span className='h-11 w-1.5 rounded-full '></span>
                       )}
                       <div
-                        className={`flex w-full items-center gap-2 p-2 hover:bg-red-100 ${
+                        className={`flex w-full items-center gap-2 p-2 hover:bg-primaryColor/20 ${
                           location.pathname === item.path &&
-                          'rounded bg-red-100 text-secondColor'
+                          'rounded bg-primaryColor/20 text-secondColor'
                         }`}
                       >
                         {
@@ -194,9 +194,9 @@ const MainPage = ({ children }: Props) => {
                         <span className='h-11 w-1.5 rounded-full '></span>
                       )}
                       <div
-                        className={`flex w-full items-center gap-2 p-2 hover:bg-red-100 ${
+                        className={`flex w-full items-center gap-2 p-2 hover:bg-primaryColor/20 ${
                           location.pathname === item.path &&
-                          'rounded bg-red-100 text-secondColor'
+                          'rounded bg-primaryColor/20 text-secondColor'
                         }`}
                       >
                         {
