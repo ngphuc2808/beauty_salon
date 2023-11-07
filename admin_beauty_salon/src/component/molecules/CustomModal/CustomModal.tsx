@@ -32,7 +32,7 @@ const CustomModal = ({
   return (
     <Modal onClose={close} {...props}>
       <Fade in={props.open}>
-        <Box sx={style} className='rounded bg-white text-white'>
+        <Box sx={style} className='rounded bg-white text-textHeadingColor'>
           <div className='flex pb-3'>
             <div className='flex-grow text-lg'>{title}</div>
             <div onClick={close} className='cursor-pointer'>

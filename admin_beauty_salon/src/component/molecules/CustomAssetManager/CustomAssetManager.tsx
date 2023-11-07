@@ -43,7 +43,7 @@ const CustomAssetManager = ({
           <img className='display-block' src={asset.getSrc()} />
           <div className='absolute left-0 top-0 flex h-full w-full flex-col items-center justify-end bg-zinc-700/75 p-5 opacity-0 transition-opacity group-hover:opacity-100'>
             <Button
-              className='w-full rounded border px-2 py-1'
+              className='w-full rounded border px-2 py-1 text-white'
               onClick={() => select(asset, true)}
             >
               Select

@@ -27,8 +27,9 @@ import CustomAssetManager from '@/component/molecules/CustomAssetManager'
 import Topbar from '@/component/molecules/Topbar'
 import RightSidebar from '@/component/molecules/RightSidebar'
 
-import { useGetAllImages, useGetCategory } from '@/hooks/hooks'
+import { useDeleteImages, useGetAllImages, useGetCategory } from '@/hooks/hooks'
 import { useGlobalContext } from '@/contexts/globalContext'
+import Modal from '@/component/molecules/Modal'
 
 const LandingPageEditor = () => {
   const { id } = useParams()
@@ -52,12 +53,13 @@ const LandingPageEditor = () => {
     },
   })
 
-  const [editor, setEditor] = useState<Editor>()
+  const deleteImagesApi = useDeleteImages('ImagesLandingPage')
 
+  const [editor, setEditor] = useState<Editor>()
   const [arrayImage, setArrayImage] = useState<string[]>(
     (getAllImagesApi && getAllImagesApi.data?.message.urls) || [],
   )
-
+  const [modalDelete, setModalDelete] = useState<boolean>(false)
   const [listImageDeleted, setListImageDeleted] = useState<string[]>([])
 
   useEffect(() => {
@@ -87,6 +89,20 @@ const LandingPageEditor = () => {
   const onEditor = (editor: Editor) => {
     setEditor(editor)
     ;(window as any).editor = editor
+  }
+
+  const handleOpenModal = () => {
+    if (listImageDeleted.length > 0) {
+      setModalDelete(true)
+      return
+    }
+  }
+
+  const handleDeleteImage = () => {
+    deleteImagesApi.mutate(listImageDeleted.toString())
+    toast.success('Xóa ảnh thành công!')
+    setListImageDeleted([])
+    setModalDelete(false)
   }
 
   return (
@@ -125,7 +141,7 @@ const LandingPageEditor = () => {
             <Topbar
               className='min-h-[64px] border-b border-primaryColor shadow-headerBox'
               setArrayImage={setArrayImage}
-              listImageDeleted={listImageDeleted}
+              handleOpenModal={handleOpenModal}
             />
             <Canvas className='gjs-custom-editor-canvas flex-grow bg-slate-200' />
           </div>
@@ -155,6 +171,15 @@ const LandingPageEditor = () => {
           )}
         </AssetsProvider>
       </GjsEditor>
+      {modalDelete && (
+        <Modal
+          title='Bạn muốn xóa các hình ảnh vừa chọn?'
+          description='Hình ảnh bị xóa không thể khôi phục.'
+          setModalDelete={setModalDelete}
+          handleDelete={handleDeleteImage}
+          isLoading={deleteImagesApi.isLoading}
+        />
+      )}
       <div className='flex h-screen w-screen items-center justify-center lg:hidden'>
         <h1 className='flex max-w-[90%] flex-col items-center gap-5 text-center text-3xl uppercase text-primaryColor'>
           <figure className='block w-[200px]'>

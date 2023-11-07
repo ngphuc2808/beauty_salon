@@ -10,36 +10,31 @@ import 'react-toastify/dist/ReactToastify.css'
 import { useGlobalContext } from '@/contexts/globalContext'
 import Button from '@/component/atoms/Button'
 import TopbarButtons from '../TopbarButtons'
-import { useDeleteImages, usePostImages } from '@/hooks/hooks'
+import { usePostImages } from '@/hooks/hooks'
 
 const imageMimeType = /image\/(png|jpg|jpeg)/i
 
 interface Props {
   className?: string
+  handleOpenModal: () => void
   setArrayImage: (data: string[]) => void
-  listImageDeleted: string[]
 }
 
-const Topbar = ({ className, setArrayImage, listImageDeleted }: Props) => {
+const Topbar = ({ className, handleOpenModal, setArrayImage }: Props) => {
   const router = useNavigate()
 
   const { setProjectData } = useGlobalContext()
 
   const uploadImagesApi = usePostImages('ImagesLandingPage')
 
-  const deleteImagesApi = useDeleteImages('ImagesLandingPage')
-
   const handleSaveContent = () => {
+    handleOpenModal()
     setProjectData({
       projectData: JSON.stringify((window as any).editor.getProjectData()),
       html: (window as any).editor.getHtml(),
       css: (window as any).editor.getCss(),
     })
-
-    if (listImageDeleted.length > 0)
-      deleteImagesApi.mutate(listImageDeleted.toString())
-
-    router(-1)
+    toast.success('Lưu trang thành công!')
   }
 
   const fileListToArray = (fileList: FileList) => {
@@ -133,7 +128,7 @@ const Topbar = ({ className, setArrayImage, listImageDeleted }: Props) => {
             onClick={() => router(-1)}
             className='max-h-[45.8px] min-w-[98px] rounded-md bg-primaryColor px-4 py-3 text-sm text-white hover:bg-secondColor'
           >
-            Hủy
+            Rời trang
           </Button>
         </div>
       </div>
