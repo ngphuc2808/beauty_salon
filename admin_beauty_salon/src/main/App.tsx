@@ -1,3 +1,4 @@
+import LandingPage from '@/component/templates/LandingPage'
 import React, { Suspense, useEffect, useState } from 'react'
 import { useLocation, useNavigate, useRoutes } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
@@ -150,6 +151,10 @@ const App: React.FC = () => {
     {
       path: '/tao-trang-landing-page/:id',
       element: <EditorLandingPage />,
+    },
+    {
+      path: '/landing-page/:id',
+      element: <LandingPage />,
     },
   ])
 

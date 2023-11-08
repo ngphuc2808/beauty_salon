@@ -548,19 +548,29 @@ const DetailCategory = () => {
                 <h1 className='block font-normal text-textHeadingColor'>
                   Trang landing page cho danh mục
                 </h1>
-                <Button
-                  to={
-                    !id
-                      ? '/tao-trang-landing-page'
-                      : `/tao-trang-landing-page/${id}`
-                  }
-                  className='mt-3 w-full rounded-md bg-primaryColor px-4 py-3 text-sm text-white hover:bg-secondColor sm:mt-0 sm:w-auto'
-                >
-                  {projectData.projectData ||
-                  getCategoryApi.data?.message.landingPage.projectData
-                    ? 'Cài đặt trang'
-                    : 'Tạo trang landing page'}
-                </Button>
+                <div className='flex items-center gap-3'>
+                  {getCategoryApi.data?.message.landingPage.projectData && (
+                    <Button
+                      to={`/landing-page/${id}`}
+                      className='mt-3 w-full rounded-md bg-primaryColor px-4 py-3 text-sm text-white hover:bg-secondColor sm:mt-0 sm:w-auto'
+                    >
+                      Xem trang
+                    </Button>
+                  )}
+                  <Button
+                    to={
+                      !id
+                        ? '/tao-trang-landing-page'
+                        : `/tao-trang-landing-page/${id}`
+                    }
+                    className='mt-3 w-full rounded-md bg-primaryColor px-4 py-3 text-sm text-white hover:bg-secondColor sm:mt-0 sm:w-auto'
+                  >
+                    {projectData.projectData ||
+                    getCategoryApi.data?.message.landingPage.projectData
+                      ? 'Cài đặt trang'
+                      : 'Tạo trang landing page'}
+                  </Button>
+                </div>
               </div>
             </div>
           )}
