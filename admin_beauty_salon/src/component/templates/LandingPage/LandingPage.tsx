@@ -2,7 +2,6 @@ import { useGetCategory } from '@/hooks/hooks'
 import { useParams } from 'react-router-dom'
 import he from 'he'
 import { useEffect } from 'react'
-import NotFoundPage from '@/component/pages/NotFoundPage'
 
 const LandingPage = () => {
   const { id } = useParams()

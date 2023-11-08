@@ -141,7 +141,7 @@ const DetailCategory = () => {
     setDataChildCategory(null)
     setSearchTerm('')
     setContentType('')
-  }, [router])
+  }, [pathname])
 
   const listChildCategoryApi = useGetListCategory(
     !isCategoryLevel3 ? (watch('level') + 1).toString() : '',
