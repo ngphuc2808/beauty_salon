@@ -9,6 +9,7 @@ import images from '@/assets/images'
 import QuickLink from '@/component/molecules/QuickLink'
 import Button from '../../atoms/Button'
 import { SpinnerIcon } from '../../atoms/CustomIcon/CustomIcon'
+import { useGlobalContext } from '@/contexts/globalContext'
 
 interface Props {
   children?: ReactNode
@@ -29,12 +30,22 @@ const MainPage = ({ children }: Props) => {
 
   const logoutApi = usePostLogout()
 
+  const { setTitle, setStatus, setContentType, setProjectData } =
+    useGlobalContext()
+
   const [navMobile, setNavMobile] = useState<boolean>(true)
 
   const handleLogout = async () => {
     logoutApi.mutate()
     localStorage.removeItem('userLogin')
     router('/dang-nhap')
+  }
+
+  const handleClearValue = () => {
+    setContentType('')
+    setStatus('')
+    setTitle('')
+    setProjectData({ projectData: '', html: '', css: '' })
   }
 
   return (
@@ -119,6 +130,7 @@ const MainPage = ({ children }: Props) => {
                     <Button
                       to={item.path}
                       className='group mb-[3px] flex items-center gap-2'
+                      onClick={() => handleClearValue()}
                     >
                       {location.pathname === item.path ? (
                         <span className='h-11 w-1.5 rounded-full border-2 border-primaryColor bg-primaryColor'></span>

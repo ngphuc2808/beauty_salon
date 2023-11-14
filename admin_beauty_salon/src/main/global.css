@@ -31,3 +31,7 @@ html *::-webkit-scrollbar-track {
 .ck-editor__editable {
   @apply h-[500px];
 }
+
+.gjs-rte-action {
+  @apply text-white;
+}

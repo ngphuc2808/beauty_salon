@@ -136,13 +136,6 @@ const DetailCategory = () => {
     },
   })
 
-  //List ChildCategory Api
-  useEffect(() => {
-    setDataChildCategory(null)
-    setSearchTerm('')
-    setContentType('')
-  }, [pathname])
-
   const listChildCategoryApi = useGetListCategory(
     !isCategoryLevel3 ? (watch('level') + 1).toString() : '',
     {
@@ -440,6 +433,9 @@ const DetailCategory = () => {
           setStatus('')
           setTitle('')
           setValue('urlKey', '')
+          setValue('name', '')
+          setValue('contentType', '')
+          setValue('status', '')
           setPreviewImg('')
           setProjectData({ projectData: '', html: '', css: '' })
           toast.success('Thêm danh mục thành công!')
@@ -467,6 +463,18 @@ const DetailCategory = () => {
     }
   }
 
+  const handleClearValue = () => {
+    setDataChildCategory(null)
+    setSearchTerm('')
+    setContentType('')
+    setStatus('')
+    setTitle('')
+    setValue('urlKey', '')
+    setValue('name', '')
+    setValue('contentType', '')
+    setValue('status', '')
+  }
+
   return (
     <Fragment>
       <div
@@ -487,7 +495,7 @@ const DetailCategory = () => {
             <Button onClick={() => router(-1)}>
               <i
                 className='ri-arrow-left-line ml-5 flex h-10 w-10 cursor-pointer items-center justify-center rounded-md bg-primaryColor text-xl text-white hover:bg-secondColor lg:text-2xl'
-                onClick={() => setDataChildCategory(null)}
+                onClick={() => handleClearValue()}
               ></i>
             </Button>
             <h1 className='text-xl text-textHeadingColor'>
@@ -513,9 +521,10 @@ const DetailCategory = () => {
             }
             placeholder='Nhập tên danh mục'
             {...register('name', {
-              required: true,
-              minLength: 10,
-              maxLength: 80,
+              required: {
+                value: true,
+                message: 'Vui lòng nhập tên bài viết!',
+              },
               onChange: (e) => {
                 setValue('urlKey', `/${slugify(e.target.value)}`)
                 setTitle(e.target.value)
@@ -527,16 +536,9 @@ const DetailCategory = () => {
                 : 'bg-white'
             }`}
           />
-          {errors.name?.type === 'required' && (
-            <p className='mt-2 text-sm text-secondColor'>
-              Vui lòng nhập tên bài viết!
-            </p>
-          )}
-          {errors.name?.type === 'minLength' && (
-            <p className='mt-2 text-sm text-secondColor'>
-              Vui lòng nhập tối thiểu 10 ký tự!
-            </p>
-          )}
+          <p className='mt-2 text-sm text-secondColor'>
+            {errors.name?.message}
+          </p>
         </div>
       </div>
       <div className='grid grid-cols-12 gap-x-3'>
@@ -548,11 +550,11 @@ const DetailCategory = () => {
                 <h1 className='block font-normal text-textHeadingColor'>
                   Trang landing page cho danh mục
                 </h1>
-                <div className='flex items-center gap-3'>
+                <div className='flex w-full items-center justify-end gap-4 sm:w-1/2 sm:gap-3 lg:w-auto'>
                   {getCategoryApi.data?.message.landingPage.projectData && (
                     <Button
                       to={`/landing-page/${id}`}
-                      className='mt-3 w-full rounded-md bg-primaryColor px-4 py-3 text-sm text-white hover:bg-secondColor sm:mt-0 sm:w-auto'
+                      className='mt-3 w-full rounded-md bg-primaryColor px-4 py-3 text-center text-sm text-white hover:bg-secondColor sm:mt-0 sm:w-auto'
                     >
                       Xem trang
                     </Button>
@@ -563,7 +565,7 @@ const DetailCategory = () => {
                         ? '/tao-trang-landing-page'
                         : `/tao-trang-landing-page/${id}`
                     }
-                    className='mt-3 w-full rounded-md bg-primaryColor px-4 py-3 text-sm text-white hover:bg-secondColor sm:mt-0 sm:w-auto'
+                    className='mt-3 w-full rounded-md bg-primaryColor px-4 py-3 text-center text-sm text-white hover:bg-secondColor sm:mt-0 sm:w-auto'
                   >
                     {projectData.projectData ||
                     getCategoryApi.data?.message.landingPage.projectData

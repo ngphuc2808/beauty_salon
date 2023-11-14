@@ -4,10 +4,7 @@ import he from 'he'
 
 import basicBlockPlugin from 'grapesjs-blocks-basic'
 import formPlugin from 'grapesjs-plugin-forms'
-import editorPlugin from 'grapesjs-plugin-ckeditor'
-import flexBoxPlugin from 'grapesjs-blocks-flexbox'
 import timerPlugin from 'grapesjs-component-countdown'
-import customCodePlugin from 'grapesjs-custom-code'
 import navbarPlugin from 'grapesjs-navbar'
 import tooltipsPlugin from 'grapesjs-tooltip'
 import imagePlugin from 'grapesjs-tui-image-editor'
@@ -125,12 +122,9 @@ const LandingPageEditor = () => {
         }}
         plugins={[
           basicBlockPlugin,
-          formPlugin,
-          editorPlugin,
-          flexBoxPlugin,
-          timerPlugin,
-          customCodePlugin,
           navbarPlugin,
+          formPlugin,
+          timerPlugin,
           tooltipsPlugin,
           imagePlugin,
         ]}

@@ -4,6 +4,10 @@ const API_BASE = `${BASE_URL}admin`
 
 const API_IMAGE = `${BASE_URL}upload`
 
+// const API_BASE = `admin`
+
+// const API_IMAGE = `upload`
+
 export const API_URL = {
   // Auth
   login: `${API_BASE}/auth/login`,

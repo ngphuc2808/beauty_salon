@@ -1,3 +1,4 @@
+import { useGlobalContext } from '@/contexts/globalContext'
 import { useNavigate } from 'react-router-dom'
 
 interface TreeProps {
@@ -7,7 +8,14 @@ interface TreeProps {
 const QuickLink = ({ node }: TreeProps) => {
   const router = useNavigate()
 
+  const { setTitle, setStatus, setContentType, setProjectData } =
+    useGlobalContext()
+
   const handleNavigation = () => {
+    setContentType('')
+    setStatus('')
+    setTitle('')
+    setProjectData({ projectData: '', html: '', css: '' })
     router(`/tao-danh-muc-cap-${node.level}/${node.id}`)
   }
 
